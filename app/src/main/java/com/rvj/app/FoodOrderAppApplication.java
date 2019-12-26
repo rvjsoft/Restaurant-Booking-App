@@ -38,6 +38,5 @@ public class FoodOrderAppApplication implements CommandLineRunner{
 		user.setPassword("NoPassword");
 		user.setUserLevel(UserLevel.CUSTOMER);
 		em.persist(user);
-		
 	}
 }

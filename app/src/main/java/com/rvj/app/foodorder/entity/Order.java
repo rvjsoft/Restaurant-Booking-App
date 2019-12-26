@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.rvj.app.foodorder.entity.converters.OrderStatusConverter;
 import com.rvj.app.foodorder.entity.enums.OrderStatus;
 
 import lombok.Data;
@@ -35,6 +37,7 @@ public class Order {
 	private Date orderedOn;
 	
 	@Column(name = "status")
+	@Convert(converter = OrderStatusConverter.class)
 	private OrderStatus status;
 	
 	@ManyToOne

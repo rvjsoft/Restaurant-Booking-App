@@ -1,6 +1,7 @@
 package com.rvj.app.foodorder.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +10,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.rvj.app.foodorder.entity.converters.UserLevelConverter;
 import com.rvj.app.foodorder.entity.enums.UserLevel;
 
 import lombok.Data;
@@ -30,5 +32,6 @@ public class User {
 	private String password;
 	
 	@Column(name = "usr_level")
+	@Convert(converter = UserLevelConverter.class)
 	private UserLevel userLevel;
 }

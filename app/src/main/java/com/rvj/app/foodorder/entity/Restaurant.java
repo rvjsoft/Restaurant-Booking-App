@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +18,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
+import com.rvj.app.foodorder.entity.converters.FoodTypeConverter;
+import com.rvj.app.foodorder.entity.converters.StatusConverter;
 import com.rvj.app.foodorder.entity.enums.FoodType;
 import com.rvj.app.foodorder.entity.enums.Status;
 
@@ -36,12 +39,14 @@ public class Restaurant extends User {
 	private String name;
 
 	@Column(name = "type")
+	@Convert(converter = FoodTypeConverter.class)
 	private FoodType type;
 
 	@Embedded
 	private AddressType address;
 
 	@Column(name = "status")
+	@Convert(converter = StatusConverter.class)
 	private Status status;
 
 	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
