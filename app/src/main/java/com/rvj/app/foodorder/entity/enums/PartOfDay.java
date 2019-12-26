@@ -22,7 +22,6 @@ public enum PartOfDay {
 			return LUNCH;
 		} else if (code == 'D' || code == 'd') {
 			return DINNER;
-		} else
-			throw new UnsupportedOperationException("the code " + code + " is not valid");
+		} else throw new UnsupportedOperationException("the code " + code + " is not valid");
 	}
 }

@@ -22,7 +22,6 @@ public enum OrderStatus {
 			return PREPARING;
 		} else if (code == 'D' || code == 'd') {
 			return DELIVERED;
-		} else
-			throw new UnsupportedOperationException("the code " + code + " is not valid");
+		} else throw new UnsupportedOperationException("the code " + code + " is not valid");
 	}
 }

@@ -19,7 +19,6 @@ public enum Status {
 			return AVAILABLE;
 		} else if (code == 'U' || code == 'u') {
 			return UNAVAILABLE;
-		} else
-			throw new UnsupportedOperationException("the code " + code + " is not valid");
+		} else throw new UnsupportedOperationException("the code " + code + " is not valid");
 	}
 }

@@ -19,7 +19,6 @@ public enum UserLevel {
 			return CUSTOMER;
 		} else if (code == 'R' || code == 'r') {
 			return RESTAURANT;
-		} else
-			throw new UnsupportedOperationException("the code " + code + " is not valid");
+		} else throw new UnsupportedOperationException("the code " + code + " is not valid");
 	}
 }
