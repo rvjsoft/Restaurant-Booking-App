@@ -9,8 +9,12 @@ public class FoodTypeSpringConverter implements Converter<String, FoodType>{
 
 	@Override
 	public FoodType convert(String source) {
-		if(StringUtils.isNotBlank(source)) {
-			return FoodType.valueOf(source);
+		try {
+			if(StringUtils.isNotBlank(source)) {
+				return FoodType.valueOf(source);
+			}
+		} catch (Exception e) {
+			return null;
 		}
 		return null;
 	}

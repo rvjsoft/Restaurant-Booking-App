@@ -1,0 +1,1 @@
+make enum related classes as generic, and use factory classes for spring enum converters.
