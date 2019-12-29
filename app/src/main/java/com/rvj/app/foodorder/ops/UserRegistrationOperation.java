@@ -27,17 +27,17 @@ public class UserRegistrationOperation extends Operation<RegisterUserRequest, Re
 	protected boolean validate() {
 		if(request.getCustomer() != null && request.getRestaurant() != null)
 		{
-			this.errors.addError("", "can't create both restaurant and customer");
+			this.errors.addError("customerAndRestaurant", "can't create both restaurant and customer");
 			log.info("validation error: can't create both restaurant and customer");
 		} else {
 			if(request.getCustomer() != null) {
 				if(userServie.isCustomerExistWithContact(request.getCustomer().getEmail(), request.getCustomer().getPhone())) {
-					this.errors.addError("", "userAlready with same contact info email/phone");
+					this.errors.addError("email_phone", "userAlready with same contact info email/phone");
 					log.info("validation error: userAlready with same contact info email/phone");
 				}
 			} else if(request.getRestaurant() != null) {
 				if(userServie.isRestaurantExistWithContact(request.getRestaurant().getEmail(), request.getRestaurant().getPhone())) {
-					this.errors.addError("", "userAlready with same contact info email/phone");
+					this.errors.addError("userExists", "userAlready with same contact info email/phone");
 					log.info("validation error: userAlready with same contact info email/phone");
 				}
 			}
@@ -55,7 +55,7 @@ public class UserRegistrationOperation extends Operation<RegisterUserRequest, Re
 			status = userServie.createRestaurant(request);
 		}
 		if(!status) {
-			this.errors.addError("", "Error creating the User.");
+			this.errors.addError("operationError", "Error creating the User.");
 		}
 	}
 

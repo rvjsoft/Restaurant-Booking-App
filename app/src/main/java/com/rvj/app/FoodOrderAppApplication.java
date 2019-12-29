@@ -38,7 +38,7 @@ public class FoodOrderAppApplication implements CommandLineRunner{
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {
-		System.out.println(repo);
+//		System.out.println(repo);
 //		System.out.println(em);
 //		User user = new User();
 //		user.setUserName("admin");
