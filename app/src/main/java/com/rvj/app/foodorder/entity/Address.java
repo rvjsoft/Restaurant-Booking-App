@@ -19,7 +19,7 @@ public class Address {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@Embedded
 	private AddressType address;

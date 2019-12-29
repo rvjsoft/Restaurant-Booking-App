@@ -30,7 +30,7 @@ public class Order {
 	@Id
 	@Column(name = "order_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "ordered_on")
 	@Temporal(TemporalType.TIMESTAMP)

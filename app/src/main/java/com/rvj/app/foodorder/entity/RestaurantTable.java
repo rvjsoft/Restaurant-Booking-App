@@ -23,7 +23,7 @@ public class RestaurantTable {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "total")
 	private Integer total;

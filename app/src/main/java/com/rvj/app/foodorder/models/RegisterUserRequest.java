@@ -7,12 +7,14 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
 
 @Data
 @Validated
+@Component
 public class RegisterUserRequest extends BaseRequest{
 
 	@NotEmpty(message = "UserName should Not be null/empty")
@@ -24,10 +26,8 @@ public class RegisterUserRequest extends BaseRequest{
 	private String password;
 	
 	@Valid
-	@Null
 	private RestaurantModel restaurant;
 	
 	@Valid
-	@Null
 	private CustomerModel customer;
 }

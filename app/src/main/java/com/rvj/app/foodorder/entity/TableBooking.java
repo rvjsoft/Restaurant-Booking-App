@@ -26,7 +26,7 @@ public class TableBooking {
 	@Id
 	@Column(name = "booking_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer bookingId;
+	private Long bookingId;
 	
 	@Column(name = "count")
 	private Integer count;

@@ -17,6 +17,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.NaturalId;
 
 import com.rvj.app.foodorder.entity.converters.FoodTypeConverter;
 import com.rvj.app.foodorder.entity.converters.StatusConverter;
@@ -33,7 +34,7 @@ public class Restaurant extends User {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	@Column(name = "name")
 	private String name;
@@ -44,6 +45,12 @@ public class Restaurant extends User {
 
 	@Embedded
 	private AddressType address;
+	
+	@Column(name = "email")
+	private String email;
+	
+	@Column(name = "phone")
+	private String phone;
 
 	@Column(name = "status")
 	@Convert(converter = StatusConverter.class)

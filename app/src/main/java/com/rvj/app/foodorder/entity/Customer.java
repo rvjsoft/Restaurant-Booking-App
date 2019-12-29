@@ -14,6 +14,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.NaturalId;
 
 import lombok.Data;
 
@@ -25,7 +26,7 @@ public class Customer extends User {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "first_name")
 	private String firstName;

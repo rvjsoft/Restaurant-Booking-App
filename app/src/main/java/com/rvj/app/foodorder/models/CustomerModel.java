@@ -26,7 +26,7 @@ public class CustomerModel {
 	private String email;
 	
 	@NotEmpty(message = "phone should Not be null/empty")
-	@Size(min = 5, max = 10, message = "phone length should be from 5 to 10 characters")
+	@Size(min = 5, max = 15, message = "phone length should be from 5 to 15 characters")
 	@Pattern(regexp = "[0-9]*", message = "phone number should be numeric")
 	private String phone;
 }
