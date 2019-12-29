@@ -10,6 +10,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NaturalId;
+
 import com.rvj.app.foodorder.entity.converters.UserLevelConverter;
 import com.rvj.app.foodorder.entity.enums.UserLevel;
 
@@ -25,6 +27,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NaturalId
 	@Column(name = "usr")
 	private String userName;
 	

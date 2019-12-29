@@ -31,10 +31,6 @@ import lombok.Data;
 @Table(name = "restaurant")
 @PrimaryKeyJoinColumn(name = "id")
 public class Restaurant extends User {
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
 	@Column(name = "name")
 	private String name;

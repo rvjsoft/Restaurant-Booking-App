@@ -23,10 +23,6 @@ import lombok.Data;
 @Table(name = "customer")
 @PrimaryKeyJoinColumn(name = "id")
 public class Customer extends User {
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	
 	@Column(name = "first_name")
 	private String firstName;
