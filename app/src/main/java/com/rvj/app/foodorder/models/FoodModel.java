@@ -1,0 +1,36 @@
+package com.rvj.app.foodorder.models;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.rvj.app.foodorder.entity.enums.FoodCategory;
+import com.rvj.app.foodorder.entity.enums.FoodType;
+import com.rvj.app.foodorder.entity.enums.deserializers.FoodCategoryDeserial;
+import com.rvj.app.foodorder.entity.enums.deserializers.FoodTypeDeserial;
+import com.rvj.app.foodorder.validators.EnumConstraint;
+
+import lombok.Data;
+
+@Data
+public class FoodModel {
+	
+	@NotEmpty(message = "food name should Not be null/empty")
+	@Size(min = 2, max = 20, message = "food name length should be from 2 to 20 characters")
+	private String name;
+	
+	@NotNull(message = "price should not be empth")
+	private Double price;
+	
+	@EnumConstraint(enumType = FoodType.class)
+	@NotNull(message = "foo type should not be empth")
+	@JsonDeserialize(using = FoodTypeDeserial.class)
+	private FoodType type;
+	
+	@EnumConstraint(enumType = FoodCategory.class)
+	@NotNull(message = "food category should not be empth")
+	@JsonDeserialize(using = FoodCategoryDeserial.class)
+	private FoodCategory category;
+	
+}
