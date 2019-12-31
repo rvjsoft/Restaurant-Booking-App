@@ -20,16 +20,16 @@ public class FoodModel {
 	@Size(min = 2, max = 20, message = "food name length should be from 2 to 20 characters")
 	private String name;
 	
-	@NotNull(message = "price should not be empth")
+	@NotNull(message = "price should not be empty")
 	private Double price;
 	
 	@EnumConstraint(enumType = FoodType.class)
-	@NotNull(message = "foo type should not be empth")
+	@NotNull(message = "foo type should not be empty")
 	@JsonDeserialize(using = FoodTypeDeserial.class)
 	private FoodType type;
 	
 	@EnumConstraint(enumType = FoodCategory.class)
-	@NotNull(message = "food category should not be empth")
+	@NotNull(message = "food category should not be empty")
 	@JsonDeserialize(using = FoodCategoryDeserial.class)
 	private FoodCategory category;
 	

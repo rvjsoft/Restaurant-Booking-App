@@ -13,7 +13,7 @@ public class StatusDeserial extends JsonDeserializer<Status>{
 	@Override
 	public Status deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		try {
-			return Status.valueOf(p.getValueAsString());
+			return Status.valueOf(p.getValueAsString().toUpperCase());
 		} catch (Exception e) {
 			return null;
 		}

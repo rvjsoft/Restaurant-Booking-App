@@ -13,7 +13,7 @@ public class OrderStatusDeserial  extends JsonDeserializer<OrderStatus>{
 	@Override
 	public OrderStatus deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		try {
-			return OrderStatus.valueOf(p.getValueAsString());
+			return OrderStatus.valueOf(p.getValueAsString().toUpperCase());
 		} catch (Exception e) {
 			return null;
 		}

@@ -13,7 +13,7 @@ public class FoodTypeDeserial<T> extends JsonDeserializer<FoodType>{
 	@Override
 	public FoodType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		try {
-			return FoodType.valueOf(p.getValueAsString());
+			return FoodType.valueOf(p.getValueAsString().toUpperCase());
 		} catch (Exception e) {
 			return null;
 		}

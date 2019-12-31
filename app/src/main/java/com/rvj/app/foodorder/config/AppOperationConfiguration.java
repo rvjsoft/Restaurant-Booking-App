@@ -12,8 +12,12 @@ import com.rvj.app.foodorder.models.DeleteAddressRequest;
 import com.rvj.app.foodorder.models.DeleteAddressResponse;
 import com.rvj.app.foodorder.models.DeleteFoodRequest;
 import com.rvj.app.foodorder.models.DeleteFoodResponse;
+import com.rvj.app.foodorder.models.FoodStatusRequest;
+import com.rvj.app.foodorder.models.FoodStatusResponse;
 import com.rvj.app.foodorder.models.RegisterUserRequest;
 import com.rvj.app.foodorder.models.RegisterUserResponse;
+import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
+import com.rvj.app.foodorder.models.RestaurantStatusResponse;
 import com.rvj.app.foodorder.models.UpdateAddressRequest;
 import com.rvj.app.foodorder.models.UpdateAddressResponse;
 import com.rvj.app.foodorder.models.UpdateFoodRequest;
@@ -22,6 +26,8 @@ import com.rvj.app.foodorder.ops.AddFoodOperation;
 import com.rvj.app.foodorder.ops.AddressOperation;
 import com.rvj.app.foodorder.ops.DeleteAddressOperation;
 import com.rvj.app.foodorder.ops.DeleteFoodOperation;
+import com.rvj.app.foodorder.ops.FoodStatusOperation;
+import com.rvj.app.foodorder.ops.RestaurantStatusOperation;
 import com.rvj.app.foodorder.ops.UpdateAddressOperaion;
 import com.rvj.app.foodorder.ops.UpdateFoodOperation;
 import com.rvj.app.foodorder.ops.UserRegistrationOperation;
@@ -89,6 +95,24 @@ public class AppOperationConfiguration {
 		DeleteFoodOperation operation = new DeleteFoodOperation();
 		operation.setRequest(request);
 		operation.setResponse(new DeleteFoodResponse());
+		return operation;
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public RestaurantStatusOperation getRestaurantStatusOperation(RestaurantStatusReqeust request) {
+		RestaurantStatusOperation operation = new RestaurantStatusOperation();
+		operation.setRequest(request);
+		operation.setResponse(new RestaurantStatusResponse());
+		return operation;
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public FoodStatusOperation getFoodStatusOperation(FoodStatusRequest request) {
+		FoodStatusOperation operation = new FoodStatusOperation();
+		operation.setRequest(request);
+		operation.setResponse(new FoodStatusResponse());
 		return operation;
 	}
 	

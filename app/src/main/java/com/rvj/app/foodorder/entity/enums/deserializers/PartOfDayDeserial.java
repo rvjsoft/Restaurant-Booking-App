@@ -13,7 +13,7 @@ public class PartOfDayDeserial extends JsonDeserializer<PartOfDay>{
 	@Override
 	public PartOfDay deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		try {
-			return PartOfDay.valueOf(p.getValueAsString());
+			return PartOfDay.valueOf(p.getValueAsString().toUpperCase());
 		} catch (Exception e) {
 			return null;
 		}

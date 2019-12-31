@@ -19,10 +19,16 @@ import com.rvj.app.foodorder.models.AddFoodRequest;
 import com.rvj.app.foodorder.models.AddFoodResponse;
 import com.rvj.app.foodorder.models.DeleteFoodRequest;
 import com.rvj.app.foodorder.models.DeleteFoodResponse;
+import com.rvj.app.foodorder.models.FoodStatusRequest;
+import com.rvj.app.foodorder.models.FoodStatusResponse;
+import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
+import com.rvj.app.foodorder.models.RestaurantStatusResponse;
 import com.rvj.app.foodorder.models.UpdateFoodRequest;
 import com.rvj.app.foodorder.models.UpdateFoodResponse;
 import com.rvj.app.foodorder.ops.AddFoodOperation;
 import com.rvj.app.foodorder.ops.DeleteFoodOperation;
+import com.rvj.app.foodorder.ops.FoodStatusOperation;
+import com.rvj.app.foodorder.ops.RestaurantStatusOperation;
 import com.rvj.app.foodorder.ops.UpdateFoodOperation;
 import com.rvj.app.foodorder.utils.ValidationUtils;
 
@@ -122,6 +128,66 @@ public class RestaurantController {
 				response.setMessage("food deletion failed");
 				log.info("deleting of food failed");
 				return new ResponseEntity<DeleteFoodResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+	
+	@PostMapping(path = "status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RestaurantStatusResponse> changeStatus(@Valid @RequestBody RestaurantStatusReqeust request, BindingResult bindingResult) {
+		log.info("Started Processing change restaurant status, messageId=" + request.getMessageId());
+		RestaurantStatusResponse response = new RestaurantStatusResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing change restaurant status Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<RestaurantStatusResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started changing status");
+			RestaurantStatusOperation operation = opsConfiguration.getRestaurantStatusOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("status changed successfully.");
+				log.info("status changed successfully");
+				return new ResponseEntity<RestaurantStatusResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("change restaurant status failed");
+				log.info("change restaurant status failed");
+				return new ResponseEntity<RestaurantStatusResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+	
+	@PostMapping(path = "status/food", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FoodStatusResponse> changeFoodStatus(@Valid @RequestBody FoodStatusRequest request, BindingResult bindingResult) {
+		log.info("Started Processing change food status, messageId=" + request.getMessageId());
+		FoodStatusResponse response = new FoodStatusResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing change food status Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<FoodStatusResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started changing status");
+			FoodStatusOperation operation = opsConfiguration.getFoodStatusOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("status changed successfully.");
+				log.info("status changed successfully");
+				return new ResponseEntity<FoodStatusResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("change food status failed");
+				log.info("change food status failed");
+				return new ResponseEntity<FoodStatusResponse>(response, HttpStatus.BAD_REQUEST);
 			}
 		}
 	}

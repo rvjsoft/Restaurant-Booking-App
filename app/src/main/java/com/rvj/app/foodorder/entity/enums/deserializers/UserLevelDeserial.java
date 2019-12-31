@@ -13,7 +13,7 @@ public class UserLevelDeserial extends JsonDeserializer<UserLevel>{
 	@Override
 	public UserLevel deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		try {
-			return UserLevel.valueOf(p.getValueAsString());
+			return UserLevel.valueOf(p.getValueAsString().toUpperCase());
 		} catch (Exception e) {
 			return null;
 		}
