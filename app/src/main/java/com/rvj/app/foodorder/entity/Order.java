@@ -1,5 +1,6 @@
 package com.rvj.app.foodorder.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,8 +34,7 @@ public class Order {
 	private Long id;
 	
 	@Column(name = "ordered_on")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date orderedOn;
+	private LocalDate orderedOn;
 	
 	@Column(name = "status")
 	@Convert(converter = OrderStatusConverter.class)

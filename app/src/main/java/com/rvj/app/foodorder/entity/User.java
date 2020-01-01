@@ -23,7 +23,7 @@ import lombok.Data;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 	@Id
-	@Column(name = "")
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	

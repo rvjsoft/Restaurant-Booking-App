@@ -55,9 +55,15 @@ public class Restaurant extends User {
 	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Food> foods = new ArrayList<Food>();
 
-	@OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-	private RestaurantTable table;
+//	@OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private RestaurantTable table;
 
+	@OneToMany(mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private List<TableBooking> bookings = new ArrayList<TableBooking>();
+	
+	@OneToMany(mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private List<Tables> tables = new ArrayList<Tables>();
+	
 	@OneToMany(mappedBy = "restaurant", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<Order> orders = new ArrayList<Order>();
 	
@@ -71,16 +77,24 @@ public class Restaurant extends User {
 		food.setRestaurant(null);
 	}
 
-	public void addTable(RestaurantTable table) {
-		this.table = table;
+	public void addBooking(TableBooking booking) {
+		this.bookings.add(booking);
+		booking.setRestaurant(this);
+	}
+	
+	public void removeBooking(TableBooking booking) {
+		this.bookings.remove(booking);
+		booking.setRestaurant(null);
+	}
+	
+	public void addTables(Tables table) {
+		this.tables.add(table);
 		table.setRestaurant(this);
 	}
-
-	public void removeTable() {
-		if (this.table != null) {
-			table.setRestaurant(null);
-			this.table = null;
-		}
+	
+	public void removeTables(Tables table) {
+		this.tables.remove(table);
+		table.setRestaurant(null);
 	}
 	
 	public void addOrder(Order order) {

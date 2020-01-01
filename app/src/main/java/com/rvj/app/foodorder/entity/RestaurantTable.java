@@ -17,35 +17,33 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Data
-@Entity
-@Table(name = "res_table")
+//@Entity
+//@Table(name = "res_table")
 public class RestaurantTable {
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(name = "total")
-	private Integer total;
-	
-	@Column(name = "available")
-	private Integer available;
-	
-	@OneToOne
-	@JoinColumn(name = "id")
-	private Restaurant restaurant;
-	
-	@OneToMany(mappedBy = "resTable", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private List<TableBooking> bookings = new ArrayList<TableBooking>();
-	
-	public void addBooking(TableBooking booking) {
-		this.bookings.add(booking);
-		booking.setResTable(this);
-	}
-	
-	public void removeBooking(TableBooking booking) {
-		this.bookings.remove(booking);
-		booking.setResTable(null);
-	}
+	/*
+	 * @Id
+	 * 
+	 * @Column(name = "id")
+	 * 
+	 * @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+	 * 
+	 * @Column(name = "total") private Integer total;
+	 * 
+	 * @Column(name = "available") private Integer available;
+	 * 
+	 * @OneToOne
+	 * 
+	 * @JoinColumn(name = "id") private Restaurant restaurant;
+	 * 
+	 * @OneToMany(mappedBy = "resTable", cascade = {CascadeType.PERSIST,
+	 * CascadeType.MERGE}) private List<TableBooking> bookings = new
+	 * ArrayList<TableBooking>();
+	 * 
+	 * public void addBooking(TableBooking booking) { this.bookings.add(booking);
+	 * booking.setResTable(this); }
+	 * 
+	 * public void removeBooking(TableBooking booking) {
+	 * this.bookings.remove(booking); booking.setResTable(null); }
+	 */
 	
 }

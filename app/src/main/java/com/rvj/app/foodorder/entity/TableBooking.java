@@ -1,5 +1,6 @@
 package com.rvj.app.foodorder.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -36,12 +37,11 @@ public class TableBooking {
 	private PartOfDay partOfDay;
 	
 	@Column(name = "booking_date")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date bookingDate;
+	private LocalDate bookingDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "tables_id")
-	private RestaurantTable resTable;
+	private Restaurant restaurant;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
