@@ -2,7 +2,6 @@ package com.rvj.app.foodorder.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -14,10 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.rvj.app.dataaccess.RestaurantRepository;
-import com.rvj.app.foodorder.entity.Address;
+import com.rvj.app.dataaccess.TableAvailRepository;
 import com.rvj.app.foodorder.entity.Food;
 import com.rvj.app.foodorder.entity.Restaurant;
 import com.rvj.app.foodorder.entity.Tables;
+import com.rvj.app.foodorder.entity.enums.PartOfDay;
 import com.rvj.app.foodorder.entity.enums.Status;
 import com.rvj.app.foodorder.models.AddFoodRequest;
 import com.rvj.app.foodorder.models.DeleteFoodRequest;
@@ -38,6 +38,9 @@ public class RestaurantService {
 	@Autowired
 	RestaurantRepository restaurantRepository;
 
+	@Autowired
+	TableAvailRepository tableAvailRepository;
+
 	public Restaurant getRestaurant(String userName) {
 		return restaurantRepository.findByUserName(userName);
 	}
@@ -48,8 +51,8 @@ public class RestaurantService {
 
 	@Transactional
 	public boolean addFoods(AddFoodRequest request) {
-		Restaurant restaurant= getRestaurant(request.getUserName());
-		for(FoodModel food : request.getFoods()) {
+		Restaurant restaurant = getRestaurant(request.getUserName());
+		for (FoodModel food : request.getFoods()) {
 			Food foodData = new Food();
 			BeanUtils.copyProperties(food, foodData);
 			foodData.setStatus(Status.UNAVAILABLE);
@@ -66,9 +69,10 @@ public class RestaurantService {
 
 	@Transactional
 	public boolean updateFood(UpdateFoodRequest request) {
-		Restaurant restaurant= getRestaurant(request.getUserName());
-		List<Food> foods = restaurant.getFoods().stream().filter(food -> food.getId().equals(request.getFoodId())).collect(Collectors.toList());
-		if(CollectionUtils.isEmpty(foods)) {
+		Restaurant restaurant = getRestaurant(request.getUserName());
+		List<Food> foods = restaurant.getFoods().stream().filter(food -> food.getId().equals(request.getFoodId()))
+				.collect(Collectors.toList());
+		if (CollectionUtils.isEmpty(foods)) {
 			return false;
 		}
 		Food food = foods.get(0);
@@ -83,9 +87,10 @@ public class RestaurantService {
 	}
 
 	public boolean deleteFood(DeleteFoodRequest request) {
-		Restaurant restaurant= getRestaurant(request.getUserName());
-		List<Food> foods = restaurant.getFoods().stream().filter(food -> food.getId().equals(request.getFoodId())).collect(Collectors.toList());
-		if(CollectionUtils.isEmpty(foods)) {
+		Restaurant restaurant = getRestaurant(request.getUserName());
+		List<Food> foods = restaurant.getFoods().stream().filter(food -> food.getId().equals(request.getFoodId()))
+				.collect(Collectors.toList());
+		if (CollectionUtils.isEmpty(foods)) {
 			return false;
 		}
 		Food food = foods.get(0);
@@ -100,7 +105,7 @@ public class RestaurantService {
 	}
 
 	public boolean changeStatus(RestaurantStatusReqeust request) {
-		Restaurant restaurant= getRestaurant(request.getUserName());
+		Restaurant restaurant = getRestaurant(request.getUserName());
 		restaurant.setStatus(request.getStatus());
 		try {
 			restaurantRepository.save(restaurant);
@@ -112,46 +117,46 @@ public class RestaurantService {
 	}
 
 	public boolean updateFoodStatus(FoodStatusRequest request, FoodStatusResponse response) {
-		Restaurant restaurant= getRestaurant(request.getUserName());
+		Restaurant restaurant = getRestaurant(request.getUserName());
 		List<Food> foods = restaurant.getFoods();
 		List<Long> errorFoodIds = new ArrayList<Long>();
 		List<Long> availableFoods = request.getAvailable();
 		List<Long> unAvailableFoods = request.getUnavailable();
-		for(Food foodData : foods) {
+		for (Food foodData : foods) {
 			Long tempId = null;
 			log.info("updating available foods");
-			for(Long id : availableFoods) {
-				if(foodData.getId().equals(id)) {
+			for (Long id : availableFoods) {
+				if (foodData.getId().equals(id)) {
 					foodData.setStatus(Status.AVAILABLE);
 					tempId = id;
 					break;
 				}
 			}
-			if(tempId != null) {
+			if (tempId != null) {
 				availableFoods.remove(tempId);
 				tempId = null;
 			}
 			log.info("updating Unavailable foods");
-			for(Long id : unAvailableFoods) {
-				if(foodData.getId().equals(id)) {
+			for (Long id : unAvailableFoods) {
+				if (foodData.getId().equals(id)) {
 					foodData.setStatus(Status.UNAVAILABLE);
 					tempId = id;
 					break;
 				}
 			}
-			if(tempId != null) {
+			if (tempId != null) {
 				unAvailableFoods.remove(tempId);
 				tempId = null;
 			}
 		}
-		
+
 		try {
 			restaurantRepository.save(restaurant);
 		} catch (Exception e) {
 			log.info("Caught exception while changing food status, Exception:" + e.getMessage());
 			return false;
 		}
-		
+
 		errorFoodIds.addAll(availableFoods);
 		errorFoodIds.addAll(unAvailableFoods);
 		response.setErrorFoodIds(errorFoodIds);
@@ -163,17 +168,47 @@ public class RestaurantService {
 		if (request.getAction().equals(AppConstants.RES_TABLE_ACTION)) {
 			restaurant.setTableCount(request.getBaseCount());
 		} else if (request.getAction().equals(AppConstants.DAY_TABLE_ACTION)) {
-			Optional<Tables> table = restaurant.getTables().stream()
-					.filter(tableData -> tableData.getBookedOn().equals(request.getDate())).findFirst();
-			if (table.isPresent()) {
-				table.get().setTotal(request.getTableCount());
+			if (request.getPart() == null) {
+				List<Tables> tableList = restaurant.getTables().stream()
+						.filter(tableData -> tableData.getBookedOn().equals(request.getDate()))
+						.collect(Collectors.toList());
+				if (CollectionUtils.isEmpty(tableList)) {
+					for (PartOfDay part : PartOfDay.values()) {
+						Tables tableData = new Tables();
+						tableData.setBookedOn(request.getDate());
+						tableData.setBookedTables(0);
+						tableData.setTotal(request.getTableCount());
+						tableData.setPart(part);
+						restaurant.addTables(tableData);
+					}
+				} else {
+					tableList.forEach(data -> data.setTotal(request.getTableCount()));
+				}
 			} else {
-				Tables tableData = new Tables();
-				tableData.setBookedOn(request.getDate());
-				tableData.setBookedTables(0);
-				tableData.setTotal(request.getTableCount());
-				restaurant.addTables(tableData);
+
+				List<Tables> tableList = restaurant.getTables().stream()
+						.filter(tableData -> tableData.getBookedOn().equals(request.getDate()))
+						.collect(Collectors.toList());
+				if (CollectionUtils.isEmpty(tableList)) {
+					for (PartOfDay part : PartOfDay.values()) {
+						Tables tableData = new Tables();
+						tableData.setBookedOn(request.getDate());
+						tableData.setBookedTables(0);
+						if(part.equals(request.getPart()))
+							tableData.setTotal(request.getTableCount());
+						else
+							tableData.setTotal(0);
+						tableData.setPart(part);
+						restaurant.addTables(tableData);
+					}
+				} else {
+					Optional<Tables> tables = restaurant.getTables().stream().filter(data -> (data.getBookedOn().equals(request.getDate()) && data.getPart().equals(request.getPart()))).findFirst();
+					if(tables.isPresent()) {
+						tables.get().setTotal(request.getTableCount());
+					}
+				}
 			}
+
 		}
 		try {
 			restaurantRepository.save(restaurant);

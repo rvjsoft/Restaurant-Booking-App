@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rvj.app.foodorder.entity.enums.PartOfDay;
 
 import lombok.Data;
 
@@ -29,6 +30,8 @@ public class RestaurantTableRequest extends BaseRequest {
 	
 	@Max(value = 999, message = "tables count should be between 0 to 999")
 	private Integer baseCount;
+	
+	private PartOfDay part;
 	
 	@JsonIgnore
 	private String action;
