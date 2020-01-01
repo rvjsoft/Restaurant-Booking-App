@@ -2,6 +2,7 @@ package com.rvj.app.foodorder.models;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -39,4 +40,8 @@ public class RestaurantModel {
 	@Size(min = 5, max = 15, message = "phone length should be from 5 to 15 characters")
 	@Pattern(regexp = "[0-9]*", message = "phone number should be numeric")
 	private String phone;
+	
+	@NotNull(message = "Table count should not be empty")
+	@Max(value = 999, message = "tables count should be between 0 to 999")
+	private Integer tableCount;
 }

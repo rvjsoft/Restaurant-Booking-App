@@ -51,6 +51,9 @@ public class Restaurant extends User {
 	@Column(name = "status")
 	@Convert(converter = StatusConverter.class)
 	private Status status;
+	
+	@Column(name = "base_tables")
+	private Integer tableCount;
 
 	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Food> foods = new ArrayList<Food>();

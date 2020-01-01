@@ -23,12 +23,15 @@ import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
 import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
 import com.rvj.app.foodorder.models.RestaurantStatusResponse;
+import com.rvj.app.foodorder.models.RestaurantTableRequest;
+import com.rvj.app.foodorder.models.RestaurantTableResponse;
 import com.rvj.app.foodorder.models.UpdateFoodRequest;
 import com.rvj.app.foodorder.models.UpdateFoodResponse;
 import com.rvj.app.foodorder.ops.AddFoodOperation;
 import com.rvj.app.foodorder.ops.DeleteFoodOperation;
 import com.rvj.app.foodorder.ops.FoodStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantStatusOperation;
+import com.rvj.app.foodorder.ops.RestaurantTableOperation;
 import com.rvj.app.foodorder.ops.UpdateFoodOperation;
 import com.rvj.app.foodorder.utils.ValidationUtils;
 
@@ -188,6 +191,36 @@ public class RestaurantController {
 				response.setMessage("change food status failed");
 				log.info("change food status failed");
 				return new ResponseEntity<FoodStatusResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+	
+	@PostMapping(path = "tablecount", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RestaurantTableResponse> changeTableCount(@Valid @RequestBody RestaurantTableRequest request, BindingResult bindingResult) {
+		log.info("Started Processing change table count, messageId=" + request.getMessageId());
+		RestaurantTableResponse response = new RestaurantTableResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing change table count Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<RestaurantTableResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started changing table count");
+			RestaurantTableOperation operation = opsConfiguration.getRestaurantTableOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("table count updated successfully.");
+				log.info("table count updated successfully");
+				return new ResponseEntity<RestaurantTableResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("change table count failed");
+				log.info("change table count failed");
+				return new ResponseEntity<RestaurantTableResponse>(response, HttpStatus.BAD_REQUEST);
 			}
 		}
 	}

@@ -2,6 +2,8 @@ package com.rvj.app.foodorder.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -15,6 +17,7 @@ import com.rvj.app.dataaccess.RestaurantRepository;
 import com.rvj.app.foodorder.entity.Address;
 import com.rvj.app.foodorder.entity.Food;
 import com.rvj.app.foodorder.entity.Restaurant;
+import com.rvj.app.foodorder.entity.Tables;
 import com.rvj.app.foodorder.entity.enums.Status;
 import com.rvj.app.foodorder.models.AddFoodRequest;
 import com.rvj.app.foodorder.models.DeleteFoodRequest;
@@ -22,7 +25,9 @@ import com.rvj.app.foodorder.models.FoodModel;
 import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
 import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
+import com.rvj.app.foodorder.models.RestaurantTableRequest;
 import com.rvj.app.foodorder.models.UpdateFoodRequest;
+import com.rvj.app.foodorder.utils.AppConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -112,18 +117,6 @@ public class RestaurantService {
 		List<Long> errorFoodIds = new ArrayList<Long>();
 		List<Long> availableFoods = request.getAvailable();
 		List<Long> unAvailableFoods = request.getUnavailable();
-		/*
-		 * for(Long foodId : availableFoods) { Food food = null; for(Food foodData :
-		 * foods) { if(foodData.getId().equals(foodId)) { food = foodData; break; } }
-		 * if(food != null) { food.setStatus(Status.AVAILABLE); } else {
-		 * errorFoodIds.add(foodId); } }
-		 * 
-		 * for(Long foodId : unAvailableFoods) { Food food = null; for(Food foodData :
-		 * foods) { if(foodData.getId().equals(foodId)) { food = foodData; break; } }
-		 * if(food != null) { food.setStatus(Status.UNAVAILABLE); } else {
-		 * errorFoodIds.add(foodId); } }
-		 */
-		
 		for(Food foodData : foods) {
 			Long tempId = null;
 			log.info("updating available foods");
@@ -162,6 +155,33 @@ public class RestaurantService {
 		errorFoodIds.addAll(availableFoods);
 		errorFoodIds.addAll(unAvailableFoods);
 		response.setErrorFoodIds(errorFoodIds);
+		return true;
+	}
+
+	public boolean changeTablesCount(RestaurantTableRequest request) {
+		Restaurant restaurant = getRestaurant(request.getUserName());
+		if (request.getAction().equals(AppConstants.RES_TABLE_ACTION)) {
+			restaurant.setTableCount(request.getBaseCount());
+		} else if (request.getAction().equals(AppConstants.DAY_TABLE_ACTION)) {
+			Optional<Tables> table = restaurant.getTables().stream()
+					.filter(tableData -> tableData.getBookedOn().equals(request.getDate())).findFirst();
+			if (table.isPresent()) {
+				table.get().setTotal(request.getTableCount());
+			} else {
+				Tables tableData = new Tables();
+				tableData.setBookedOn(request.getDate());
+				tableData.setBookedTables(0);
+				tableData.setTotal(request.getTableCount());
+				restaurant.addTables(tableData);
+			}
+		}
+		try {
+			restaurantRepository.save(restaurant);
+		} catch (Exception e) {
+			log.info("Caught exception while changing table count, Exception:" + e.getMessage());
+			return false;
+		}
+
 		return true;
 	}
 
