@@ -19,10 +19,13 @@ import com.rvj.app.foodorder.models.AddAddressRequest;
 import com.rvj.app.foodorder.models.AddAddressResponse;
 import com.rvj.app.foodorder.models.DeleteAddressRequest;
 import com.rvj.app.foodorder.models.DeleteAddressResponse;
+import com.rvj.app.foodorder.models.OrderFoodRequest;
+import com.rvj.app.foodorder.models.OrderFoodResponse;
 import com.rvj.app.foodorder.models.UpdateAddressRequest;
 import com.rvj.app.foodorder.models.UpdateAddressResponse;
 import com.rvj.app.foodorder.ops.AddressOperation;
 import com.rvj.app.foodorder.ops.DeleteAddressOperation;
+import com.rvj.app.foodorder.ops.OrderFoodOperation;
 import com.rvj.app.foodorder.ops.UpdateAddressOperaion;
 import com.rvj.app.foodorder.utils.ValidationUtils;
 
@@ -122,6 +125,36 @@ public class CustomerController {
 				response.setMessage("address delete failed");
 				log.info("deletion of address failed");
 				return new ResponseEntity<DeleteAddressResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+	
+	@PostMapping(path = "order", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OrderFoodResponse> orderFood(@Valid @RequestBody OrderFoodRequest request, BindingResult bindingResult) {
+		log.info("Started Processing delete address request, messageId=" + request.getMessageId());
+		OrderFoodResponse response = new OrderFoodResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing order food Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<OrderFoodResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started DeleteAddressResponse address");
+			OrderFoodOperation operation = opsConfiguration.getOrderFoodOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("food ordered successfully.");
+				log.info("food ordered successfully");
+				return new ResponseEntity<OrderFoodResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("food ordered failed");
+				log.info("dfood ordered failed");
+				return new ResponseEntity<OrderFoodResponse>(response, HttpStatus.BAD_REQUEST);
 			}
 		}
 	}

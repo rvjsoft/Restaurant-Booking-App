@@ -1,6 +1,7 @@
 package com.rvj.app.foodorder.entity.enums;
 
 public enum OrderStatus {
+	ORDERED('O'),
 	ACKNOWLEDGED('A'),
 	PREPARING('P'),
 	DELIVERED('D');
@@ -22,6 +23,8 @@ public enum OrderStatus {
 			return PREPARING;
 		} else if (code == 'D' || code == 'd') {
 			return DELIVERED;
+		} else if (code == 'O' || code == 'o') {
+			return ORDERED;
 		} else throw new UnsupportedOperationException("the code " + code + " is not valid");
 	}
 }
