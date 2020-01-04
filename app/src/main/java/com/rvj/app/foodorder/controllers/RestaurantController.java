@@ -21,6 +21,8 @@ import com.rvj.app.foodorder.models.DeleteFoodRequest;
 import com.rvj.app.foodorder.models.DeleteFoodResponse;
 import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
+import com.rvj.app.foodorder.models.OrderStatusRequest;
+import com.rvj.app.foodorder.models.OrderStatusResponse;
 import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
 import com.rvj.app.foodorder.models.RestaurantStatusResponse;
 import com.rvj.app.foodorder.models.RestaurantTableRequest;
@@ -30,6 +32,7 @@ import com.rvj.app.foodorder.models.UpdateFoodResponse;
 import com.rvj.app.foodorder.ops.AddFoodOperation;
 import com.rvj.app.foodorder.ops.DeleteFoodOperation;
 import com.rvj.app.foodorder.ops.FoodStatusOperation;
+import com.rvj.app.foodorder.ops.OrderStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantTableOperation;
 import com.rvj.app.foodorder.ops.UpdateFoodOperation;
@@ -221,6 +224,36 @@ public class RestaurantController {
 				response.setMessage("change table count failed");
 				log.info("change table count failed");
 				return new ResponseEntity<RestaurantTableResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+	
+	@PostMapping(path = "orderstatus", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<OrderStatusResponse> changeOrderStatus(@Valid @RequestBody OrderStatusRequest request, BindingResult bindingResult) {
+		log.info("Started Processing change order status, messageId=" + request.getMessageId());
+		OrderStatusResponse response = new OrderStatusResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing change order status Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<OrderStatusResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started changing table count");
+			OrderStatusOperation operation = opsConfiguration.getOrderStatusOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("order status updated successfully.");
+				log.info("order status updated successfully");
+				return new ResponseEntity<OrderStatusResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("change order status failed");
+				log.info("order status count failed");
+				return new ResponseEntity<OrderStatusResponse>(response, HttpStatus.BAD_REQUEST);
 			}
 		}
 	}

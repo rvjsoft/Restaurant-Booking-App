@@ -18,6 +18,8 @@ import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
 import com.rvj.app.foodorder.models.OrderFoodRequest;
 import com.rvj.app.foodorder.models.OrderFoodResponse;
+import com.rvj.app.foodorder.models.OrderStatusRequest;
+import com.rvj.app.foodorder.models.OrderStatusResponse;
 import com.rvj.app.foodorder.models.RegisterUserRequest;
 import com.rvj.app.foodorder.models.RegisterUserResponse;
 import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
@@ -35,6 +37,7 @@ import com.rvj.app.foodorder.ops.DeleteAddressOperation;
 import com.rvj.app.foodorder.ops.DeleteFoodOperation;
 import com.rvj.app.foodorder.ops.FoodStatusOperation;
 import com.rvj.app.foodorder.ops.OrderFoodOperation;
+import com.rvj.app.foodorder.ops.OrderStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantTableOperation;
 import com.rvj.app.foodorder.ops.UpdateAddressOperaion;
@@ -149,6 +152,15 @@ public class AppOperationConfiguration {
 		BookTableOperation operation = new BookTableOperation();
 		operation.setRequest(request);
 		operation.setResponse(new BookTableResponse());
+		return operation;
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public OrderStatusOperation getOrderStatusOperation(OrderStatusRequest request) {
+		OrderStatusOperation operation = new OrderStatusOperation();
+		operation.setRequest(request);
+		operation.setResponse(new OrderStatusResponse());
 		return operation;
 	}
 	

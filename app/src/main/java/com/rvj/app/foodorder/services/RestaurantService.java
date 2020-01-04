@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.rvj.app.dataaccess.OrderRepository;
 import com.rvj.app.dataaccess.RestaurantRepository;
 import com.rvj.app.dataaccess.TableAvailRepository;
 import com.rvj.app.foodorder.entity.Food;
+import com.rvj.app.foodorder.entity.Order;
 import com.rvj.app.foodorder.entity.Restaurant;
 import com.rvj.app.foodorder.entity.Tables;
 import com.rvj.app.foodorder.entity.enums.PartOfDay;
@@ -24,6 +26,7 @@ import com.rvj.app.foodorder.models.DeleteFoodRequest;
 import com.rvj.app.foodorder.models.FoodModel;
 import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
+import com.rvj.app.foodorder.models.OrderStatusRequest;
 import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
 import com.rvj.app.foodorder.models.RestaurantTableRequest;
 import com.rvj.app.foodorder.models.UpdateFoodRequest;
@@ -40,6 +43,9 @@ public class RestaurantService {
 
 	@Autowired
 	TableAvailRepository tableAvailRepository;
+	
+	@Autowired
+	OrderRepository orderRepository;
 
 	public Restaurant getRestaurant(String userName) {
 		return restaurantRepository.findByUserName(userName);
@@ -219,5 +225,26 @@ public class RestaurantService {
 
 		return true;
 	}
+
+	public boolean updateOrderStatus(OrderStatusRequest request) {
+		Optional<Order> order = orderRepository.findById(request.getOrderId());
+		if(order.isPresent()) {
+			order.get().setStatus(request.getStatus());
+		} else {
+			return false;
+		}
+		try {
+			orderRepository.save(order.get());
+		} catch (Exception e) {
+			log.info("Caught exception while changing order status, Exception:" + e.getMessage());
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isOrderExist(Long orderId) {
+		return orderRepository.findById(orderId).isPresent() ;
+	}
+
 
 }
