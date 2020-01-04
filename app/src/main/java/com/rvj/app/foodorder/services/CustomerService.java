@@ -1,8 +1,6 @@
 package com.rvj.app.foodorder.services;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -26,12 +24,17 @@ import com.rvj.app.foodorder.entity.AddressType;
 import com.rvj.app.foodorder.entity.Customer;
 import com.rvj.app.foodorder.entity.Order;
 import com.rvj.app.foodorder.entity.OrderItem;
+import com.rvj.app.foodorder.entity.Restaurant;
+import com.rvj.app.foodorder.entity.TableBooking;
+import com.rvj.app.foodorder.entity.Tables;
 import com.rvj.app.foodorder.entity.User;
 import com.rvj.app.foodorder.entity.enums.OrderStatus;
+import com.rvj.app.foodorder.entity.enums.PartOfDay;
 import com.rvj.app.foodorder.entity.enums.Status;
 import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.AddAddressRequest;
 import com.rvj.app.foodorder.models.AddressModel;
+import com.rvj.app.foodorder.models.BookTableRequest;
 import com.rvj.app.foodorder.models.DeleteAddressRequest;
 import com.rvj.app.foodorder.models.OrderFoodRequest;
 import com.rvj.app.foodorder.models.OrderFoodResponse;
@@ -138,12 +141,14 @@ public class CustomerService {
 		return user.isPresent();
 	}
 
+	@Transactional
 	public boolean orderFood(OrderFoodRequest request) {
+		Customer customer = getCustomer(request.getUserName());
+		Restaurant restaurant = getRestaurant(request.getResId());
 		Order order = new Order();
-		List<OrderItem> items = new ArrayList<OrderItem>();
 		HashMap<Long, Integer> foods = request.getFoods();
-		order.setCustomer(getCustomer(request.getUserName()));
-		order.setRestaurant(restaurantRepository.findById(request.getResId()).get());
+		restaurant.addOrder(order);
+		customer.addOrder(order);
 		order.setOrderedOn(LocalDateTime.now());
 		order.setStatus(OrderStatus.ORDERED);
 		for(Long foodId : foods.keySet()) {
@@ -153,12 +158,64 @@ public class CustomerService {
 			order.addItem(item);
 		}
 		try {
-			orderRepository.save(order);
+			restaurantRepository.save(restaurant);
+			customerRepository.save(customer);
 		} catch(Exception e) {
 			log.info("Error ordering food");
 			return false;
 		}
 		return true;
+	}
+
+	public boolean bookTable(BookTableRequest request) {
+		Customer customer = getCustomer(request.getUserName());
+		Restaurant restaurant = getRestaurant(request.getResId());
+		TableBooking booking;
+		List<Tables> tableList = restaurant.getTables().stream()
+				.filter(tableData -> tableData.getBookedOn().equals(request.getDate()))
+				.collect(Collectors.toList());
+		if (CollectionUtils.isEmpty(tableList)) {
+			for (PartOfDay part : PartOfDay.values()) {
+				Tables tableData = new Tables();
+				tableData.setBookedOn(request.getDate());
+				if(part.equals(request.getPart())) {
+					tableData.setBookedTables(request.getCount());
+				}
+				tableData.setTotal(restaurant.getTableCount());
+				tableData.setPart(part);
+				restaurant.addTables(tableData);
+			}
+		} else {
+			Tables table = tableList.stream()
+					.filter(data -> data.getPart().equals(request.getPart()))
+					.findFirst().get();
+			table.setBookedTables(table.getBookedTables() + request.getCount());
+		}
+		booking = new TableBooking();
+		booking.setBookingDate(request.getDate());
+		booking.setCount(request.getCount());
+		booking.setPartOfDay(request.getPart());
+		booking.setCustomer(customer);
+		booking.setRestaurant(restaurant);
+		restaurant.addBooking(booking);
+		customer.addBooking(booking);
+		
+		try {
+			restaurantRepository.save(restaurant);
+			customerRepository.save(customer);
+		} catch (Exception e) {
+			log.info("Error booking table");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public Restaurant getRestaurant(Long resId) {
+		Optional<Restaurant> res = restaurantRepository.findById(resId);
+		if(res.isPresent())
+			return res.get();
+		return null;
 	}
 	
 }

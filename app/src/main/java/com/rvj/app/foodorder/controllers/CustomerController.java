@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rvj.app.foodorder.config.AppOperationConfiguration;
 import com.rvj.app.foodorder.models.AddAddressRequest;
 import com.rvj.app.foodorder.models.AddAddressResponse;
+import com.rvj.app.foodorder.models.BookTableRequest;
+import com.rvj.app.foodorder.models.BookTableResponse;
 import com.rvj.app.foodorder.models.DeleteAddressRequest;
 import com.rvj.app.foodorder.models.DeleteAddressResponse;
 import com.rvj.app.foodorder.models.OrderFoodRequest;
@@ -24,6 +26,7 @@ import com.rvj.app.foodorder.models.OrderFoodResponse;
 import com.rvj.app.foodorder.models.UpdateAddressRequest;
 import com.rvj.app.foodorder.models.UpdateAddressResponse;
 import com.rvj.app.foodorder.ops.AddressOperation;
+import com.rvj.app.foodorder.ops.BookTableOperation;
 import com.rvj.app.foodorder.ops.DeleteAddressOperation;
 import com.rvj.app.foodorder.ops.OrderFoodOperation;
 import com.rvj.app.foodorder.ops.UpdateAddressOperaion;
@@ -153,8 +156,38 @@ public class CustomerController {
 			}
 			else {
 				response.setMessage("food ordered failed");
-				log.info("dfood ordered failed");
+				log.info("food ordered failed");
 				return new ResponseEntity<OrderFoodResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+	
+	@PostMapping(path = "booktable", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<BookTableResponse> bookTable(@Valid @RequestBody BookTableRequest request, BindingResult bindingResult) {
+		log.info("Started Processing delete address request, messageId=" + request.getMessageId());
+		BookTableResponse response = new BookTableResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing book Table Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<BookTableResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started DeleteAddressResponse address");
+			BookTableOperation operation = opsConfiguration.getBookTableOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("table booked successfully.");
+				log.info("table booked successfully");
+				return new ResponseEntity<BookTableResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("table booking failed");
+				log.info("table booking failed");
+				return new ResponseEntity<BookTableResponse>(response, HttpStatus.BAD_REQUEST);
 			}
 		}
 	}

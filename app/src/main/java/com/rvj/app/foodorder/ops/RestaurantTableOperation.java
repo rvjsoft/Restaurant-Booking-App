@@ -31,6 +31,7 @@ public class RestaurantTableOperation extends Operation<RestaurantTableRequest, 
 		if ((request.getBaseCount() != null) && (request.getDate() != null || request.getTableCount() != null)) {
 			this.getErrors().addError("conflictInRequest",
 					"can't update both Restaurant's base table count and table count.");
+			return false;
 		} else if (request.getBaseCount() != null) {
 			request.setAction(AppConstants.RES_TABLE_ACTION);
 		} else if (request.getDate() != null && request.getTableCount() != null) {
