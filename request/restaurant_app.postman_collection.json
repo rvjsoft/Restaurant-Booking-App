@@ -1,0 +1,485 @@
+{
+	"info": {
+		"_postman_id": "d784eb72-f44c-4f82-989a-ad8bdc52e2b5",
+		"name": "restaurant_app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "customerCreation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"messageId\": \"messageId\",\n    \"userName\": \"test2\",\n    \"password\": \"noname123\",\n    \"restaurant\":{\n\t\t\"name\":\"test restaurant 2\",\n\t\t\"type\":\"VEG\",\n\t\t\"email\":\"test2@gmail.com\",\n\t\t\"phone\":\"3987523642\",\n\t\t\"tableCount\":\"123\",\n\t\t\"address\":{\n\t\t\"address1\":\"sadfasfsadf\",\n\t\t\"address2\":\"asdfwwfsdf\",\n\t\t\"landmark\":\"sfsfasf\",\n\t\t\"city\":\"sdfasf\",\n\t\t\"state\":\"asdfasdf\"\n\t\t}\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/register/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addAddress",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"noid123\",\n\t\"userName\":\"noname\",\n\t\"addresses\":[\n\t\t\t{\n\t\t\"address1\":\"sadfasfsadf\",\n\t\t\"address2\":\"asdfwwfsdf\",\n\t\t\"landmark\":\"sfsfasf\",\n\t\t\"city\":\"sdfasf\",\n\t\t\"state\":\"asdfasdf\"\n\t\t}\n\t\t]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customer/add/address",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"add",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateAddressRequest",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"noid123\",\n\t\"userName\":\"noname\",\n\t\"address\":\n\t\t\t{\n\t\t\"address1\":\"hohoho\",\n\t\t\"address2\":\"haha3\",\n\t\t\"landmark\":\"haha3\",\n\t\t\"city\":\"haha3\",\n\t\t\"state\":\"haha3\"\n\t\t},\n\t\"addressId\":\"5\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customer/update/address",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"update",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteAddress",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"nomessageId\",\n\t\"userName\":\"noname\",\n\t\"addressId\":\"5\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customer/delete/address",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"delete",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addFood",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"nomessageId\",\n\t\"userName\":\"resta1\",\n\t\"foods\":[\n\t\t{\n\t\t\t\"name\":\"idly\",\n\t\t\t\"price\":\"10\",\n\t\t\t\"type\":\"VEG\",\n\t\t\t\"category\":\"DOSA_IDLY\"\n\t\t},\n\t\t{\n\t\t\t\"name\":\"South Meals\",\n\t\t\t\"price\":\"70\",\n\t\t\t\"type\":\"VEG\",\n\t\t\t\"category\":\"RICE\"\n\t\t}\n\t]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/add/food",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"add",
+						"food"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateFood",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"nomessageId\",\n\t\"userName\":\"resta1\",\n\t\"food\":{\n\t\t\t\"name\":\"vada\",\n\t\t\t\"price\":\"15\",\n\t\t\t\"type\":\"VEG\",\n\t\t\t\"category\":\"DOSA_IDLY\"\n\t\t},\n\t\"foodId\":\"3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/update/food",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"update",
+						"food"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteFood",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"nomessageId\",\n\t\"userName\":\"resta1\",\n\t\"foodId\":\"4\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/delete/food",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"delete",
+						"food"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changeRestaurantStatus",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"nomessageId\",\n\t\"userName\":\"resta1\",\n\t\"status\":\"unavailable\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changeFoodStatus",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"nomessageId\",\n\t\"userName\":\"resta1\",\n\t\"available\":[1,3,2],\n\t\"unavailable\":[]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/status/food",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"status",
+						"food"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tableCount",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"someID\",\n\t\"userName\":\"resta1\",\n\t\"tableCount\":\"10\",\n\t\"part\":\"DINNER\",\n\t\"date\":\"2020-01-05\"\n\t\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/tablecount",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"tablecount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orderFood",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"someId\",\n\t\"userName\":\"noname\",\n\t\"resId\":\"13\",\n\t\"foods\":{\n\t\t\"3\":\"10\",\n\t\t\"1\":\"1\",\n\t\t\"2\":\"1\"\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customer/order",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bookTable",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"someId\",\n\t\"userName\":\"noname\",\n\t\"resId\":\"13\",\n\t\"count\":\"10\",\n\t\"part\":\"DINNER\",\n\t\"date\":\"2020-01-05\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customer/booktable",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"booktable"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changeOrderStatus",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"messageId\":\"someId\",\n\t\"userName\":\"resta1\",\n\t\"orderId\":\"2\",\n\t\"status\":\"acknowledged\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/restaurant/orderstatus",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurant",
+						"orderstatus"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
