@@ -17,7 +17,7 @@ public class EnumValidator implements ConstraintValidator<EnumConstraint, Enum<?
 	@Override
 	public boolean isValid(Enum<?> value, ConstraintValidatorContext context) {
 		if (value == null)
-			return false;
+			return true;
 		return valueList.contains(value);
 	}
 

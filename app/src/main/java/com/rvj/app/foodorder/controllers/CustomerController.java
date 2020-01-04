@@ -9,18 +9,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rvj.app.foodorder.config.AppOperationConfiguration;
+import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.AddAddressRequest;
 import com.rvj.app.foodorder.models.AddAddressResponse;
 import com.rvj.app.foodorder.models.BookTableRequest;
 import com.rvj.app.foodorder.models.BookTableResponse;
 import com.rvj.app.foodorder.models.DeleteAddressRequest;
 import com.rvj.app.foodorder.models.DeleteAddressResponse;
+import com.rvj.app.foodorder.models.GetOrderRequest;
+import com.rvj.app.foodorder.models.GetOrderResponse;
 import com.rvj.app.foodorder.models.OrderFoodRequest;
 import com.rvj.app.foodorder.models.OrderFoodResponse;
 import com.rvj.app.foodorder.models.UpdateAddressRequest;
@@ -28,6 +32,7 @@ import com.rvj.app.foodorder.models.UpdateAddressResponse;
 import com.rvj.app.foodorder.ops.AddressOperation;
 import com.rvj.app.foodorder.ops.BookTableOperation;
 import com.rvj.app.foodorder.ops.DeleteAddressOperation;
+import com.rvj.app.foodorder.ops.GetOrderOperation;
 import com.rvj.app.foodorder.ops.OrderFoodOperation;
 import com.rvj.app.foodorder.ops.UpdateAddressOperaion;
 import com.rvj.app.foodorder.utils.ValidationUtils;
@@ -115,7 +120,7 @@ public class CustomerController {
 			return new ResponseEntity<DeleteAddressResponse>(response, HttpStatus.BAD_REQUEST);
 		}
 		else {
-			log.info("No constraint errors,started DeleteAddressResponse address");
+			log.info("No constraint errors,started Delete address request");
 			DeleteAddressOperation operation = opsConfiguration.getDeleteAddressOperation(request);
 			response = operation.run();
 			response.setMessageId(request.getMessageId());
@@ -188,6 +193,37 @@ public class CustomerController {
 				response.setMessage("table booking failed");
 				log.info("table booking failed");
 				return new ResponseEntity<BookTableResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+	
+	@GetMapping(path = "get/orders", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetOrderResponse> getOrders(@Valid @RequestBody GetOrderRequest request, BindingResult bindingResult) {
+		log.info("Started Processing get Orders request, messageId=" + request.getMessageId());
+		GetOrderResponse response = new GetOrderResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing get Orders Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<GetOrderResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started get orders request");
+			request.setUserLevel(UserLevel.CUSTOMER);
+			GetOrderOperation operation = opsConfiguration.getGetOrderOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("get orders successfully.");
+				log.info("get orders successfully");
+				return new ResponseEntity<GetOrderResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("get orders failed");
+				log.info("get orders failed");
+				return new ResponseEntity<GetOrderResponse>(response, HttpStatus.BAD_REQUEST);
 			}
 		}
 	}

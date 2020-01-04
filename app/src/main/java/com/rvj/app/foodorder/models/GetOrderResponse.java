@@ -5,8 +5,8 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class FoodStatusResponse extends BaseResponse{
+public class GetOrderResponse extends BaseResponse {
 	
-	List<Long> errorFoodIds;
+	private List<OrderModel> orders;
 	
 }

@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
-@Component
-@Data
+	@Data
 public class AddFoodRequest extends BaseRequest{
 	
 	@NotEmpty(message = "UserName should Not be null/empty")

@@ -74,4 +74,8 @@ public class Customer extends User {
 		this.orders.remove(order);
 		order.setCustomer(null);
 	}
+	
+	public String getFullName() {
+		return this.getFirstName() + this.getLastName();
+	}
 }

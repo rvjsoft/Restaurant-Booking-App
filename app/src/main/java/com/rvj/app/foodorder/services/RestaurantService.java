@@ -15,12 +15,14 @@ import org.springframework.util.CollectionUtils;
 import com.rvj.app.dataaccess.OrderRepository;
 import com.rvj.app.dataaccess.RestaurantRepository;
 import com.rvj.app.dataaccess.TableAvailRepository;
+import com.rvj.app.dataaccess.UserRepository;
 import com.rvj.app.foodorder.entity.Food;
 import com.rvj.app.foodorder.entity.Order;
 import com.rvj.app.foodorder.entity.Restaurant;
 import com.rvj.app.foodorder.entity.Tables;
 import com.rvj.app.foodorder.entity.enums.PartOfDay;
 import com.rvj.app.foodorder.entity.enums.Status;
+import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.AddFoodRequest;
 import com.rvj.app.foodorder.models.DeleteFoodRequest;
 import com.rvj.app.foodorder.models.FoodModel;
@@ -46,6 +48,9 @@ public class RestaurantService {
 	
 	@Autowired
 	OrderRepository orderRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 
 	public Restaurant getRestaurant(String userName) {
 		return restaurantRepository.findByUserName(userName);
@@ -244,6 +249,10 @@ public class RestaurantService {
 
 	public boolean isOrderExist(Long orderId) {
 		return orderRepository.findById(orderId).isPresent() ;
+	}
+	
+	public boolean isCustomerExist(Long custId) {
+		return userRepository.findByIdAndUserLevel(custId, UserLevel.CUSTOMER).isPresent();
 	}
 
 

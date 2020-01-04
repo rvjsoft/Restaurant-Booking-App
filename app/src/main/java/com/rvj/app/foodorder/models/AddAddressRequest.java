@@ -7,12 +7,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.stereotype.Component;
-
 import lombok.Data;
 
 @Data
-@Component
 public class AddAddressRequest extends BaseRequest {
 	
 	@NotEmpty(message = "UserName should Not be null/empty")

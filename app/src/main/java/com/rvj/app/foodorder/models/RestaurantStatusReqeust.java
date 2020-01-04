@@ -4,8 +4,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rvj.app.foodorder.entity.enums.Status;
 import com.rvj.app.foodorder.entity.enums.deserializers.StatusDeserial;
@@ -14,7 +12,6 @@ import com.rvj.app.foodorder.validators.EnumConstraint;
 import lombok.Data;
 
 @Data
-@Component
 public class RestaurantStatusReqeust extends BaseRequest {
 
 	@NotEmpty(message = "UserName should Not be null/empty")
