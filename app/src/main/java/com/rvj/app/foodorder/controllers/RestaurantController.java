@@ -9,18 +9,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rvj.app.foodorder.config.AppOperationConfiguration;
+import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.AddFoodRequest;
 import com.rvj.app.foodorder.models.AddFoodResponse;
 import com.rvj.app.foodorder.models.DeleteFoodRequest;
 import com.rvj.app.foodorder.models.DeleteFoodResponse;
 import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
+import com.rvj.app.foodorder.models.GetOrderRequest;
+import com.rvj.app.foodorder.models.GetOrderResponse;
 import com.rvj.app.foodorder.models.OrderStatusRequest;
 import com.rvj.app.foodorder.models.OrderStatusResponse;
 import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
@@ -32,6 +36,7 @@ import com.rvj.app.foodorder.models.UpdateFoodResponse;
 import com.rvj.app.foodorder.ops.AddFoodOperation;
 import com.rvj.app.foodorder.ops.DeleteFoodOperation;
 import com.rvj.app.foodorder.ops.FoodStatusOperation;
+import com.rvj.app.foodorder.ops.GetOrderOperation;
 import com.rvj.app.foodorder.ops.OrderStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantTableOperation;
@@ -257,4 +262,36 @@ public class RestaurantController {
 			}
 		}
 	}
+	
+	@GetMapping(path = "get/orders", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetOrderResponse> getOrders(@Valid @RequestBody GetOrderRequest request, BindingResult bindingResult) {
+		log.info("Started Processing get Orders request, messageId=" + request.getMessageId());
+		GetOrderResponse response = new GetOrderResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing get Orders Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<GetOrderResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started get orders request");
+			request.setUserLevel(UserLevel.RESTAURANT);
+			GetOrderOperation operation = opsConfiguration.getGetOrderOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("get orders successfully.");
+				log.info("get orders successfully");
+				return new ResponseEntity<GetOrderResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("get orders failed");
+				log.info("get orders failed");
+				return new ResponseEntity<GetOrderResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+	
 }

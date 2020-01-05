@@ -1,7 +1,8 @@
 package com.rvj.app.foodorder.models;
 
+import java.time.LocalDate;
+
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

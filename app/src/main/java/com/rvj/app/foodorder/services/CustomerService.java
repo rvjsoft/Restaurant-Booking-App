@@ -158,6 +158,7 @@ public class CustomerService {
 			order.addItem(item);
 		}
 		try {
+			orderRepository.save(order);
 			restaurantRepository.save(restaurant);
 			customerRepository.save(customer);
 		} catch(Exception e) {

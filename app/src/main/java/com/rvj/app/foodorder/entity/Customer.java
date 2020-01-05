@@ -76,6 +76,6 @@ public class Customer extends User {
 	}
 	
 	public String getFullName() {
-		return this.getFirstName() + this.getLastName();
+		return this.getFirstName() + " " +this.getLastName();
 	}
 }
