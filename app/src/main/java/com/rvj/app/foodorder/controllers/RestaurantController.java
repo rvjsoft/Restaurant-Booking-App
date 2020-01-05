@@ -25,6 +25,8 @@ import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
 import com.rvj.app.foodorder.models.GetOrderRequest;
 import com.rvj.app.foodorder.models.GetOrderResponse;
+import com.rvj.app.foodorder.models.GetTableRequest;
+import com.rvj.app.foodorder.models.GetTableResponse;
 import com.rvj.app.foodorder.models.OrderStatusRequest;
 import com.rvj.app.foodorder.models.OrderStatusResponse;
 import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
@@ -37,6 +39,7 @@ import com.rvj.app.foodorder.ops.AddFoodOperation;
 import com.rvj.app.foodorder.ops.DeleteFoodOperation;
 import com.rvj.app.foodorder.ops.FoodStatusOperation;
 import com.rvj.app.foodorder.ops.GetOrderOperation;
+import com.rvj.app.foodorder.ops.GetTableOperation;
 import com.rvj.app.foodorder.ops.OrderStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantTableOperation;
@@ -294,4 +297,34 @@ public class RestaurantController {
 		}
 	}
 	
+	@GetMapping(path = "get/tables", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetTableResponse> getTables(@Valid @RequestBody GetTableRequest request, BindingResult bindingResult) {
+		log.info("Started Processing get tabel booking request, messageId=" + request.getMessageId());
+		GetTableResponse response = new GetTableResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing get tabel booking Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<GetTableResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started get tabel booking request");
+			request.setUserLevel(UserLevel.RESTAURANT);
+			GetTableOperation operation = opsConfiguration.getGetTableOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("get tabel booking successfully.");
+				log.info("get tabel booking successfully");
+				return new ResponseEntity<GetTableResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("get tabel booking failed");
+				log.info("get tabel booking failed");
+				return new ResponseEntity<GetTableResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
 }

@@ -18,6 +18,7 @@ import com.rvj.app.dataaccess.CustomerRepository;
 import com.rvj.app.dataaccess.FoodRepository;
 import com.rvj.app.dataaccess.OrderRepository;
 import com.rvj.app.dataaccess.RestaurantRepository;
+import com.rvj.app.dataaccess.TableBookingRepository;
 import com.rvj.app.dataaccess.UserRepository;
 import com.rvj.app.foodorder.entity.Address;
 import com.rvj.app.foodorder.entity.AddressType;
@@ -60,6 +61,9 @@ public class CustomerService {
 	
 	@Autowired
 	OrderRepository orderRepository;
+	
+	@Autowired
+	TableBookingRepository bookingRepository;
 	
 	public Customer getCustomer(String userName){
 		return customerRepository.findByUserName(userName);
@@ -181,7 +185,8 @@ public class CustomerService {
 				tableData.setBookedOn(request.getDate());
 				if(part.equals(request.getPart())) {
 					tableData.setBookedTables(request.getCount());
-				}
+				} else
+					tableData.setBookedTables(0);
 				tableData.setTotal(restaurant.getTableCount());
 				tableData.setPart(part);
 				restaurant.addTables(tableData);
@@ -202,8 +207,9 @@ public class CustomerService {
 		customer.addBooking(booking);
 		
 		try {
+			bookingRepository.save(booking);
 			restaurantRepository.save(restaurant);
-			customerRepository.save(customer);
+//			customerRepository.save(customer);
 		} catch (Exception e) {
 			log.info("Error booking table");
 			return false;

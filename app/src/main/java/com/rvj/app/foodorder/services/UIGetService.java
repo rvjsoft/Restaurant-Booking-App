@@ -9,13 +9,17 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.rvj.app.dataaccess.OrderRepository;
+import com.rvj.app.dataaccess.TableBookingRepository;
 import com.rvj.app.foodorder.entity.Food;
 import com.rvj.app.foodorder.entity.Order;
 import com.rvj.app.foodorder.entity.OrderItem;
+import com.rvj.app.foodorder.entity.TableBooking;
 import com.rvj.app.foodorder.models.FoodModel;
 import com.rvj.app.foodorder.models.GetOrderResponse;
+import com.rvj.app.foodorder.models.GetTableResponse;
 import com.rvj.app.foodorder.models.OrderItemModel;
 import com.rvj.app.foodorder.models.OrderModel;
+import com.rvj.app.foodorder.models.TableModel;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +30,9 @@ public class UIGetService {
 
 	@Autowired
 	OrderRepository orderRepository;
+	
+	@Autowired
+	TableBookingRepository bookingRepository;
 
 	public boolean getOrders(Example<Order> orderExample, GetOrderResponse response) {
 		List<Order> orders;
@@ -37,6 +44,30 @@ public class UIGetService {
 			return false;
 		}
 		return true;
+	}
+	
+	public boolean getTableBookings(Example<TableBooking> bookingExample, GetTableResponse response) {
+		List<TableBooking> bookingList;
+		try {
+			bookingList = bookingRepository.findAll(bookingExample);
+			response.setTableBookings(getBookingModel(bookingList));
+		} catch (Exception e) {
+			log.info("caught exception while processing request, Exception:" + e.getMessage());
+			return false;
+		}
+		return true;
+	}
+
+	private List<TableModel> getBookingModel(List<TableBooking> bookingList) {
+		List<TableModel> tableModelList = new ArrayList<TableModel>();
+		for(TableBooking booking : bookingList) {
+			TableModel model = new TableModel();
+			BeanUtils.copyProperties(booking, model);
+			model.setCustomer(booking.getCustomer().getFullName());
+			model.setRestaurant(booking.getRestaurant().getName());
+			tableModelList.add(model);
+		}
+		return tableModelList;
 	}
 
 	private List<OrderModel> getOrderModel(List<Order> orders) {
