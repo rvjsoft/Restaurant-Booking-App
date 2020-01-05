@@ -21,6 +21,7 @@ import com.rvj.app.foodorder.models.AddFoodRequest;
 import com.rvj.app.foodorder.models.AddFoodResponse;
 import com.rvj.app.foodorder.models.DeleteFoodRequest;
 import com.rvj.app.foodorder.models.DeleteFoodResponse;
+import com.rvj.app.foodorder.models.FileUploadRequest;
 import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
 import com.rvj.app.foodorder.models.GetOrderRequest;
@@ -44,6 +45,7 @@ import com.rvj.app.foodorder.ops.OrderStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantTableOperation;
 import com.rvj.app.foodorder.ops.UpdateFoodOperation;
+import com.rvj.app.foodorder.services.FileUploadService;
 import com.rvj.app.foodorder.utils.ValidationUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +57,9 @@ public class RestaurantController {
 	
 	@Autowired
 	private AppOperationConfiguration opsConfiguration;
+	
+	@Autowired
+	private FileUploadService fileService;
 	
 	@PostMapping(path = "add/food", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AddFoodResponse> addFood(@Valid @RequestBody AddFoodRequest request, BindingResult bindingResult) {
@@ -327,4 +332,20 @@ public class RestaurantController {
 			}
 		}
 	}
+	
+	@PostMapping(path = "upload", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> uploadImage(@Valid FileUploadRequest request, BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return new ResponseEntity<String>("invalid data", HttpStatus.BAD_REQUEST);
+		}
+		String status = "";
+		try {
+			status = fileService.uploadImaage(request);
+		} catch (Exception e) {
+			status = "invalid data";
+		}
+		return new ResponseEntity<String>(status, HttpStatus.OK);
+	}
+	
+	
 }
