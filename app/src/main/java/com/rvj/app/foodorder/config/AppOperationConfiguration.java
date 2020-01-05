@@ -18,6 +18,8 @@ import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
 import com.rvj.app.foodorder.models.GetOrderRequest;
 import com.rvj.app.foodorder.models.GetOrderResponse;
+import com.rvj.app.foodorder.models.GetRestaurantResponse;
+import com.rvj.app.foodorder.models.GetRestaurantsRequest;
 import com.rvj.app.foodorder.models.GetTableRequest;
 import com.rvj.app.foodorder.models.GetTableResponse;
 import com.rvj.app.foodorder.models.OrderFoodRequest;
@@ -41,6 +43,7 @@ import com.rvj.app.foodorder.ops.DeleteAddressOperation;
 import com.rvj.app.foodorder.ops.DeleteFoodOperation;
 import com.rvj.app.foodorder.ops.FoodStatusOperation;
 import com.rvj.app.foodorder.ops.GetOrderOperation;
+import com.rvj.app.foodorder.ops.GetRestaurantsOperation;
 import com.rvj.app.foodorder.ops.GetTableOperation;
 import com.rvj.app.foodorder.ops.OrderFoodOperation;
 import com.rvj.app.foodorder.ops.OrderStatusOperation;
@@ -185,6 +188,15 @@ public class AppOperationConfiguration {
 		GetTableOperation operation = new GetTableOperation();
 		operation.setRequest(request);
 		operation.setResponse(new GetTableResponse());
+		return operation;
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public GetRestaurantsOperation getGetRestaurantsOperation(GetRestaurantsRequest request) {
+		GetRestaurantsOperation operation = new GetRestaurantsOperation();
+		operation.setRequest(request);
+		operation.setResponse(new GetRestaurantResponse());
 		return operation;
 	}
 	

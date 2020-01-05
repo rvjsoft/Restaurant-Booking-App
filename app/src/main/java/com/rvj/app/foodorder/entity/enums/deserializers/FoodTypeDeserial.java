@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.rvj.app.foodorder.entity.enums.FoodType;
 
-public class FoodTypeDeserial<T> extends JsonDeserializer<FoodType>{
+public class FoodTypeDeserial extends JsonDeserializer<FoodType>{
 
 	@Override
 	public FoodType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {

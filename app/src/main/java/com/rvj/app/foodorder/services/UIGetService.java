@@ -9,16 +9,20 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.rvj.app.dataaccess.OrderRepository;
+import com.rvj.app.dataaccess.RestaurantRepository;
 import com.rvj.app.dataaccess.TableBookingRepository;
 import com.rvj.app.foodorder.entity.Food;
 import com.rvj.app.foodorder.entity.Order;
 import com.rvj.app.foodorder.entity.OrderItem;
+import com.rvj.app.foodorder.entity.Restaurant;
 import com.rvj.app.foodorder.entity.TableBooking;
 import com.rvj.app.foodorder.models.FoodModel;
 import com.rvj.app.foodorder.models.GetOrderResponse;
+import com.rvj.app.foodorder.models.GetRestaurantResponse;
 import com.rvj.app.foodorder.models.GetTableResponse;
 import com.rvj.app.foodorder.models.OrderItemModel;
 import com.rvj.app.foodorder.models.OrderModel;
+import com.rvj.app.foodorder.models.RestaurantModel;
 import com.rvj.app.foodorder.models.TableModel;
 
 import lombok.Data;
@@ -33,6 +37,9 @@ public class UIGetService {
 	
 	@Autowired
 	TableBookingRepository bookingRepository;
+	
+	@Autowired
+	RestaurantRepository resRepo;
 
 	public boolean getOrders(Example<Order> orderExample, GetOrderResponse response) {
 		List<Order> orders;
@@ -89,6 +96,28 @@ public class UIGetService {
 			orderModelList.add(orderModel);
 		}
 		return orderModelList;
+	}
+
+	public boolean getRestaurants(Example<Restaurant> resExample, GetRestaurantResponse response) {
+		List<Restaurant> restaurants;
+		try {
+			restaurants = resRepo.findAll(resExample);
+			response.setRestaurants(getRestaurantModels(restaurants));
+		} catch (Exception e) {
+			log.info("caught exception while processing request, Exception:" + e.getMessage());
+			return false;
+		}
+		return true;
+	}
+
+	private List<RestaurantModel> getRestaurantModels(List<Restaurant> restaurants) {
+		List<RestaurantModel> restaurantList = new ArrayList<RestaurantModel>();
+		for(Restaurant res : restaurants) {
+			RestaurantModel resModel = new RestaurantModel();
+			BeanUtils.copyProperties(res, resModel);
+			restaurantList.add(resModel);
+		}
+		return restaurantList;
 	}
 
 }
