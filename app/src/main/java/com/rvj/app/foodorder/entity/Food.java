@@ -47,6 +47,9 @@ public class Food {
 	@Enumerated(EnumType.STRING)
 	private FoodCategory category;
 	
+	@Column(name = "image_id")
+	private String imageId;
+	
 	@ManyToOne
 	@JoinColumn(name = "res_id")
 	private Restaurant restaurant;

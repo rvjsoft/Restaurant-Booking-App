@@ -1,6 +1,8 @@
 package com.rvj.app.foodorder.controllers;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.validation.Valid;
 
@@ -46,6 +48,7 @@ import com.rvj.app.foodorder.ops.RestaurantStatusOperation;
 import com.rvj.app.foodorder.ops.RestaurantTableOperation;
 import com.rvj.app.foodorder.ops.UpdateFoodOperation;
 import com.rvj.app.foodorder.services.FileUploadService;
+import com.rvj.app.foodorder.utils.AppConstants;
 import com.rvj.app.foodorder.utils.ValidationUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -334,17 +337,30 @@ public class RestaurantController {
 	}
 	
 	@PostMapping(path = "upload", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadImage(@Valid FileUploadRequest request, BindingResult bindingResult) {
+	public ResponseEntity<Map<String, String>> uploadImage(@Valid FileUploadRequest request, BindingResult bindingResult) {
+		Map<String, String> response = new HashMap<String, String>();
 		if(bindingResult.hasErrors()) {
-			return new ResponseEntity<String>("invalid data", HttpStatus.BAD_REQUEST);
+			response.put(AppConstants.MESSAGE, "invalid request data");
+			return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
 		}
-		String status = "";
+		String message = fileService.validate(request);
+		if(Objects.nonNull(message)) {
+			response.put(AppConstants.MESSAGE, message);
+			return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+		}
 		try {
-			status = fileService.uploadImaage(request);
+			String imageId = null;
+			if(Objects.nonNull(request.getFoodId())) {
+				imageId = fileService.uploadImage(request.getFile(), request.getFoodId().toString());
+			} else {
+				imageId = fileService.uploadImage(request.getFile(), request.getUserName());
+			}
+			response.put(AppConstants.MESSAGE, "image uploaded");
+			response.put(AppConstants.IMAGE_ID, imageId);
 		} catch (Exception e) {
-			status = "invalid data";
+			response.put(AppConstants.MESSAGE,"image upload failed");
 		}
-		return new ResponseEntity<String>(status, HttpStatus.OK);
+		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
 	}
 	
 	

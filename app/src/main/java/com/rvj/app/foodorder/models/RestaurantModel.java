@@ -44,4 +44,7 @@ public class RestaurantModel {
 	@NotNull(message = "Table count should not be empty")
 	@Max(value = 999, message = "tables count should be between 0 to 999")
 	private Integer tableCount;
+	
+	@Size(max = 20)
+	private String imageId;
 }

@@ -33,4 +33,7 @@ public class FoodModel {
 	@JsonDeserialize(using = FoodCategoryDeserial.class)
 	private FoodCategory category;
 	
+	@Size(max = 20)
+	private String imageId;
+	
 }

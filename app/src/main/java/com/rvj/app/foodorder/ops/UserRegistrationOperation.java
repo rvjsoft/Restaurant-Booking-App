@@ -1,5 +1,7 @@
 package com.rvj.app.foodorder.ops;
 
+import java.util.Objects;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
@@ -21,22 +23,25 @@ import lombok.extern.slf4j.Slf4j;
 public class UserRegistrationOperation extends Operation<RegisterUserRequest, RegisterUserResponse> {
 
 	@Autowired
-	private UserRegistrationService userServie;
+	private UserRegistrationService userService;
 	
 	@Override
 	protected boolean validate() {
-		if(request.getCustomer() != null && request.getRestaurant() != null)
+		if(userService.isUserExist(request.getUserName())) {
+			this.errors.addError("userName", "user already exist.");
+			log.info("user already exist.");
+		}else if(request.getCustomer() != null && request.getRestaurant() != null)
 		{
 			this.errors.addError("customerAndRestaurant", "can't create both restaurant and customer");
 			log.info("validation error: can't create both restaurant and customer");
 		} else {
 			if(request.getCustomer() != null) {
-				if(userServie.isCustomerExistWithContact(request.getCustomer().getEmail(), request.getCustomer().getPhone())) {
+				if(userService.isCustomerExistWithContact(request.getCustomer().getEmail(), request.getCustomer().getPhone())) {
 					this.errors.addError("email_phone", "userAlready with same contact info email/phone");
 					log.info("validation error: userAlready with same contact info email/phone");
 				}
 			} else if(request.getRestaurant() != null) {
-				if(userServie.isRestaurantExistWithContact(request.getRestaurant().getEmail(), request.getRestaurant().getPhone())) {
+				if(userService.isRestaurantExistWithContact(request.getRestaurant().getEmail(), request.getRestaurant().getPhone())) {
 					this.errors.addError("userExists", "userAlready with same contact info email/phone");
 					log.info("validation error: userAlready with same contact info email/phone");
 				}
@@ -50,9 +55,9 @@ public class UserRegistrationOperation extends Operation<RegisterUserRequest, Re
 	protected void process() {
 		boolean status = false;
 		if(request.getCustomer() != null) {
-			status = userServie.createCustomer(request);
+			status = userService.createCustomer(request);
 		} else if (request.getRestaurant() != null) {
-			status = userServie.createRestaurant(request);
+			status = userService.createRestaurant(request);
 		}
 		if(!status) {
 			this.errors.addError("operationError", "Error creating the User.");

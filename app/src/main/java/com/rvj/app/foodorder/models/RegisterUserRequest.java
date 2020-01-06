@@ -22,4 +22,5 @@ public class RegisterUserRequest extends BaseRequest{
 	
 	@Valid
 	private CustomerModel customer;
+	
 }
