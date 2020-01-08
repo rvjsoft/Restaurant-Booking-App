@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,10 @@ public class RestaurantController {
 	
 	@Autowired
 	private FileUploadService fileService;
+	
+	//:TODO remove this
+	@Autowired
+	private HttpSession session;
 	
 	@PostMapping(path = "add/food", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AddFoodResponse> addFood(@Valid @RequestBody AddFoodRequest request, BindingResult bindingResult) {
@@ -360,6 +365,7 @@ public class RestaurantController {
 		} catch (Exception e) {
 			response.put(AppConstants.MESSAGE,"image upload failed");
 		}
+		System.out.println(session.getId());
 		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
 	}
 	

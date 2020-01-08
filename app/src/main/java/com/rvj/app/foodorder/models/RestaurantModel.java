@@ -1,5 +1,8 @@
 package com.rvj.app.foodorder.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -9,6 +12,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.rvj.app.foodorder.entity.Food;
 import com.rvj.app.foodorder.entity.enums.FoodType;
 import com.rvj.app.foodorder.entity.enums.deserializers.FoodTypeDeserial;
 import com.rvj.app.foodorder.validators.EnumConstraint;
@@ -47,4 +51,6 @@ public class RestaurantModel {
 	
 	@Size(max = 20)
 	private String imageId;
+	
+	private List<Food> foods = new ArrayList<Food>();
 }

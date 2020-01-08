@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	public Optional<User> findByIdAndUserLevel(Long id, UserLevel level);
 	
+	public Optional<User> findByUserNameAndPassword(String userName, String password);
+	
 }
