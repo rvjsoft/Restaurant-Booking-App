@@ -2,6 +2,7 @@ package com.rvj.app.foodorder.models;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -15,6 +16,9 @@ import lombok.Data;
 
 @Data
 public class FoodModel {
+	
+	@Null
+	private Long id;
 	
 	@NotEmpty(message = "food name should Not be null/empty")
 	@Size(min = 2, max = 20, message = "food name length should be from 2 to 20 characters")

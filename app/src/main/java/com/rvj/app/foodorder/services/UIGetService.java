@@ -2,6 +2,7 @@ package com.rvj.app.foodorder.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.rvj.app.foodorder.models.OrderItemModel;
 import com.rvj.app.foodorder.models.OrderModel;
 import com.rvj.app.foodorder.models.RestaurantModel;
 import com.rvj.app.foodorder.models.TableModel;
+import com.rvj.app.foodorder.utils.AppConstants;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -98,16 +100,30 @@ public class UIGetService {
 		return orderModelList;
 	}
 
-	public boolean getRestaurants(Example<Restaurant> resExample, GetRestaurantResponse response) {
+	public boolean getRestaurants(Example<Restaurant> resExample, GetRestaurantResponse response, String action) {
 		List<Restaurant> restaurants;
 		try {
 			restaurants = resRepo.findAll(resExample);
 			response.setRestaurants(getRestaurantModels(restaurants));
+			if(action.equalsIgnoreCase(AppConstants.RES_SINGLE) && !restaurants.isEmpty())
+				response.setFoods(getFoodModel(restaurants.get(0)));
 		} catch (Exception e) {
 			log.info("caught exception while processing request, Exception:" + e.getMessage());
 			return false;
 		}
 		return true;
+	}
+
+	private List<FoodModel> getFoodModel(Restaurant restaurant) {
+		List<FoodModel> foods = new ArrayList<FoodModel>();
+		if(Objects.isNull(restaurant))
+			return foods;
+		for(Food food : restaurant.getFoods()) {
+			FoodModel model = new FoodModel();
+			BeanUtils.copyProperties(food, model);
+			foods.add(model);
+		}
+		return foods;
 	}
 
 	private List<RestaurantModel> getRestaurantModels(List<Restaurant> restaurants) {

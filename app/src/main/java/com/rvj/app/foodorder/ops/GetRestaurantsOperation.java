@@ -63,7 +63,7 @@ public class GetRestaurantsOperation extends Operation<GetRestaurantsRequest, Ge
 		}
 		Example<Restaurant> resExample = Example.of(restaurant, matcher);
 		boolean status = false;
-		status = uiService.getRestaurants(resExample, response);
+		status = uiService.getRestaurants(resExample, response, request.getAction());
 		if(!status) {
 			this.getErrors().addError("request", "request processing failed");
 		}

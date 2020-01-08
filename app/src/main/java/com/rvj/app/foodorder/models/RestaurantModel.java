@@ -52,5 +52,4 @@ public class RestaurantModel {
 	@Size(max = 20)
 	private String imageId;
 	
-	private List<Food> foods = new ArrayList<Food>();
 }
