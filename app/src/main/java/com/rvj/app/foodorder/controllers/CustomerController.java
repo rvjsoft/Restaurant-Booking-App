@@ -297,34 +297,4 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping(path = "get/res", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetRestaurantResponse> getRestaurant(@Valid @RequestBody GetRestaurantsRequest request, BindingResult bindingResult) {
-		log.info("Started Processing get restaurants request, messageId=" + request.getMessageId());
-		GetRestaurantResponse response = new GetRestaurantResponse();
-		response.setMessageId(request.getMessageId());
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
-			response.setErrors(errors);
-			response.setMessage("Request processing failed, Enter the valide values");
-			log.info("having constraint errors,stopped processing get restaurants Request, messageId=" + request.getMessageId());
-			return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.BAD_REQUEST);
-		}
-		else {
-			log.info("No constraint errors,started get tabel booking request");
-			request.setAction(AppConstants.RES_SINGLE);
-			GetRestaurantsOperation operation = opsConfiguration.getGetRestaurantsOperation(request);
-			response = operation.run();
-			response.setMessageId(request.getMessageId());
-			if(response.getErrors().isEmpty()) {
-				response.setMessage("get restaurants successfully.");
-				log.info("get restaurants successfully");
-				return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.OK);
-			}
-			else {
-				response.setMessage("get restaurants failed");
-				log.info("get restaurants failed");
-				return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.BAD_REQUEST);
-			}
-		}
-	}
 }

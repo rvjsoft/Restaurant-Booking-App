@@ -28,8 +28,6 @@ public class AutenticationInterceptor implements HandlerInterceptor{
 		if(Objects.nonNull(user)) {
 			return true;
 		} else {
-			if(url.endsWith("login"))
-				return true;
 			session.invalidate();
 			return false;
 		}

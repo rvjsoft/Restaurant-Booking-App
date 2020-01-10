@@ -8,12 +8,14 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rvj.app.foodorder.entity.Food;
 import com.rvj.app.foodorder.entity.enums.FoodType;
+import com.rvj.app.foodorder.entity.enums.Status;
 import com.rvj.app.foodorder.entity.enums.deserializers.FoodTypeDeserial;
 import com.rvj.app.foodorder.validators.EnumConstraint;
 
@@ -48,6 +50,9 @@ public class RestaurantModel {
 	@NotNull(message = "Table count should not be empty")
 	@Max(value = 999, message = "tables count should be between 0 to 999")
 	private Integer tableCount;
+	
+	@Null
+	private Status status;
 	
 	@Size(max = 20)
 	private String imageId;

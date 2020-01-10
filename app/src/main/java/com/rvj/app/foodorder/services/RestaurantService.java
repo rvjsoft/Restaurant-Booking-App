@@ -1,8 +1,12 @@
 package com.rvj.app.foodorder.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -31,6 +35,9 @@ import com.rvj.app.foodorder.models.FoodStatusResponse;
 import com.rvj.app.foodorder.models.OrderStatusRequest;
 import com.rvj.app.foodorder.models.RestaurantStatusReqeust;
 import com.rvj.app.foodorder.models.RestaurantTableRequest;
+import com.rvj.app.foodorder.models.TableAvailModel;
+import com.rvj.app.foodorder.models.TableAvailRequest;
+import com.rvj.app.foodorder.models.TableAvailResponse;
 import com.rvj.app.foodorder.models.UpdateFoodRequest;
 import com.rvj.app.foodorder.utils.AppConstants;
 
@@ -45,10 +52,10 @@ public class RestaurantService {
 
 	@Autowired
 	TableAvailRepository tableAvailRepository;
-	
+
 	@Autowired
 	OrderRepository orderRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
 
@@ -205,7 +212,7 @@ public class RestaurantService {
 						Tables tableData = new Tables();
 						tableData.setBookedOn(request.getDate());
 						tableData.setBookedTables(0);
-						if(part.equals(request.getPart()))
+						if (part.equals(request.getPart()))
 							tableData.setTotal(request.getTableCount());
 						else
 							tableData.setTotal(0);
@@ -213,8 +220,11 @@ public class RestaurantService {
 						restaurant.addTables(tableData);
 					}
 				} else {
-					Optional<Tables> tables = restaurant.getTables().stream().filter(data -> (data.getBookedOn().equals(request.getDate()) && data.getPart().equals(request.getPart()))).findFirst();
-					if(tables.isPresent()) {
+					Optional<Tables> tables = restaurant.getTables().stream()
+							.filter(data -> (data.getBookedOn().equals(request.getDate())
+									&& data.getPart().equals(request.getPart())))
+							.findFirst();
+					if (tables.isPresent()) {
 						tables.get().setTotal(request.getTableCount());
 					}
 				}
@@ -233,7 +243,7 @@ public class RestaurantService {
 
 	public boolean updateOrderStatus(OrderStatusRequest request) {
 		Optional<Order> order = orderRepository.findById(request.getOrderId());
-		if(order.isPresent()) {
+		if (order.isPresent()) {
 			order.get().setStatus(request.getStatus());
 		} else {
 			return false;
@@ -248,12 +258,31 @@ public class RestaurantService {
 	}
 
 	public boolean isOrderExist(Long orderId) {
-		return orderRepository.findById(orderId).isPresent() ;
+		return orderRepository.findById(orderId).isPresent();
 	}
-	
+
 	public boolean isCustomerExist(Long custId) {
 		return userRepository.findByIdAndUserLevel(custId, UserLevel.CUSTOMER).isPresent();
 	}
 
+	public boolean getTableAvailability(TableAvailRequest request, TableAvailResponse response) {
+		Restaurant restaurant = restaurantRepository.findByUserName(request.getUserName());
+		List<Tables> tables = tableAvailRepository.findByRestaurantAndBookedOnGreaterThan(restaurant, LocalDate.now().minusDays(1l));
+		Map<LocalDate, Map<PartOfDay, TableAvailModel>> responseMap = new HashMap<LocalDate, Map<PartOfDay, TableAvailModel>>();
+		for(int i=0; i<7;i++) {
+			LocalDate date = LocalDate.now().plusDays(i);
+			Map<PartOfDay, TableAvailModel> models= new HashMap<PartOfDay, TableAvailModel>();
+			tables.stream().filter(data -> data.getBookedOn().equals(date)).forEach(data -> {
+				TableAvailModel model = new TableAvailModel();
+				model.setBookedOn(date);
+				model.setTotal(data.getTotal());
+				model.setBookedTables(data.getBookedTables());
+				models.put(data.getPart(), model);
+			});
+			responseMap.put(date, models);
+		}
+		response.setAvailability(responseMap);
+		return true;
+	}
 
 }

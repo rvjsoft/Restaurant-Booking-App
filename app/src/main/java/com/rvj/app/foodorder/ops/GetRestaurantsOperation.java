@@ -26,10 +26,12 @@ public class GetRestaurantsOperation extends Operation<GetRestaurantsRequest, Ge
 
 	@Override
 	protected boolean validate() {
-		Customer customer = customerService.getCustomer(request.getUserName());
-		if (customer == null) {
-			this.getErrors().addError("customer", "customer does not exist");
-		} else if (request.getAction().equals(AppConstants.RES_SINGLE)) {
+		/*
+		 * Customer customer = customerService.getCustomer(request.getUserName()); if
+		 * (customer == null) { this.getErrors().addError("customer",
+		 * "customer does not exist"); } else
+		 */
+		if (request.getAction().equals(AppConstants.RES_SINGLE)) {
 			if (Objects.isNull(request.getResId())) {
 				this.getErrors().addError("customer", "restaurant id is mandatory");
 			}
@@ -64,7 +66,7 @@ public class GetRestaurantsOperation extends Operation<GetRestaurantsRequest, Ge
 		Example<Restaurant> resExample = Example.of(restaurant, matcher);
 		boolean status = false;
 		status = uiService.getRestaurants(resExample, response, request.getAction());
-		if(!status) {
+		if (!status) {
 			this.getErrors().addError("request", "request processing failed");
 		}
 	}
