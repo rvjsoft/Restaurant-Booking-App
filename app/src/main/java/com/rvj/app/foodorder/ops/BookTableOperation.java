@@ -41,7 +41,9 @@ public class BookTableOperation extends Operation<BookTableRequest, BookTableRes
 						.filter(data -> data.getPart().equals(request.getPart())).findFirst();
 				if (tableData.isPresent()
 						&& ((tableData.get().getBookedTables() + request.getCount()) > tableData.get().getTotal())) {
-					this.getErrors().addError("count", request.getCount() + "seats are not available");
+					this.getErrors().addError("count", request.getCount() + " seats are not available");
+				} else if(restaurant.getTableCount() < request.getCount()) {
+					this.getErrors().addError("count", request.getCount() + " seats are not available, available seates are " + restaurant.getTableCount());
 				}
 			}
 		}
