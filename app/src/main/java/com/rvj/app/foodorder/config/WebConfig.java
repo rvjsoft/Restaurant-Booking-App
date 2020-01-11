@@ -10,7 +10,7 @@ import com.rvj.app.foodorder.converters.FoodTypeSpringConverter;
 import com.rvj.app.foodorder.converters.OrderStatusSpringConverter;
 import com.rvj.app.foodorder.converters.PartOfDaySpringConverter;
 import com.rvj.app.foodorder.converters.StatusSpringConverter;
-import com.rvj.app.foodorder.interceptors.AutenticationInterceptor;
+import com.rvj.app.foodorder.interceptors.AuthenticationInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer{
@@ -25,6 +25,6 @@ public class WebConfig implements WebMvcConfigurer{
 	}
 	
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new AutenticationInterceptor()).excludePathPatterns("/login");
+		registry.addInterceptor(new AuthenticationInterceptor()).excludePathPatterns("/login");
 	}
 }

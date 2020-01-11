@@ -14,7 +14,7 @@ import com.rvj.app.foodorder.services.LoginService;
 import com.rvj.app.foodorder.utils.AppConstants;
 
 @Component
-public class AutenticationInterceptor implements HandlerInterceptor{
+public class AuthenticationInterceptor implements HandlerInterceptor{
 	
 	@Autowired
 	LoginService loginService;
