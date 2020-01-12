@@ -23,8 +23,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 			throws Exception {
 		HttpSession session = request.getSession();
 		String user = (String)session.getAttribute(AppConstants.APP_USER);
-		String url = request.getRequestURL().toString();
-		System.out.println(url); 
 		if(Objects.nonNull(user)) {
 			return true;
 		} else {
