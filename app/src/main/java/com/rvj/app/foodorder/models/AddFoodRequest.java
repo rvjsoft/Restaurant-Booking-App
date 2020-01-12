@@ -14,10 +14,6 @@ import lombok.Data;
 @Data
 public class AddFoodRequest extends BaseRequest{
 	
-	@NotEmpty(message = "UserName should Not be null/empty")
-	@Size(min = 5, max = 20, message = "UserName length should be from 5 to 20 characters")
-	private String userName;
-	
 	@Valid
 	@NotNull(message = "food details are mandatory")
 	private List<FoodModel> foods;

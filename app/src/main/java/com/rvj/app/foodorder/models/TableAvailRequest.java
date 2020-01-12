@@ -7,6 +7,4 @@ import lombok.Data;
 @Data
 public class TableAvailRequest extends BaseRequest{
 
-	@JsonIgnore
-	private String userName;
 }

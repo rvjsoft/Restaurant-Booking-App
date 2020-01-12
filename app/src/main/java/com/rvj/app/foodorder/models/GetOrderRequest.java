@@ -17,10 +17,6 @@ import lombok.Data;
 @Data
 public class GetOrderRequest extends BaseRequest {
 	
-	@NotEmpty(message = "UserName should Not be null/empty")
-	@Size(min = 5, max = 20, message = "UserName length should be from 5 to 20 characters")
-	private String userName;
-	
 	private Long resId;
 	
 	private Long custId;

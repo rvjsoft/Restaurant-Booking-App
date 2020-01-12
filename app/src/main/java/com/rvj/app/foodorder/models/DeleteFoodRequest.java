@@ -9,10 +9,6 @@ import lombok.Data;
 @Data
 public class DeleteFoodRequest extends BaseRequest {
 	
-	@NotEmpty(message = "UserName should Not be null/empty")
-	@Size(min = 5, max = 20, message = "UserName length should be from 5 to 20 characters")
-	private String userName;
-	
 	@NotNull(message = "id of food should not be null/empty")
 	private Long foodId;
 }
