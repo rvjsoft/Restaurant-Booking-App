@@ -39,5 +39,9 @@ public class LoginService {
 	public boolean isValidUser(String userName, String password) {
 		return userRepository.findByUserNameAndPassword(userName, password).isPresent();
 	}
+
+	public void logout() {
+		session.invalidate();
+	}
 	
 }

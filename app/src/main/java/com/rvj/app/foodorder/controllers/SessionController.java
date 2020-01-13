@@ -19,14 +19,13 @@ import com.rvj.app.foodorder.utils.ValidationUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/login")
 @RestController
 public class SessionController {
 
 	@Autowired
 	LoginService loginService;
 
-	@PostMapping()
+	@PostMapping("/login")
 	public ResponseEntity<BaseResponse> login(@RequestBody LoginRequest request, BindingResult bindingResult) {
 		BaseResponse response = new BaseResponse();
 		HttpStatus status = null;
@@ -48,5 +47,11 @@ public class SessionController {
 			}
 		}
 		return new ResponseEntity<BaseResponse>(response, status);
+	}
+	
+	@PostMapping("/logout")
+	public String logout() {
+		loginService.logout();
+		return "logout successfully";
 	}
 }

@@ -18,6 +18,8 @@ public class LoginInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		HttpSession session = request.getSession();
+		if(request.getServletPath().startsWith("/logout"))
+			return true;
 		if(Objects.nonNull(session) && Objects.nonNull(session.getAttribute(AppConstants.APP_USER))) {
 			if(request.getServletPath().startsWith("/register")) {
 				response.sendError(403, "logout to continue");
