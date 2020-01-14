@@ -42,6 +42,9 @@ public class UIGetService {
 	
 	@Autowired
 	RestaurantRepository resRepo;
+	
+	@Autowired
+	RestaurantService restaurantService;
 
 	public boolean getOrders(Example<Order> orderExample, GetOrderResponse response) {
 		List<Order> orders;
@@ -107,6 +110,7 @@ public class UIGetService {
 			response.setRestaurants(getRestaurantModels(restaurants));
 			if(action.equalsIgnoreCase(AppConstants.RES_SINGLE) && !restaurants.isEmpty())
 				response.setFoods(getFoodModel(restaurants.get(0)));
+				response.setAvailability(restaurantService.getTableAvail(restaurants.get(0).getUserName()));
 		} catch (Exception e) {
 			log.info("caught exception while processing request, Exception:" + e.getMessage());
 			return false;

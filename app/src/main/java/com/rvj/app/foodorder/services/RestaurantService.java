@@ -39,6 +39,7 @@ import com.rvj.app.foodorder.models.TableAvailModel;
 import com.rvj.app.foodorder.models.TableAvailRequest;
 import com.rvj.app.foodorder.models.TableAvailResponse;
 import com.rvj.app.foodorder.models.UpdateFoodRequest;
+import com.rvj.app.foodorder.ops.GetTableAvailOperation;
 import com.rvj.app.foodorder.utils.AppConstants;
 
 import lombok.extern.slf4j.Slf4j;
@@ -266,7 +267,12 @@ public class RestaurantService {
 	}
 
 	public boolean getTableAvailability(TableAvailRequest request, TableAvailResponse response) {
-		Restaurant restaurant = restaurantRepository.findByUserName(request.getUserName());
+		response.setAvailability(getTableAvail(request.getUserName()));
+		return true;
+	}
+	
+	public Map<LocalDate, Map<PartOfDay, TableAvailModel>> getTableAvail(String restaName){
+		Restaurant restaurant = restaurantRepository.findByUserName(restaName);
 		List<Tables> tables = tableAvailRepository.findByRestaurantAndBookedOnGreaterThan(restaurant, LocalDate.now().minusDays(1l));
 		Map<LocalDate, Map<PartOfDay, TableAvailModel>> responseMap = new HashMap<LocalDate, Map<PartOfDay, TableAvailModel>>();
 		for(int i=0; i<7;i++) {
@@ -281,8 +287,7 @@ public class RestaurantService {
 			});
 			responseMap.put(date, models);
 		}
-		response.setAvailability(responseMap);
-		return true;
+		return responseMap;
 	}
 
 }
