@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import com.rvj.app.foodorder.config.AppOperationConfiguration;
 import com.rvj.app.foodorder.models.GetRestaurantResponse;
 import com.rvj.app.foodorder.models.GetRestaurantsRequest;
 import com.rvj.app.foodorder.ops.GetRestaurantsOperation;
+import com.rvj.app.foodorder.services.FileUploadService;
 import com.rvj.app.foodorder.utils.AppConstants;
 import com.rvj.app.foodorder.utils.ValidationUtils;
 
@@ -30,6 +32,9 @@ public class GeneralController {
 
 	@Autowired
 	private AppOperationConfiguration opsConfiguration;
+	
+	@Autowired
+	private FileUploadService fileUploadService;
 	
 	@GetMapping(path = "get/restaurant", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<GetRestaurantResponse> getRestaurant(@Valid @RequestBody GetRestaurantsRequest request, BindingResult bindingResult) {
@@ -60,5 +65,11 @@ public class GeneralController {
 				return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.BAD_REQUEST);
 			}
 		}
+	}
+	
+	@GetMapping(path = "get/image/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] getImage(@PathVariable String imageId){
+		byte[] imagebytes = fileUploadService.getImageBytes(imageId);
+		return imagebytes;
 	}
 }
