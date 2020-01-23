@@ -1,12 +1,12 @@
-<div *ngIf="show" class="container">
-  <div class="row align-items-center">
-    <div class="col">
-      <p *ngFor="let message of messages">
+<div *ngIf="show" [class.error]='isError' class="container app-toast">
+  <div class="row align-items-center justify-content-between">
+    <div class="col-sm-auto">
+      <div *ngFor="let message of messages">
         {{message}}
-      </p>
+      </div>
     </div>
-    <div>
-      <button class="btn" (click)="closeMessage()">Okay</button>
+    <div class="col-sm-2">
+      <button class="btn border" (click)="closeMessage()">Okay</button>
     </div>
   </div>
 </div>

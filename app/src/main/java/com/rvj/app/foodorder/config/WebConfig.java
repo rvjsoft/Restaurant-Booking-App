@@ -2,6 +2,7 @@ package com.rvj.app.foodorder.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -28,5 +29,9 @@ public class WebConfig implements WebMvcConfigurer{
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new AuthenticationInterceptor()).excludePathPatterns("/login","/register/**","/logout");
 		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/login","/register/**","/logout");
+	}
+	
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowCredentials(true);
 	}
 }

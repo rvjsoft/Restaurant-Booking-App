@@ -9,18 +9,28 @@ import { ToastService } from '../toast.service';
 export class ToastComponent implements OnInit {
 
   show: boolean;
+  isError: boolean;
   messages: string[];
   constructor(private toastService: ToastService) {
 
   }
 
   ngOnInit() {
-    this.toastService.toastMessages.subscribe({
+    this.toastService.successMessages.subscribe({
        next : (val) => {
          this.messages = val;
          this.show = true;
+         this.isError = false;
        }
     });
+
+    this.toastService.errorMessages.subscribe({
+      next : (val) => {
+        this.messages = val;
+        this.show = true;
+        this.isError = true;
+      }
+   });
   }
 
   private closeMessage() {
