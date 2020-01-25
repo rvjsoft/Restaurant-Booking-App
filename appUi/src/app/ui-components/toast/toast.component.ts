@@ -21,6 +21,7 @@ export class ToastComponent implements OnInit {
          this.messages = val;
          this.show = true;
          this.isError = false;
+         window.scrollTo(0, 0);
        }
     });
 
@@ -29,6 +30,7 @@ export class ToastComponent implements OnInit {
         this.messages = val;
         this.show = true;
         this.isError = true;
+        window.scrollTo(0, 0);
       }
    });
   }

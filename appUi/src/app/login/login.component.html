@@ -4,7 +4,7 @@
       <div class="row justify-content-center form-group">
         <div class="h2 col-2">Login</div>
       </div>
-      <form [formGroup]="loginForm">
+      <form [formGroup]="loginForm" (ngSubmit)='login()' >
         <div class="row justify-content-center form-group">
           <label class="col-md-auto">username : </label>
           <input class="col-sm-6 form-control" type="text" width="30" formControlName="userName"/>
@@ -14,7 +14,7 @@
           <input class="col-sm-6 form-control" type="password" formControlName="password" width="30" />
         </div>
         <div class="row justify-content-center form-group">
-          <button type="button" class="col-2 btn btn-primary" (click)="login()">login</button>
+          <button type="submit" class="col-2 btn btn-primary">login</button>
         </div>
       </form>
     </div>

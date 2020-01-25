@@ -22,7 +22,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(false);
+		if(Objects.isNull(session))
+			return false;
 		String user = (String)session.getAttribute(AppConstants.APP_USER);
 		if(Objects.nonNull(user)) {
 			UserLevel level = (UserLevel) session.getAttribute(AppConstants.USR_LEVEL);

@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rvj.app.foodorder.config.AppOperationConfiguration;
 import com.rvj.app.foodorder.entity.enums.UserLevel;
@@ -375,7 +377,9 @@ public class RestaurantController {
 	}
 	
 	@PostMapping(path = "upload", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, String>> uploadImage(@Valid FileUploadRequest request, BindingResult bindingResult) {
+	public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file, BindingResult bindingResult) {
+		FileUploadRequest request = new FileUploadRequest();
+		request.setFile(file);
 		Map<String, String> response = new HashMap<String, String>();
 		if(bindingResult.hasErrors()) {
 			response.put(AppConstants.MESSAGE, "invalid request data");

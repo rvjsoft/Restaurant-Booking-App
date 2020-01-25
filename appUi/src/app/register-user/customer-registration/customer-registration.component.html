@@ -1,0 +1,38 @@
+<div class="container">
+  <div class='register-customer row'>
+    <div class='py-5 px-5 col-sm-12 col-md-11 col-lg-10 col-xl-8'>
+      <div class="h2">Register Customer</div>
+      <form [formGroup]='registrationForm' (ngSubmit)='registerCustomer()' class="row register-form">
+        <div class="form-group col-sm-6">
+          <label class="row">FirstName:</label>
+          <input type="text" class="row form-control" formControlName="firstName" />
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="row">LastName:</label>
+          <input type="text" class="row form-control" formControlName="lastName" />
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="row">E-mail:</label>
+          <input type="email" class="row form-control" formControlName="email" />
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="row">Phone:</label>
+          <input type="text" class="row form-control" formControlName="phone" />
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="row">Username:</label>
+          <input type="text" class="row form-control" formControlName="userName" />
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="row">Password:</label>
+          <input type="password" class="row form-control" formControlName="password" />
+        </div>
+        <div class="submit-wrapper col-12 w-100">
+          <div class="submit row justify-content-center">
+            <button type="submit" class="col-sm-3 col-auto btn btn-primary">Create</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="container">
+  <div class='register-restaurant row'>
+    <div class='py-5 px-5 col-sm-12 col-md-11 col-lg-10 col-xl-8'>
+      <div class="h2">Register Restaurant</div>
+      <form [formGroup]='registrationForm' (ngSubmit)='registerRestaurant()' class="row register-form">
+        <div class="form-group col-sm-10">
+          <label class="row">Restaurant Name:</label>
+          <input type="text" class="row form-control" formControlName="resName" />
+        </div>
+        <div class="form-group col-sm-6 align-self-center">
+          <input type="checkbox" class="form-check d-inline mx-2" formControlName="type" />
+          <label>Is veg only</label>
+        </div>
+        <div class="form-group col-sm-3">
+          <label class="row">Table Count:</label>
+          <input type="number" class="row form-control" formControlName="tableCount" />
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="row">E-mail:</label>
+          <input type="email" class="row form-control" formControlName="email" />
+        </div>
+        <div class="form-group col-sm-6">
+          <label class="row">Phone:</label>
+          <input type="text" class="row form-control" formControlName="phone" />
+        </div>
+        <div class="col-sm-12 my-3 mx-0">Address Data:</div>
+        <div class="address row mx-5 w-75" formGroupName='address'>
+          <div class="form-group col-sm-6">
+            <label class="row">Address:</label>
+            <textarea class="row form-control" formControlName="address1"></textarea>
+          </div>
+          <div class="form-group col-sm-6">
+            <label class="row">Address 2:</label>
+            <textarea class="row form-control" formControlName="address2" ></textarea>
+          </div>
+          <div class="form-group col-sm-6">
+            <label class="row">City:</label>
+            <input type="text" class="row form-control" formControlName="city" />
+          </div>
+          <div class="form-group col-sm-6">
+            <label class="row">Landmark:</label>
+            <input type="text" class="row form-control" formControlName="landmark" />
+          </div>
+          <div class="form-group col-sm-6">
+            <label class="row">State:</label>
+            <input type="text" class="row form-control" formControlName="state" />
+          </div>
+          <div class="form-group col-sm-6">
+            <label class="row">Postal:</label>
+            <input type="text" class="row form-control" formControlName="postalCode" />
+          </div>
+        </div>
+        <div class="form-group col-sm-6 my-3">
+          <label class="row">Username:</label>
+          <input type="text" class="row form-control" formControlName="userName" />
+        </div>
+        <div class="form-group col-sm-6 my-3">
+          <label class="row">Password:</label>
+          <input type="password" class="row form-control" formControlName="password" />
+        </div>
+        <div class="image-upload">
+          <input class="form-control-file" (input)="temp($event)" type="file" formControlName="image" />
+          <img class="img-thumbnail" [attr.src]='image' width="100" height="100" />
+        </div>
+        <div class="submit-wrapper my-3 col-12 w-100">
+          <div class="submit row justify-content-center">
+            <button type="submit" class="col-sm-3 col-auto btn btn-primary">Create</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,5 @@
+import { PartOfDay, OrderStatus, Status, FoodType, FoodCategory } from './AppEnums';
+
 // Generated using typescript-generator version 2.0.400 on 2020-01-17 23:29:27.
 export class Serializable {
 }
@@ -39,6 +41,7 @@ export class AddressModel {
     landmark: string;
     city: string;
     state: string;
+    postalCode: string;
 }
 
 
@@ -268,15 +271,3 @@ export class URL extends Serializable {
 
 export class URI extends Comparable<URI>{
 }
-
-
-
-export type PartOfDay = "BREAKFAST" | "LUNCH" | "DINNER";
-
-export type FoodType = "VEG" | "NON_VEG";
-
-export type FoodCategory = "STARTERS" | "RICE" | "BIRIYANI" | "BREADS" | "DOSA_IDLY" | "JUICES" | "DESERTS" | "CAKES" | "GRAVY" | "CURRY" | "SNACKS";
-
-export type OrderStatus = "ORDERED" | "ACKNOWLEDGED" | "PREPARING" | "DELIVERED";
-
-export type Status = "AVAILABLE" | "UNAVAILABLE";

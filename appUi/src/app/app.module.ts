@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { UiComponentsModule } from './ui-components/ui-components.module';
+import { RegisterUserModule } from './register-user/register-user.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { UiComponentsModule } from './ui-components/ui-components.module';
     UiComponentsModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RegisterUserModule
   ],
   providers: [],
   bootstrap: [AppComponent]
