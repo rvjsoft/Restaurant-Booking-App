@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoginRequest, RegisterUserRequest, FileUploadRequest } from './FoodOrderApp';
+import { LoginRequest, RegisterUserRequest, FileUploadRequest, AddressModel, AddAddressRequest } from './FoodOrderApp';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
@@ -12,6 +12,7 @@ export class AppServiceService {
 
   readonly PATH_LOGIN = 'login';
   readonly PATH_REGISTER = 'register/user';
+  readonly PATH_ADD_ADDRESS = 'customer/add/address';
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
 
@@ -33,15 +34,18 @@ export class AppServiceService {
     return this.http.post(requestURL, request, {headers: headers, withCredentials: true});
   }
 
-  public uploadImage(file: File) {
+  public addAddress(addresses: AddressModel[]): Observable<any>{
+    let requestURL = environment.appURI + this.PATH_ADD_ADDRESS;
+    let request = new AddAddressRequest();
+    request.messageId = (Date.now() / 1000).toString();
+    request.addresses = addresses;
+    return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
+  }
+
+  public uploadImage(file: File): Observable<any> {
     let formData = new FormData();
-    let headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data'
-    });
     formData.append('file', file);
-    // let request = new FileUploadRequest();
-    // request.file = file;
     let requestURL = environment.appURI + 'restaurant/upload';
-    this.http.post(requestURL, formData, {headers: {}, withCredentials: true}).subscribe();
+    return this.http.post(requestURL, formData, {headers: {}, withCredentials: true});
   }
 }

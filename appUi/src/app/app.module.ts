@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { UiComponentsModule } from './ui-components/ui-components.module';
 import { RegisterUserModule } from './register-user/register-user.module';
+import { CustomerModule } from './customer/customer.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { RegisterUserModule } from './register-user/register-user.module';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    RegisterUserModule
+    RegisterUserModule,
+    CustomerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
