@@ -92,9 +92,9 @@ export class RestaurantRegistrationComponent implements OnInit {
     return messages;
   }
 
-  public temp(val: any) {
+  /* public temp(val: any) {
     console.log(val);
     this.appService.uploadImage(val.target.files.item(0));
-  }
+  } */
 
 }

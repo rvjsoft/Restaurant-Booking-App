@@ -78,7 +78,7 @@ export class DeleteFoodResponse extends BaseResponse {
 
 export class FileUploadRequest extends BaseRequest {
     foodId: number;
-    file: MultipartFile;
+    file: File;
 }
 
 export class FoodModel {

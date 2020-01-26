@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoginRequest, RegisterUserRequest } from './FoodOrderApp';
+import { LoginRequest, RegisterUserRequest, FileUploadRequest } from './FoodOrderApp';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
@@ -35,9 +35,13 @@ export class AppServiceService {
 
   public uploadImage(file: File) {
     let formData = new FormData();
-
+    let headers = new HttpHeaders({
+      'Content-Type': 'multipart/form-data'
+    });
     formData.append('file', file);
+    // let request = new FileUploadRequest();
+    // request.file = file;
     let requestURL = environment.appURI + 'restaurant/upload';
-    this.http.post(requestURL, formData, {withCredentials: true}).subscribe();
+    this.http.post(requestURL, formData, {headers: {}, withCredentials: true}).subscribe();
   }
 }

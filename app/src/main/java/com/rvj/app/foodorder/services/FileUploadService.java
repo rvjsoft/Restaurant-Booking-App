@@ -8,8 +8,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Base64;
 import java.util.Objects;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.RandomUtils;
@@ -43,7 +42,11 @@ public class FileUploadService {
 	@Autowired
 	ImageRespository imageRespository;
 	
+	@Autowired
+	HttpSession session;
+	
 	public String validate(FileUploadRequest request) {
+		request.setUserName((String)session.getAttribute(AppConstants.APP_USER));
 		Restaurant restaurant = restaurantService.getRestaurant(request.getUserName());
 		if(Objects.isNull(restaurant)) {
 			return "restaurant doesn't exist";

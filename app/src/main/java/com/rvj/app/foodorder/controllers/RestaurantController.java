@@ -377,14 +377,10 @@ public class RestaurantController {
 	}
 	
 	@PostMapping(path = "upload", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file, BindingResult bindingResult) {
+	public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
 		FileUploadRequest request = new FileUploadRequest();
 		request.setFile(file);
 		Map<String, String> response = new HashMap<String, String>();
-		if(bindingResult.hasErrors()) {
-			response.put(AppConstants.MESSAGE, "invalid request data");
-			return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
-		}
 		String message = fileService.validate(request);
 		if(Objects.nonNull(message)) {
 			response.put(AppConstants.MESSAGE, message);
