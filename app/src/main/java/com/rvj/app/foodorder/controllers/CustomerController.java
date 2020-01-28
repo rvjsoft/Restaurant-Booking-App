@@ -20,10 +20,12 @@ import com.rvj.app.foodorder.config.AppOperationConfiguration;
 import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.AddAddressRequest;
 import com.rvj.app.foodorder.models.AddAddressResponse;
+import com.rvj.app.foodorder.models.BaseRequest;
 import com.rvj.app.foodorder.models.BookTableRequest;
 import com.rvj.app.foodorder.models.BookTableResponse;
 import com.rvj.app.foodorder.models.DeleteAddressRequest;
 import com.rvj.app.foodorder.models.DeleteAddressResponse;
+import com.rvj.app.foodorder.models.GetAddressResponse;
 import com.rvj.app.foodorder.models.GetOrderRequest;
 import com.rvj.app.foodorder.models.GetOrderResponse;
 import com.rvj.app.foodorder.models.GetRestaurantResponse;
@@ -37,6 +39,7 @@ import com.rvj.app.foodorder.models.UpdateAddressResponse;
 import com.rvj.app.foodorder.ops.AddressOperation;
 import com.rvj.app.foodorder.ops.BookTableOperation;
 import com.rvj.app.foodorder.ops.DeleteAddressOperation;
+import com.rvj.app.foodorder.ops.GetAddressOperation;
 import com.rvj.app.foodorder.ops.GetOrderOperation;
 import com.rvj.app.foodorder.ops.GetRestaurantsOperation;
 import com.rvj.app.foodorder.ops.GetTableOperation;
@@ -294,6 +297,36 @@ public class CustomerController {
 				response.setMessage("get restaurants failed");
 				log.info("get restaurants failed");
 				return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+	
+	@GetMapping(path = "/get/address", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetAddressResponse> getAddress(@Valid @RequestBody BaseRequest request, BindingResult bindingResult) {
+		log.info("Started Processing get address request, messageId=" + request.getMessageId());
+		GetAddressResponse response = new GetAddressResponse();
+		response.setMessageId(request.getMessageId());
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
+			response.setErrors(errors);
+			response.setMessage("Request processing failed, Enter the valide values");
+			log.info("having constraint errors,stopped processing get address Request, messageId=" + request.getMessageId());
+			return new ResponseEntity<GetAddressResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			log.info("No constraint errors,started get tabel booking request");
+			GetAddressOperation operation = opsConfiguration.getAddressOperation(request);
+			response = operation.run();
+			response.setMessageId(request.getMessageId());
+			if(response.getErrors().isEmpty()) {
+				response.setMessage("get address successfully.");
+				log.info("get address successfully");
+				return new ResponseEntity<GetAddressResponse>(response, HttpStatus.OK);
+			}
+			else {
+				response.setMessage("get address failed");
+				log.info("get address failed");
+				return new ResponseEntity<GetAddressResponse>(response, HttpStatus.BAD_REQUEST);
 			}
 		}
 	}

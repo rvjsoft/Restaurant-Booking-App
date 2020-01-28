@@ -3,10 +3,16 @@ package com.rvj.app.foodorder.models;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.rvj.app.foodorder.entity.Address;
+import com.rvj.app.foodorder.entity.AddressType;
+
 import lombok.Data;
 
 @Data
 public class AddressModel {
+	
+	private Long id;
+	
 	@NotEmpty(message = "Address1 should Not be null/empty")
 	@Size(min = 5, max = 100, message = "Address1 length should not be more than 100 characters")
 	private String address1;
@@ -25,4 +31,14 @@ public class AddressModel {
 	@NotEmpty(message = "state should Not be null/empty")
 	@Size(min = 3, max = 20, message = "state length should be from 3 to 20 characters")
 	private String state;
+	
+	public boolean isSame(Address address) {
+		AddressType addr = address.getAddress();
+		if (address1.equals(addr.getAddress1()) && address2.equals(addr.getAddress2())
+				&& landmark.equals(addr.getLandmark()) && city.equals(addr.getCity())
+				&& state.equals(addr.getState())) {
+			return true;
+		}
+		return false;
+	}
 }

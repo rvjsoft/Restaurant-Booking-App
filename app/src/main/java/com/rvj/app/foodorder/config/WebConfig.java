@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer{
 		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/login","/register/**","/logout");
 	}
 	
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins("*").allowCredentials(true).allowedMethods("GET","POST");
-	}
+//	public void addCorsMappings(CorsRegistry registry) {
+//		registry.addMapping("/**").allowedOrigins("*").allowCredentials(true).allowedMethods("GET","POST");
+//	}
 }

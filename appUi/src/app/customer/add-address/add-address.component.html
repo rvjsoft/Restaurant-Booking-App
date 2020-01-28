@@ -1,12 +1,22 @@
 <div class="container add-address px-5 py-5">
   <div class="row addresses">
-    <p class="h1">Address</p>
-    <div class="col-sm-12">
-      <div *ngFor="let address of addresses" class="row address-data my-2 mx-3">
-        <div class='col-sm-12 col-md-11 col-lg-10 col-xl-8 address rounded border px-5'>
+    <p class="h1 col-12">Address</p>
+    <div class="col-sm-10">
+      <div *ngFor="let address of addresses" class="row align-items-center px-5 address-data my-2 mx-3 address rounded border">
+        <div class='col'>
           <p class='row'>{{address.address1}}, {{address.address2}}</p>
           <p class='row'>{{address.landmark}}, {{address.city}}</p>
-          <p class='row'>{{address.state}} - {{address.postalCode}}</p>
+          <p class="row">{{address.state}} - {{address.postalCode}}</p>
+          <!-- <div  class='row'>
+            <span class='col'>{{address.state}} - {{address.postalCode}}</span>
+            <div class='col-auto btn btn-primary btn-sm'>delete</div>
+          </div > -->
+          <!-- <div class='row select'>
+            <div class='col-auto btn btn-primary btn-sm'>select</div>
+          </div> -->
+        </div>
+        <div>
+          <div class='col-auto btn btn-primary' >delete</div>
         </div>
       </div>
     </div>

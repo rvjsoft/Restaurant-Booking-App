@@ -30,7 +30,7 @@ public class AddressOperation extends Operation<AddAddressRequest, AddAddressRes
 	@Override
 	protected void process() {
 		boolean status = false;
-		status = customerService.addAddresses(request);
+		status = customerService.addAddresses(request, response);
 		if(!status) {
 			this.getErrors().addError("operationError", "error adding addresses");
 		}
