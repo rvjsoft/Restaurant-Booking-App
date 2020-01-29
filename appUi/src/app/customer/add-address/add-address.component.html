@@ -16,7 +16,10 @@
           </div> -->
         </div>
         <div>
-          <div class='col-auto btn btn-primary btn-sm' >delete</div>
+          <!-- <div class='col-auto btn btn-primary btn-sm delete' (click)='deleteAddress(address)' >delete</div> -->
+          <div class='col-auto delete' (click)='deleteAddress(address)' >
+            <img [attr.src]='x_mark' width="50px" height="50px"/>
+          </div>
         </div>
       </div>
     </div>

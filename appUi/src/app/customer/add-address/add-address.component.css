@@ -3,3 +3,14 @@
   padding-bottom: 0.5em;
 }
 
+.delete {
+  display: none;
+}
+
+.address:hover {
+  box-shadow: -5px 0px grey;
+}
+
+.address:hover .delete {
+  display: block;
+}

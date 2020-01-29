@@ -26,6 +26,7 @@ export class AddAddressRequest extends BaseRequest {
 }
 
 export class AddAddressResponse extends BaseResponse {
+  ids: number[];
 }
 
 export class AddFoodRequest extends BaseRequest {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AddressModel, AddAddressResponse } from 'src/app/FoodOrderApp';
+import { AddressModel, AddAddressResponse, DeleteAddressResponse } from 'src/app/FoodOrderApp';
 import { ToastService } from '../../ui-components/toast.service';
 import { FormBuilder } from '@angular/forms';
 import { AppServiceService } from 'src/app/app-service.service';
@@ -12,6 +12,7 @@ import { AppServiceService } from 'src/app/app-service.service';
 export class AddAddressComponent implements OnInit {
 
   private addresses: AddressModel[];
+  private x_mark = '../../../assets/images/x-mark.svg';
 
   private addressForm = this.formBuilder.group({
     address1: [''],
@@ -47,8 +48,22 @@ export class AddAddressComponent implements OnInit {
     this.appService.addAddress([address]).subscribe(
       (response: AddAddressResponse) => {
         this.toastService.showMessage([response.message], false);
+        address.id = response.ids[0];
         this.addresses.push(address);
         this.addressForm.reset();
+      },
+      (error: any) => {
+        let messages = this.extractErrorMesage(error.error);
+        this.toastService.showMessage(messages, true);
+      }
+    );
+  }
+
+  public deleteAddress(address: AddressModel) {
+    this.appService.deleteAddress(address.id).subscribe(
+      (response: DeleteAddressResponse) => {
+        this.toastService.showMessage([response.message], false);
+        this.addresses.splice(this.addresses.indexOf(address), 1);
       },
       (error: any) => {
         let messages = this.extractErrorMesage(error.error);
