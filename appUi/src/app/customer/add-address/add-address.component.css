@@ -3,14 +3,3 @@
   padding-bottom: 0.5em;
 }
 
-.address:hover {
-  box-shadow: -5px 0px grey;
-}
-
-.select {
-  display: none;
-}
-
-.address:hover > .select {
-  display: block;
-}

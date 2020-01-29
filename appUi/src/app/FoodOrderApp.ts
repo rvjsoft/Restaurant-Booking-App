@@ -36,6 +36,7 @@ export class AddFoodResponse extends BaseResponse {
 }
 
 export class AddressModel {
+    id: number;
     address1: string;
     address2: string;
     landmark: string;
@@ -107,6 +108,14 @@ export class GetOrderRequest extends BaseRequest {
 
 export class GetOrderResponse extends BaseResponse {
     orders: OrderModel[];
+}
+
+export class GetAddressRequest extends BaseRequest {
+
+}
+
+export class GetAddressResponse extends BaseResponse {
+    addresses: AddressModel[];
 }
 
 export class GetRestaurantResponse extends BaseResponse {

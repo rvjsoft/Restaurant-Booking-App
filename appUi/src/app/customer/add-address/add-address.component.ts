@@ -27,6 +27,11 @@ export class AddAddressComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.appService.getAddresses().subscribe(
+      (response) => {
+        this.addresses = response.addresses;
+      }
+    );
   }
 
   public addAddress() {
@@ -39,10 +44,10 @@ export class AddAddressComponent implements OnInit {
     address.landmark = this.addressForm.get('landmark').value;
     address.state = this.addressForm.get('state').value;
     address.postalCode = this.addressForm.get('postalCode').value;
-    this.addresses.push(address);
-    this.appService.addAddress(this.addresses).subscribe(
+    this.appService.addAddress([address]).subscribe(
       (response: AddAddressResponse) => {
         this.toastService.showMessage([response.message], false);
+        this.addresses.push(address);
         this.addressForm.reset();
       },
       (error: any) => {

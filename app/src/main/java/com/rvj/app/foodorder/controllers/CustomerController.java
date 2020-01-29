@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rvj.app.foodorder.config.AppOperationConfiguration;
@@ -301,34 +302,25 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping(path = "/get/address", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetAddressResponse> getAddress(@Valid @RequestBody BaseRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "/get/address")
+	public ResponseEntity<GetAddressResponse> getAddress(@RequestParam String messageId) {
+		BaseRequest request = new BaseRequest();
+		request.setMessageId(messageId);
 		log.info("Started Processing get address request, messageId=" + request.getMessageId());
 		GetAddressResponse response = new GetAddressResponse();
 		response.setMessageId(request.getMessageId());
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
-			response.setErrors(errors);
-			response.setMessage("Request processing failed, Enter the valide values");
-			log.info("having constraint errors,stopped processing get address Request, messageId=" + request.getMessageId());
+		GetAddressOperation operation = opsConfiguration.getAddressOperation(request);
+		response = operation.run();
+		response.setMessageId(request.getMessageId());
+		if (response.getErrors().isEmpty()) {
+			response.setMessage("get address successfully.");
+			log.info("get address successfully");
+			return new ResponseEntity<GetAddressResponse>(response, HttpStatus.OK);
+		} else {
+			response.setMessage("get address failed");
+			log.info("get address failed");
 			return new ResponseEntity<GetAddressResponse>(response, HttpStatus.BAD_REQUEST);
 		}
-		else {
-			log.info("No constraint errors,started get tabel booking request");
-			GetAddressOperation operation = opsConfiguration.getAddressOperation(request);
-			response = operation.run();
-			response.setMessageId(request.getMessageId());
-			if(response.getErrors().isEmpty()) {
-				response.setMessage("get address successfully.");
-				log.info("get address successfully");
-				return new ResponseEntity<GetAddressResponse>(response, HttpStatus.OK);
-			}
-			else {
-				response.setMessage("get address failed");
-				log.info("get address failed");
-				return new ResponseEntity<GetAddressResponse>(response, HttpStatus.BAD_REQUEST);
-			}
-		}
 	}
-	
+
 }
