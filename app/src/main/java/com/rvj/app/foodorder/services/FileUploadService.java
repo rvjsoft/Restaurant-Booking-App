@@ -94,4 +94,12 @@ public class FileUploadService {
 		return bytes;
 	}
 
+	public void updateRestaurantImage(FileUploadRequest request, String imageId) {
+		restaurantService.updateImage(request.getUserName(), imageId);
+	}
+
+	public void updateFoodImage(FileUploadRequest request, String imageId) {
+		restaurantService.updateFoodImage(request.getUserName(), imageId);		
+	}
+
 }

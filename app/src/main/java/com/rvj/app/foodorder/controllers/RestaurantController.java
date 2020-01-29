@@ -377,9 +377,10 @@ public class RestaurantController {
 	}
 	
 	@PostMapping(path = "upload", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("foodId") Long foodId) {
 		FileUploadRequest request = new FileUploadRequest();
 		request.setFile(file);
+		request.setFoodId(foodId);
 		Map<String, String> response = new HashMap<String, String>();
 		String message = fileService.validate(request);
 		if(Objects.nonNull(message)) {
@@ -390,8 +391,10 @@ public class RestaurantController {
 			String imageId = null;
 			if(Objects.nonNull(request.getFoodId())) {
 				imageId = fileService.uploadImage(request.getFile(), request.getFoodId().toString());
+				fileService.updateRestaurantImage(request, imageId);
 			} else {
 				imageId = fileService.uploadImage(request.getFile(), request.getUserName());
+				fileService.updateFoodImage(request, imageId);
 			}
 			response.put(AppConstants.MESSAGE, "image uploaded");
 			response.put(AppConstants.IMAGE_ID, imageId);

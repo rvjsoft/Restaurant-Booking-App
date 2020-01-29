@@ -290,4 +290,27 @@ public class RestaurantService {
 		return responseMap;
 	}
 
+	public void updateImage(String userName, String imageId) {
+		Restaurant restaurant = restaurantRepository.findByUserName(userName);
+		restaurant.setImageId(imageId);
+		try {
+			restaurantRepository.save(restaurant);
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	public void updateFoodImage(String userName, String foodId, String imageId) {
+		Restaurant restaurant = restaurantRepository.findByUserName(userName);
+		try {
+			Optional<Food> food = restaurant.getFoods().stream().filter(data -> data.getId().toString().equals(foodId)).findFirst();
+			if(food.isPresent()) {
+				food.get().setImageId(imageId);
+			}
+			restaurantRepository.save(restaurant);
+		} catch (Exception e) {
+			
+		}
+	}
+
 }
