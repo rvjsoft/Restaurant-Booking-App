@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { UiComponentsModule } from './ui-components/ui-components.module';
 import { RegisterUserModule } from './register-user/register-user.module';
 import { CustomerModule } from './customer/customer.module';
+import { RestaurantModule } from './restaurant/restaurant.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CustomerModule } from './customer/customer.module';
     FormsModule,
     ReactiveFormsModule,
     RegisterUserModule,
-    CustomerModule
+    CustomerModule,
+    RestaurantModule
   ],
   providers: [],
   bootstrap: [AppComponent]

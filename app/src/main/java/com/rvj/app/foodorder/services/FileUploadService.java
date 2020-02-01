@@ -99,7 +99,7 @@ public class FileUploadService {
 	}
 
 	public void updateFoodImage(FileUploadRequest request, String imageId) {
-		restaurantService.updateFoodImage(request.getUserName(), imageId);		
+		restaurantService.updateFoodImage(request.getUserName(),request.getFoodId().toString(), imageId);		
 	}
 
 }

@@ -67,9 +67,9 @@ public class GeneralController {
 		}
 	}
 	
-	@GetMapping(path = "get/image/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
-	public byte[] getImage(@PathVariable String imageId){
+	@GetMapping(path = "get/image/{imageId}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public String getImage(@PathVariable String imageId){
 		byte[] imagebytes = fileUploadService.getImageBytes(imageId);
-		return imagebytes;
+		return "data:image/jpg;base64,"+ (new String(imagebytes));
 	}
 }

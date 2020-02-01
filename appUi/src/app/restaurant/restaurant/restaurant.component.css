@@ -1,0 +1,24 @@
+.resimage {
+  z-index: 1;
+  height: 300px;
+  background-size: cover !important;
+  /* width: 200px; */
+}
+
+.temp {
+  z-index: 1200;
+}
+
+.res_name {
+  color: white;
+  background-color: black;
+  padding: 5px 20px;
+  border-radius: 15px;
+}
+
+.res_type {
+  color: white;
+  background-color: black;
+  padding: 3px 15px;
+  border-radius: 10px;
+}

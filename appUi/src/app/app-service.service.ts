@@ -60,6 +60,11 @@ export class AppServiceService {
     return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
   }
 
+  public getRestaurantImage(): Observable<any> {
+    let requestURL = 'http://localhost:8080/gen/get/image/resta10eW2hVpV';
+    return this.http.get(requestURL, {headers: {}, responseType: 'text', withCredentials: true});
+  }
+
   public uploadImage(file: File): Observable<any> {
     let formData = new FormData();
     formData.append('file', file);
