@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoginRequest, RegisterUserRequest, FileUploadRequest, AddressModel, AddAddressRequest, GetAddressRequest, DeleteAddressRequest } from './FoodOrderApp';
+import { LoginRequest, RegisterUserRequest, FileUploadRequest, AddressModel, AddAddressRequest, GetAddressRequest, DeleteAddressRequest, GetRestaurantsRequest } from './FoodOrderApp';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
@@ -15,6 +15,8 @@ export class AppServiceService {
   readonly PATH_ADD_ADDRESS = 'customer/add/address';
   readonly PATH_GET_ADDRESS = 'customer/get/address';
   readonly PATH_DELETE_ADDRESS = 'customer/delete/address';
+  readonly PATH_GET_RESTAURANT = 'gen/get/restaurant';
+  readonly PATH_GET_RES_IMAGE = 'gen/get/image/';
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
 
@@ -60,8 +62,20 @@ export class AppServiceService {
     return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
   }
 
-  public getRestaurantImage(): Observable<any> {
-    let requestURL = 'http://localhost:8080/gen/get/image/resta10eW2hVpV';
+  public getRestaurant(request: GetRestaurantsRequest): Observable<any> {
+    let requestURL = environment.appURI + this.PATH_GET_RESTAURANT;
+    let params = new HttpParams();
+    if (request.resId != null && request.resId != undefined)
+      params = params.set('resId', request.resId + '');
+    if (request.resName != null && request.resName != undefined)
+      params = params.set('resName', request.resName);
+    if (request.type != null && request.type != undefined)
+      params = params.set('type', request.type);
+    return this.http.get(requestURL, { headers: {}, params: params, withCredentials: true });
+  }
+
+  public getRestaurantImage(imageId: string): Observable<any> {
+    let requestURL = environment.appURI + this.PATH_GET_RES_IMAGE + imageId;
     return this.http.get(requestURL, {headers: {}, responseType: 'text', withCredentials: true});
   }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel } from 'src/app/FoodOrderApp';
+import { Status } from 'src/app/AppEnums';
 
 @Component({
   selector: 'app-restaurant',
@@ -9,25 +11,48 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class RestaurantComponent implements OnInit {
 
-  name = 'restaurant name';
-  type = 'veg';
-  image: any = '';
-  image2: any = '';
+  name;
+  imageId;
+  type;
+  image: any;
+  temp: any = '/assets/images/res_image.svg';
+  image_veg = '/assets/images/veg.svg';
+  image_non_veg = '/assets/images/non_veg.svg';
+  address: AddressModel = new AddressModel();
+  isAvailable: Status;
+  baseCount;
 
   constructor(private appService: AppServiceService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    this.appService.getRestaurantImage().subscribe(
-      (response) => {
-        this.image = this.sanitizer.bypassSecurityTrustUrl(response);
-        this.image2 = response;
-        console.log("got data");
-      }, (error) => {
-        this.image = "";
-        console.log("got error", error);
+
+    let request = new GetRestaurantsRequest;
+    this.appService.getRestaurant(request).subscribe(
+      (response: GetRestaurantResponse) => {
+        let restaurant = response.restaurants[0];
+        if (restaurant.address != null)
+          this.address = restaurant.address;
+        else
+          this.address = new AddressModel();
+        this.baseCount = restaurant.tableCount;
+        this.isAvailable = restaurant.status;
+        this.type = restaurant.type;
+        this.name = restaurant.name;
+        this.imageId = restaurant.imageId;
+        if (this.imageId != null && this.imageId != undefined) {
+          this.appService.getRestaurantImage(this.imageId).subscribe(
+            (imageData) => {
+              this.temp = imageData;
+              this.image = this.sanitizer.bypassSecurityTrustUrl(imageData);
+              console.log("got data");
+            }, (error) => {
+              this.image = "";
+              console.log("got error", error);
+            }
+          );
+        }
       }
     );
-    // this.image = this.sanitizer.bypassSecurityTrustUrl(this.appService.getRestaurantImage());
   }
 
 }

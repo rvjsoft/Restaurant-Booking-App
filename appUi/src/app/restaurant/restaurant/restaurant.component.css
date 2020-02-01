@@ -22,3 +22,8 @@
   padding: 3px 15px;
   border-radius: 10px;
 }
+
+.res_address {
+  color: white;
+  background-color: black;
+}

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -377,7 +378,7 @@ public class RestaurantController {
 	}
 	
 	@PostMapping(path = "upload", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("foodId") Long foodId) {
+	public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file, @Nullable @RequestParam("foodId") Long foodId) {
 		FileUploadRequest request = new FileUploadRequest();
 		request.setFile(file);
 		request.setFoodId(foodId);
@@ -391,14 +392,15 @@ public class RestaurantController {
 			String imageId = null;
 			if(Objects.nonNull(request.getFoodId())) {
 				imageId = fileService.uploadImage(request.getFile(), request.getFoodId().toString());
-				fileService.updateRestaurantImage(request, imageId);
+				fileService.updateFoodImage(request, imageId);
 			} else {
 				imageId = fileService.uploadImage(request.getFile(), request.getUserName());
-				fileService.updateFoodImage(request, imageId);
+				fileService.updateRestaurantImage(request, imageId);
 			}
 			response.put(AppConstants.MESSAGE, "image uploaded");
 			response.put(AppConstants.IMAGE_ID, imageId);
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.put(AppConstants.MESSAGE,"image upload failed");
 		}
 		System.out.println(session.getId());

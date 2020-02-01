@@ -1,21 +1,26 @@
 package com.rvj.app.foodorder.controllers;
 
 import java.util.Map;
+import java.util.Objects;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rvj.app.foodorder.config.AppOperationConfiguration;
+import com.rvj.app.foodorder.entity.enums.FoodType;
 import com.rvj.app.foodorder.models.GetRestaurantResponse;
 import com.rvj.app.foodorder.models.GetRestaurantsRequest;
 import com.rvj.app.foodorder.ops.GetRestaurantsOperation;
@@ -36,40 +41,38 @@ public class GeneralController {
 	@Autowired
 	private FileUploadService fileUploadService;
 	
-	@GetMapping(path = "get/restaurant", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetRestaurantResponse> getRestaurant(@Valid @RequestBody GetRestaurantsRequest request, BindingResult bindingResult) {
-		log.info("Started Processing get restaurants request, messageId=" + request.getMessageId());
+	@GetMapping(path = "get/restaurant", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetRestaurantResponse> getRestaurant(@Nullable @RequestParam("resId") Long resId,
+			@Nullable @RequestParam("resName") String resName, @Nullable @RequestParam("type") FoodType type) {
+		GetRestaurantsRequest request = new GetRestaurantsRequest();
 		GetRestaurantResponse response = new GetRestaurantResponse();
+		request.setResId(resId);
+		request.setResName(resName);
+		request.setType(type);
 		response.setMessageId(request.getMessageId());
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
-			response.setErrors(errors);
-			response.setMessage("Request processing failed, Enter the valide values");
-			log.info("having constraint errors,stopped processing get restaurants Request, messageId=" + request.getMessageId());
+		log.info("No constraint errors,started get tabel booking request");
+		request.setAction(AppConstants.RES_SINGLE);
+		GetRestaurantsOperation operation = opsConfiguration.getGetRestaurantsOperation(request);
+		response = operation.run();
+		response.setMessageId(request.getMessageId());
+		if (response.getErrors().isEmpty()) {
+			response.setMessage("get restaurants successfully.");
+			log.info("get restaurants successfully");
+			return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.OK);
+		} else {
+			response.setMessage("get restaurants failed");
+			log.info("get restaurants failed");
 			return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.BAD_REQUEST);
-		}
-		else {
-			log.info("No constraint errors,started get tabel booking request");
-			request.setAction(AppConstants.RES_SINGLE);
-			GetRestaurantsOperation operation = opsConfiguration.getGetRestaurantsOperation(request);
-			response = operation.run();
-			response.setMessageId(request.getMessageId());
-			if(response.getErrors().isEmpty()) {
-				response.setMessage("get restaurants successfully.");
-				log.info("get restaurants successfully");
-				return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.OK);
-			}
-			else {
-				response.setMessage("get restaurants failed");
-				log.info("get restaurants failed");
-				return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.BAD_REQUEST);
-			}
 		}
 	}
 	
 	@GetMapping(path = "get/image/{imageId}", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String getImage(@PathVariable String imageId){
+		if(StringUtils.isBlank(imageId))
+			return null;
 		byte[] imagebytes = fileUploadService.getImageBytes(imageId);
+		if(Objects.isNull(imagebytes))
+			return null;
 		return "data:image/jpg;base64,"+ (new String(imagebytes));
 	}
 }

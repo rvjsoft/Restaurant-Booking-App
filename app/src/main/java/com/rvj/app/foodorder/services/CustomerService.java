@@ -263,4 +263,12 @@ public class CustomerService {
 		return true;
 	}
 	
+	public User getUser(String userName) {
+		List<User> user = userRepository.findByUserName(userName);
+		if(!CollectionUtils.isEmpty(user)) {
+			return user.get(0);
+		}
+		return null;
+	}
+	
 }

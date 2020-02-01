@@ -17,6 +17,7 @@ import com.rvj.app.foodorder.entity.Order;
 import com.rvj.app.foodorder.entity.OrderItem;
 import com.rvj.app.foodorder.entity.Restaurant;
 import com.rvj.app.foodorder.entity.TableBooking;
+import com.rvj.app.foodorder.models.AddressModel;
 import com.rvj.app.foodorder.models.FoodModel;
 import com.rvj.app.foodorder.models.GetOrderResponse;
 import com.rvj.app.foodorder.models.GetRestaurantResponse;
@@ -108,9 +109,10 @@ public class UIGetService {
 		try {
 			restaurants = resRepo.findAll(resExample);
 			response.setRestaurants(getRestaurantModels(restaurants));
-			if(action.equalsIgnoreCase(AppConstants.RES_SINGLE) && !restaurants.isEmpty())
+			if(action.equalsIgnoreCase(AppConstants.RES_SINGLE) && !restaurants.isEmpty()) {
 				response.setFoods(getFoodModel(restaurants.get(0)));
 				response.setAvailability(restaurantService.getTableAvail(restaurants.get(0).getUserName()));
+			}
 		} catch (Exception e) {
 			log.info("caught exception while processing request, Exception:" + e.getMessage());
 			return false;
@@ -134,7 +136,9 @@ public class UIGetService {
 		List<RestaurantModel> restaurantList = new ArrayList<RestaurantModel>();
 		for(Restaurant res : restaurants) {
 			RestaurantModel resModel = new RestaurantModel();
+			resModel.setAddress(new AddressModel());
 			BeanUtils.copyProperties(res, resModel);
+			BeanUtils.copyProperties(res.getAddress(), resModel.getAddress());
 			restaurantList.add(resModel);
 		}
 		return restaurantList;

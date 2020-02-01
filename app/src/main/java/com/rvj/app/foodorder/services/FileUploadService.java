@@ -68,6 +68,7 @@ public class FileUploadService {
 			Files.write(path, bytes, StandardOpenOption.CREATE);
 			persistImage(fileName);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 		return fileName;
