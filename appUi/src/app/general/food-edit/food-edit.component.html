@@ -1,0 +1,48 @@
+<div class="food_edit container">
+  <div class="h1 text-center px-3 py-3">Modify Foods</div>
+  <div class="modify_food">
+    <div class="h4">Add/Edit Food Items:</div>
+    <div class="food_io row align-content-center">
+      <div class='col-sm-auto align-self-center m-3 mx-5'>
+        <label class='file_upload_label row align-content-center justify-content-center' for='upload_image'>
+          <span class='col-sm-auto'>upload</span>
+        </label>
+        <input type="file" id='upload_image' class="col-auto file_upload" (change)='uploadImage($event.target.files)' />
+      </div>
+      <div class="col-sm-auto food_name align-self-center">
+        <span class="row">Food Name</span>
+        <input [(ngModel)]="foodData.name" type="text" class="row form-control" />
+      </div>
+      <div class="col-sm-auto align-self-center ">
+        <span class="row">Type</span>
+        <div class="food_type row">
+          <select [(ngModel)]="foodData.type" class='form-control' name='food_type'>
+            <option value='VEG'>Veg</option>
+            <option value="NON_VEG">NonVeg</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-auto food_price align-self-center">
+        <span class="row">Price</span>
+        <input [(ngModel)]="foodData.price" type="number row" class="row form-control" />
+      </div>
+      <div class="col-sm-auto align-self-center ">
+        <span class="row">Type</span>
+        <div class="food_category row">
+          <select [(ngModel)]="foodData.category" class='form-control' name='food_category'>
+            <option *ngFor='let category of categories' [attr.value]="category">{{category}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center m-3 justify-content-end">
+      <div class="col-auto btn btn-dark mx-3" (click)='addFood()'>Add</div>
+    </div>
+  </div>
+  <div class="row py-3 justify-content-between">
+    <div class="col h3">Foods</div>
+  </div>
+  <div class="food_list_component">
+    <app-food-list [foodList]='foods'></app-food-list>
+  </div>
+</div>

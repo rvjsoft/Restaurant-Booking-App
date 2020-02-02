@@ -12,6 +12,7 @@ public class AppConstants {
 	public static final String RES_SINGLE = "RES_SINGLE";
 	public static final String MESSAGE = "message";
 	public static final String IMAGE_ID = "imageId";
+	public static final Long NO_FOOD = -1l;
 	
 	public static final String IMAGE_EXTENSION = ".jpg"; 
 }

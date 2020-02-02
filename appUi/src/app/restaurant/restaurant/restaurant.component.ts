@@ -3,6 +3,7 @@ import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel, FoodModel } from 'src/app/FoodOrderApp';
 import { Status } from 'src/app/AppEnums';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-restaurant',
@@ -24,7 +25,7 @@ export class RestaurantComponent implements OnInit {
   foods: Array<FoodModel>;
 
 
-  constructor(private appService: AppServiceService, private sanitizer: DomSanitizer) { }
+  constructor(private appService: AppServiceService, private sanitizer: DomSanitizer, private router: Router) { }
 
   ngOnInit() {
 
@@ -56,6 +57,10 @@ export class RestaurantComponent implements OnInit {
         }
       }
     );
+  }
+
+  public goToModifyFoods() {
+    this.router.navigate(['/restaurant/editfood', {foods: JSON.stringify(this.foods)}]);
   }
 
 }

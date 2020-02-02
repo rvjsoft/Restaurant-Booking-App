@@ -391,8 +391,9 @@ public class RestaurantController {
 		try {
 			String imageId = null;
 			if(Objects.nonNull(request.getFoodId())) {
-				imageId = fileService.uploadImage(request.getFile(), request.getFoodId().toString());
-				fileService.updateFoodImage(request, imageId);
+				imageId = fileService.uploadImage(request.getFile(), "food");
+				if(request.getFoodId() != AppConstants.NO_FOOD)
+					fileService.updateFoodImage(request, imageId);
 			} else {
 				imageId = fileService.uploadImage(request.getFile(), request.getUserName());
 				fileService.updateRestaurantImage(request, imageId);

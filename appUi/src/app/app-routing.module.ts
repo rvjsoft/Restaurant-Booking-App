@@ -6,6 +6,7 @@ import { registerLocaleData } from '@angular/common';
 import { RestaurantRegistrationComponent } from './register-user/restaurant-registration/restaurant-registration.component';
 import { AddAddressComponent } from './customer/add-address/add-address.component';
 import { RestaurantComponent } from './restaurant/restaurant/restaurant.component';
+import { FoodEditComponent } from './general/food-edit/food-edit.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,9 @@ const routes: Routes = [
   },
   {
     path: 'restaurant', component: RestaurantComponent
+  },
+  {
+    path: 'restaurant/editfood', component: FoodEditComponent
   }
 ];
 

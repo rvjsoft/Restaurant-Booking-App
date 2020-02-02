@@ -1,0 +1,21 @@
+.file_upload {
+  display: none;
+}
+.file_upload_label {
+  background-color: white;
+  width: 100px;
+  height: 100px;
+}
+
+.food_type {
+  margin-right: 15px;
+}
+
+.food_io {
+  background-color: lightgray;
+  padding: 15px;
+}
+
+.modify_food {
+  margin:15px;
+}
