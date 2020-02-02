@@ -10,6 +10,7 @@ import { UiComponentsModule } from './ui-components/ui-components.module';
 import { RegisterUserModule } from './register-user/register-user.module';
 import { CustomerModule } from './customer/customer.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
+import { GeneralModule } from './general/general.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { RestaurantModule } from './restaurant/restaurant.module';
     ReactiveFormsModule,
     RegisterUserModule,
     CustomerModule,
-    RestaurantModule
+    RestaurantModule,
+    GeneralModule
   ],
   providers: [],
   bootstrap: [AppComponent]

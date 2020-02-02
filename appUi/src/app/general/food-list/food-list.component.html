@@ -1,0 +1,24 @@
+<div class="food_list container">
+  <div *ngIf='foodList != null && foodList != undefined && foodList.length > 0' class="list">
+    <div *ngFor='let food of foodList; trackBy: trackByFn' class="food_item">
+      <form [formGroup]='quantityForm'>
+        <div class="row align-items-center ">
+          <div class="col-auto">
+            <img class="rounded-lg" width="60px" height="60px"
+              [attr.src]='food.imageId != null ? getImage(food).image : foodImage' />
+          </div>
+          <span class="col">{{food.name}}</span>
+          <span class="col-auto">Rs.{{food.price}}</span>
+          <input *ngIf='!isQuantityZero(food.id)' type="number" min=0 max=10 class="form-control col-auto quantity"
+            [formControlName]='food.id' />
+          <input *ngIf='isQuantityZero(food.id)' type="button" class="btn btn-light"
+            (click)='initializeQuantity(food.id)' value="add" />
+        </div>
+      </form>
+      <hr />
+    </div>
+  </div>
+  <div *ngIf='foodList == null || foodList == undefined || foodList.length == 0' class="row justify-content-center">
+    <span class="col-4">No food available</span>
+  </div>
+</div>

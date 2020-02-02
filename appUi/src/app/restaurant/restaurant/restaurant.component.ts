@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel } from 'src/app/FoodOrderApp';
+import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel, FoodModel } from 'src/app/FoodOrderApp';
 import { Status } from 'src/app/AppEnums';
 
 @Component({
@@ -16,11 +16,13 @@ export class RestaurantComponent implements OnInit {
   type;
   image: any;
   temp: any = '/assets/images/res_image.svg';
-  image_veg = '/assets/images/veg.svg';
-  image_non_veg = '/assets/images/non_veg.svg';
+  imageVeg = '/assets/images/veg.svg';
+  imageNonVeg = '/assets/images/non_veg.svg';
   address: AddressModel = new AddressModel();
   isAvailable: Status;
   baseCount;
+  foods: Array<FoodModel>;
+
 
   constructor(private appService: AppServiceService, private sanitizer: DomSanitizer) { }
 
@@ -30,6 +32,7 @@ export class RestaurantComponent implements OnInit {
     this.appService.getRestaurant(request).subscribe(
       (response: GetRestaurantResponse) => {
         let restaurant = response.restaurants[0];
+        this.foods = response.foods;
         if (restaurant.address != null)
           this.address = restaurant.address;
         else

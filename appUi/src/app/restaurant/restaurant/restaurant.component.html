@@ -5,7 +5,7 @@
     </div>
     <div class='col-auto h3'>
       <div class="res_type">
-        <img calss='image_type' width="30px" height="30px" [attr.src]="type == 'VEG' ? image_veg : type == 'NON_VEG' ? image_non_veg : null" />
+        <img calss='image_type' width="30px" height="30px" [attr.src]="type == 'VEG' ? imageVeg : type == 'NON_VEG' ? imageNonVeg : null" />
         <span class=''>{{type}}</span>
       </div>
     </div>
@@ -24,5 +24,11 @@
         <div class="col">Seats: {{baseCount}}</div>
       </div>
     </div>
+  </div>
+  <div class="row py-3">
+    <div class="col h3">Foods</div>
+  </div>
+  <div class="food_list_component">
+    <app-food-list [foodList]='foods'></app-food-list>
   </div>
 </div>

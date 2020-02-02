@@ -90,6 +90,7 @@ export class FoodModel {
     type: FoodType;
     category: FoodCategory;
     imageId: string;
+    image: any;
 }
 
 export class FoodStatusRequest extends BaseRequest {
