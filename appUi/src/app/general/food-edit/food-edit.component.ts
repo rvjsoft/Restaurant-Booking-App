@@ -5,6 +5,7 @@ import { ToastService } from 'src/app/ui-components/toast.service';
 import { FormBuilder } from '@angular/forms';
 import { AppServiceService } from 'src/app/app-service.service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-food-edit',
@@ -17,6 +18,8 @@ export class FoodEditComponent implements OnInit {
   foodData: FoodModel = new FoodModel();
   foods: Array<FoodModel>;
   temp: any;
+  greyImage = '/assets/images/gray.svg';
+  tempImage: any = this.greyImage;
 
   constructor
     (
@@ -24,7 +27,8 @@ export class FoodEditComponent implements OnInit {
       private formBuilder: FormBuilder,
       private appService: AppServiceService,
       private route: ActivatedRoute,
-      private router: Router
+      private router: Router,
+      private sanitizer: DomSanitizer
     ) { }
 
   ngOnInit() {
@@ -34,8 +38,8 @@ export class FoodEditComponent implements OnInit {
     //   console.log(params.get('foods'));
     // }
     // );
-    this.temp = this.route.snapshot.paramMap.get('foods');
-    this.foods = JSON.parse(this.temp);
+    this.temp = JSON.parse(history.state['foods']);
+    this.foods = this.temp;
   }
 
   public addFood() {
@@ -44,7 +48,13 @@ export class FoodEditComponent implements OnInit {
     this.appService.addFood(request).subscribe(
       (response: AddFoodResponse) => {
         this.toastService.showMessage([response.message], false);
+        this.foodData.id = response.ids[0];
+        let food = new FoodModel();
+        this.cloneFood(food, this.foodData);
+        this.foods = [... this.foods, food];
+        this.foods = this.foods;
         this.foodData = new FoodModel();
+        this.tempImage = this.greyImage;
       },
       (error: any) => {
         let messages = this.extractErrorMesage(error.error);
@@ -59,6 +69,12 @@ export class FoodEditComponent implements OnInit {
     this.appService.uploadImage(file, id).subscribe(
       (response: any) => {
         this.foodData.imageId = response.imageId;
+        this.appService.getRestaurantImage(this.foodData.imageId).subscribe(
+          (imageData) => {
+            // this.tempImage = this.sanitizer.bypassSecurityTrustUrl(imageData);
+            this.tempImage = imageData;
+          }
+        );
       },
       (error) => {
         let messages = this.extractErrorMesage(error.error);
@@ -79,6 +95,16 @@ export class FoodEditComponent implements OnInit {
       messages.push(errors[error]);
     }
     return messages;
+  }
+
+  private cloneFood(target: FoodModel, source: FoodModel) {
+    target.id = source.id;
+    target.category = source.category;
+    target.image = source.image;
+    target.imageId = source.imageId;
+    target.name = source.name;
+    target.price = source.price;
+    target.type = source.type;
   }
 
 }

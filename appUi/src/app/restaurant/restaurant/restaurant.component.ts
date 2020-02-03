@@ -60,7 +60,7 @@ export class RestaurantComponent implements OnInit {
   }
 
   public goToModifyFoods() {
-    this.router.navigate(['/restaurant/editfood', {foods: JSON.stringify(this.foods)}]);
+    this.router.navigateByUrl('/restaurant/editfood', {state: {foods: JSON.stringify(this.foods)}});
   }
 
 }

@@ -34,6 +34,7 @@ export class AddFoodRequest extends BaseRequest {
 }
 
 export class AddFoodResponse extends BaseResponse {
+  ids: Array<number>;
 }
 
 export class AddressModel {

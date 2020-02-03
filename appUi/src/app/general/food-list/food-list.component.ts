@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, SimpleChanges } from '@angular/core';
 import { FoodModel } from 'src/app/FoodOrderApp';
 import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -9,7 +9,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
   templateUrl: './food-list.component.html',
   styleUrls: ['./food-list.component.css']
 })
-export class FoodListComponent implements OnInit {
+export class FoodListComponent implements OnInit, OnChanges {
 
   private foodImage = '/assets/images/food.svg';
   private quantityForm = this.fb.group({});

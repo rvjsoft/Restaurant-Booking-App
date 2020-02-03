@@ -4,7 +4,7 @@
     <div class="h4">Add/Edit Food Items:</div>
     <div class="food_io row align-content-center">
       <div class='col-sm-auto align-self-center m-3 mx-5'>
-        <label class='file_upload_label row align-content-center justify-content-center' for='upload_image'>
+        <label class='file_upload_label row align-content-center justify-content-center' [ngStyle]='{background: "url("+tempImage+")"}' for='upload_image'>
           <span class='col-sm-auto'>upload</span>
         </label>
         <input type="file" id='upload_image' class="col-auto file_upload" (change)='uploadImage($event.target.files)' />
@@ -24,7 +24,7 @@
       </div>
       <div class="col-sm-auto food_price align-self-center">
         <span class="row">Price</span>
-        <input [(ngModel)]="foodData.price" type="number row" class="row form-control" />
+        <input [(ngModel)]="foodData.price" type="number" class="row form-control" />
       </div>
       <div class="col-sm-auto align-self-center ">
         <span class="row">Type</span>
