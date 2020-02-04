@@ -36,13 +36,14 @@
       </div>
     </div>
     <div class="row align-items-center m-3 justify-content-end">
-      <div class="col-auto btn btn-dark mx-3" (click)='addFood()'>Add</div>
+      <div class="col-auto btn btn-dark mx-3" (click)='addFood()'>{{(foodData.id != null && foodData.id != undefined)? 'Update' : 'Add'}}</div>
+      <div class="col-auto btn btn-dark mx-3" (click)='clear()'>Clear</div>
     </div>
   </div>
   <div class="row py-3 justify-content-between">
     <div class="col h3">Foods</div>
   </div>
   <div class="food_list_component">
-    <app-food-list [foodList]='foods'></app-food-list>
+    <app-food-list [foodList]='foods' (deleteFood)='deleteFood($event)' (editFood)='editFood($event)' ></app-food-list>
   </div>
 </div>

@@ -1,3 +1,11 @@
 .quantity {
   width: 75px;
 }
+
+.delete, .edit {
+  display: none;
+}
+
+.food_item:hover .delete, .food_item:hover .edit {
+  display: block;
+}

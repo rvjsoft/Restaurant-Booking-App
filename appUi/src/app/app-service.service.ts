@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoginRequest, RegisterUserRequest, FileUploadRequest, AddressModel, AddAddressRequest, GetAddressRequest, DeleteAddressRequest, GetRestaurantsRequest, AddFoodRequest } from './FoodOrderApp';
+import { LoginRequest, RegisterUserRequest, FileUploadRequest, AddressModel, AddAddressRequest, GetAddressRequest, DeleteAddressRequest, GetRestaurantsRequest, AddFoodRequest, UpdateFoodRequest } from './FoodOrderApp';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
@@ -18,6 +18,7 @@ export class AppServiceService {
   readonly PATH_GET_RESTAURANT = 'gen/get/restaurant';
   readonly PATH_GET_RES_IMAGE = 'gen/get/image/';
   readonly PATH_ADD_FOOD = 'restaurant/add/food';
+  readonly PATH_UPDATE_FOOD = 'restaurant/update/food';
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
 
@@ -77,6 +78,12 @@ export class AppServiceService {
 
   public addFood(request: AddFoodRequest): Observable<any> {
     let requestURL = environment.appURI + this.PATH_ADD_FOOD;
+    request.messageId = (Date.now() / 1000).toString();
+    return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
+  }
+
+  public updateFood(request: UpdateFoodRequest): Observable<any> {
+    let requestURL = environment.appURI + this.PATH_UPDATE_FOOD;
     request.messageId = (Date.now() / 1000).toString();
     return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
   }

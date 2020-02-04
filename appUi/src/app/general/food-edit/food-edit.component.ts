@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FoodCategory } from 'src/app/AppEnums';
-import { FoodModel, AddFoodRequest, AddFoodResponse } from 'src/app/FoodOrderApp';
+import { FoodModel, AddFoodRequest, AddFoodResponse, UpdateFoodRequest, UpdateFoodResponse } from 'src/app/FoodOrderApp';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { FormBuilder } from '@angular/forms';
 import { AppServiceService } from 'src/app/app-service.service';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { of, from } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-food-edit',
@@ -43,6 +45,11 @@ export class FoodEditComponent implements OnInit {
   }
 
   public addFood() {
+    if(this.foodData.id != null && this.foodData.id != undefined)
+    {
+      this.updateFood();
+      return;
+    }
     let request = new AddFoodRequest();
     request.foods = [this.foodData];
     this.appService.addFood(request).subscribe(
@@ -61,6 +68,32 @@ export class FoodEditComponent implements OnInit {
         this.toastService.showMessage(messages, true);
       }
     )
+  }
+
+  public updateFood() {
+    let request = new UpdateFoodRequest();
+    let food = new FoodModel();
+    this.cloneFood(food, this.foodData);
+    food.id = null;
+    request.foodId = this.foodData.id;
+    request.food = food;
+    this.appService.updateFood(request).subscribe(
+      (response: UpdateFoodResponse) => {
+        this.toastService.showMessage([response.message], false);
+        for(let fd of this.foods) {
+          if (fd.id == this.foodData.id){
+            this.cloneFood(fd, this.foodData);
+            break;
+          }
+        }
+        this.foods = [... this.foods];
+        this.foodData = new FoodModel();
+      },
+      (error: any) => {
+        let messages = this.extractErrorMesage(error.error);
+        this.toastService.showMessage(messages, true);
+      }
+    );
   }
 
   public uploadImage(files: any) {
@@ -97,6 +130,14 @@ export class FoodEditComponent implements OnInit {
     return messages;
   }
 
+  deleteFood(food: FoodModel) {
+    console.log(food);
+  }
+
+  editFood(food: FoodModel) {
+    this.foodData = food;
+  }
+
   private cloneFood(target: FoodModel, source: FoodModel) {
     target.id = source.id;
     target.category = source.category;
@@ -105,6 +146,10 @@ export class FoodEditComponent implements OnInit {
     target.name = source.name;
     target.price = source.price;
     target.type = source.type;
+  }
+
+  public clear() {
+    this.foodData = new FoodModel();
   }
 
 }

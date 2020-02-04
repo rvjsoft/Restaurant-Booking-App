@@ -102,7 +102,7 @@ public class RestaurantService {
 			return false;
 		}
 		Food food = foods.get(0);
-		BeanUtils.copyProperties(request.getFood(), food);
+		BeanUtils.copyProperties(request.getFood(), food, "id");
 		try {
 			restaurantRepository.save(restaurant);
 		} catch (Exception e) {

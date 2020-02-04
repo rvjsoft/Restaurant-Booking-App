@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FoodModel } from 'src/app/FoodOrderApp';
 import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -16,10 +16,14 @@ export class FoodListComponent implements OnInit, OnChanges {
   private foodImage = '/assets/images/food.svg';
   private quantityForm = this.fb.group({});
   private foodImages: any = {};
+  private temp: any;
 
   @Input()
   private foodList: Array<FoodModel>;
-  private temp: any;
+  @Output()
+  private editFood = new EventEmitter<FoodModel>();
+  @Output()
+  private deleteFood = new EventEmitter<FoodModel>();
 
   constructor(private appService: AppServiceService, private sanitizer: DomSanitizer, private fb: FormBuilder) { }
 
@@ -58,9 +62,7 @@ export class FoodListComponent implements OnInit, OnChanges {
     for(let index in this.foodList) {
       let food = this.foodList[index];
       if(food.imageId == null || food.imageId == undefined)
-        continue;
-      if(food.imageId == null || food.imageId == undefined)
-        this.foodImages[food.id] = of(this.foodImage);
+        this.foodImages[food.id] = of('url(' + this.foodImage + ')');
       this.foodImages[food.id] = new Observable<any>(
         (observer: Observer<any>) => {
             this.appService.getRestaurantImage(food.imageId).subscribe(
@@ -124,6 +126,14 @@ export class FoodListComponent implements OnInit, OnChanges {
 
   print(val: any) {
     console.log(val);
+  }
+
+  private edit(foodData: FoodModel) {
+    this.editFood.emit(foodData);
+  }
+
+  private delete(foodData: FoodModel) {
+    this.deleteFood.emit(foodData);
   }
 
 }

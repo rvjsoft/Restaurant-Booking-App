@@ -4,8 +4,7 @@
       <form [formGroup]='quantityForm'>
         <div class="row align-items-center ">
           <div class="col-auto">
-            <img class="rounded-lg" width="60px" height="60px"
-              [attr.src]='foodImages[food.id] | async' />
+            <img class="rounded-lg" width="60px" height="60px" [attr.src]='foodImages[food.id] | async' />
           </div>
           <span class="col">{{food.name}}</span>
           <span class="col-auto">Rs.{{food.price}}</span>
@@ -13,6 +12,10 @@
             [formControlName]='food.id' />
           <input *ngIf='isQuantityZero(food.id)' type="button" class="btn btn-light"
             (click)='initializeQuantity(food.id)' value="add" />
+          <div class='col-auto delete' >
+            <img src='/assets/images/x-mark.svg' width="30px" height="30px" (click)='delete(food)' />
+          </div>
+          <div class="col-auto edit btn btn-warning btn-sm" (click)='edit(food)'>edit</div>
         </div>
       </form>
       <hr />
