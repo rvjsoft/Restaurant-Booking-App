@@ -3,16 +3,19 @@ import { FoodModel } from 'src/app/FoodOrderApp';
 import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormControl } from '@angular/forms';
+import { Observable, Observer, of } from 'rxjs';
 
 @Component({
   selector: 'app-food-list',
   templateUrl: './food-list.component.html',
-  styleUrls: ['./food-list.component.css']
+  styleUrls: ['./food-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FoodListComponent implements OnInit, OnChanges {
 
   private foodImage = '/assets/images/food.svg';
   private quantityForm = this.fb.group({});
+  private foodImages: any = {};
 
   @Input()
   private foodList: Array<FoodModel>;
@@ -26,6 +29,22 @@ export class FoodListComponent implements OnInit, OnChanges {
       let food = this.foodList[index];
       this.quantityForm.addControl(food.id + '', new FormControl(''));
     }
+    for(let index in this.foodList) {
+      let food = this.foodList[index];
+      if(food.imageId == null || food.imageId == undefined)
+        this.foodImages[food.id] = of(this.foodImage);
+      this.foodImages[food.id] = new Observable<any>(
+        (observer: Observer<any>) => {
+            this.appService.getRestaurantImage(food.imageId).subscribe(
+              (imageData) => {
+                observer.next(imageData);
+              }, (error) => {
+                observer.next(this.foodImage);
+              }
+            );
+          }
+      );
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -36,12 +55,44 @@ export class FoodListComponent implements OnInit, OnChanges {
       if (!this.quantityForm.contains(food.id + ''))
         this.quantityForm.addControl(food.id + '', new FormControl(''));
     }
+    for(let index in this.foodList) {
+      let food = this.foodList[index];
+      if(food.imageId == null || food.imageId == undefined)
+        continue;
+      if(food.imageId == null || food.imageId == undefined)
+        this.foodImages[food.id] = of(this.foodImage);
+      this.foodImages[food.id] = new Observable<any>(
+        (observer: Observer<any>) => {
+            this.appService.getRestaurantImage(food.imageId).subscribe(
+              (imageData) => {
+                observer.next(imageData);
+              }, (error) => {
+                observer.next(this.foodImage);
+              }
+            );
+          }
+      );
+    }
   }
 
 
-  public getImage(food: FoodModel): FoodModel {
-    console.log('in method getImage ' + food);
-    if (food.image != null && food.image != undefined)
+  public getImage(imageId: string): Observable<any> {
+    console.log('in method getImage ', imageId);
+    let imageAsync = new Observable<any>(
+      (observer: Observer<any>) => {
+          this.appService.getRestaurantImage(imageId).subscribe(
+            (imageData) => {
+              observer.next(imageData);
+              console.log("got data");
+            }, (error) => {
+              observer.next(this.foodImage);
+              console.log("got error", error);
+            }
+          );
+        }
+    );
+        return imageAsync;
+    /* if (food.image != null && food.image != undefined)
       return food;
     this.appService.getRestaurantImage(food.imageId).subscribe(
       (imageData) => {
@@ -53,7 +104,7 @@ export class FoodListComponent implements OnInit, OnChanges {
         console.log("got error", error);
       }
     );
-    return food;
+    return food; */
   }
 
   public isQuantityZero(id: number): boolean {

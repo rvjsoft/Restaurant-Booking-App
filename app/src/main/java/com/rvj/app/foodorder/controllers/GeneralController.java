@@ -68,6 +68,7 @@ public class GeneralController {
 	
 	@GetMapping(path = "get/image/{imageId}", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String getImage(@PathVariable String imageId){
+		log.info("getting image");
 		if(StringUtils.isBlank(imageId))
 			return null;
 		byte[] imagebytes = fileUploadService.getImageBytes(imageId);

@@ -5,7 +5,7 @@
         <div class="row align-items-center ">
           <div class="col-auto">
             <img class="rounded-lg" width="60px" height="60px"
-              [attr.src]='food.imageId != null ? getImage(food).image : foodImage' />
+              [attr.src]='foodImages[food.id] | async' />
           </div>
           <span class="col">{{food.name}}</span>
           <span class="col-auto">Rs.{{food.price}}</span>
