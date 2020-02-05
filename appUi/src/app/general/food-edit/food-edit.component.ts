@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FoodCategory } from 'src/app/AppEnums';
-import { FoodModel, AddFoodRequest, AddFoodResponse, UpdateFoodRequest, UpdateFoodResponse } from 'src/app/FoodOrderApp';
+import { FoodModel, AddFoodRequest, AddFoodResponse, UpdateFoodRequest, UpdateFoodResponse, DeleteFoodRequest, DeleteFoodResponse } from 'src/app/FoodOrderApp';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { FormBuilder } from '@angular/forms';
 import { AppServiceService } from 'src/app/app-service.service';
@@ -131,7 +131,19 @@ export class FoodEditComponent implements OnInit {
   }
 
   deleteFood(food: FoodModel) {
-    console.log(food);
+    let request = new DeleteFoodRequest();
+    request.foodId = food.id;
+    this.appService.deleteFood(request).subscribe(
+      (response: DeleteFoodResponse) => {
+        this.toastService.showMessage([response.message], false);
+        this.foods.splice(this.foods.indexOf(food), 1);
+        this.foods = [... this.foods];
+      },
+      (error) => {
+        let messages = this.extractErrorMesage(error.error);
+        this.toastService.showMessage(messages, true);
+      }
+    );
   }
 
   editFood(food: FoodModel) {
