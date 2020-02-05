@@ -7,6 +7,7 @@ import { RestaurantRegistrationComponent } from './register-user/restaurant-regi
 import { AddAddressComponent } from './customer/add-address/add-address.component';
 import { RestaurantComponent } from './restaurant/restaurant/restaurant.component';
 import { FoodEditComponent } from './general/food-edit/food-edit.component';
+import { ModifyTablesComponent } from './restaurant/modify-tables/modify-tables.component';
 
 
 const routes: Routes = [
@@ -27,6 +28,9 @@ const routes: Routes = [
   },
   {
     path: 'restaurant/editfood', component: FoodEditComponent
+  },
+  {
+    path: 'restaurant/tables', component: ModifyTablesComponent
   }
 ];
 

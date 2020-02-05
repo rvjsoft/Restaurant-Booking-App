@@ -224,6 +224,12 @@ export class TableAvailModel {
     bookedTables: number;
 }
 
+export class TableAvailData {
+  date: Date;
+  baseCount: number;
+  part: PartOfDay;
+}
+
 export class TableAvailRequest extends BaseRequest {
 }
 

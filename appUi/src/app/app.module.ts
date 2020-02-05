@@ -15,7 +15,7 @@ import { GeneralModule } from './general/general.module';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

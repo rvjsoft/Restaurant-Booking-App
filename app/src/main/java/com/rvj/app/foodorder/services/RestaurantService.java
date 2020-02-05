@@ -274,6 +274,8 @@ public class RestaurantService {
 	}
 
 	public boolean getTableAvailability(TableAvailRequest request, TableAvailResponse response) {
+		Restaurant restaurant = restaurantRepository.findByUserName(request.getUserName());
+		response.setBaseCount(restaurant.getTableCount());
 		response.setAvailability(getTableAvail(request.getUserName()));
 		return true;
 	}
