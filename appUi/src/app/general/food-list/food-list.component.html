@@ -4,7 +4,7 @@
       <form [formGroup]='quantityForm'>
         <div class="row align-items-center ">
           <div class="col-auto">
-            <img class="rounded-lg" width="60px" height="60px" [attr.src]='foodImages[food.id] | async' />
+            <img class="rounded-lg" width="60px" height="60px" [attr.src]='(food.imageId == null || food.imageId == undefined) ? foodImage : foodImages[food.id] | async' />
           </div>
           <span class="col">{{food.name}}</span>
           <span class="col-auto">Rs.{{food.price}}</span>
