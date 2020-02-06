@@ -234,6 +234,7 @@ export class TableAvailRequest extends BaseRequest {
 }
 
 export class TableAvailResponse extends BaseResponse {
+    baseCount: number;
     availability: { [index: string]: { [index: string]: TableAvailModel } };
 }
 

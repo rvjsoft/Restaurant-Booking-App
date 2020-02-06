@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PartOfDay } from 'src/app/AppEnums';
-import { TableAvailData, RestaurantTableRequest, RestaurantTableResponse } from 'src/app/FoodOrderApp';
+import { TableAvailData, RestaurantTableRequest, RestaurantTableResponse, TableAvailRequest, TableAvailResponse, TableAvailModel } from 'src/app/FoodOrderApp';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { AppServiceService } from 'src/app/app-service.service';
 
@@ -13,10 +13,13 @@ export class ModifyTablesComponent implements OnInit {
 
   PartOfDay = Object.keys(PartOfDay);
   tableData = new TableAvailData();
+  availability: { [date: string]: { [part: string]: TableAvailModel } };
 
   constructor(private toastService: ToastService, private appService: AppServiceService) { }
 
   ngOnInit() {
+    this.populateAvail();
+
   }
 
   updateTable() {
@@ -29,6 +32,7 @@ export class ModifyTablesComponent implements OnInit {
       (response: RestaurantTableResponse) => {
         this.toastService.showMessage([response.message], false);
         this.tableData = new TableAvailData();
+        this.populateAvail();
       },
       (error: any) => {
         let messages = this.extractErrorMesage(error.error);
@@ -53,4 +57,16 @@ export class ModifyTablesComponent implements OnInit {
     return messages;
   }
 
+  public populateAvail() {
+    this.appService.getTableAvail().subscribe(
+      (response: TableAvailResponse) => {
+        this.availability = response.availability;
+        console.log(this.availability);
+      },
+      (error: any) => {
+        let messages = this.extractErrorMesage(error.error);
+        this.toastService.showMessage(messages, true);
+      }
+    );
+  }
 }

@@ -346,34 +346,26 @@ public class RestaurantController {
 			}
 		}
 	}
-	
-	@GetMapping(path = "get/tablesAvail", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TableAvailResponse> getTablesAvailability(@Valid @RequestBody TableAvailRequest request, BindingResult bindingResult) {
+
+	@GetMapping(path = "get/tablesAvail", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<TableAvailResponse> getTablesAvailability(@RequestParam("messageId") String messageId) {
+		TableAvailRequest request = new TableAvailRequest();
+		request.setMessageId(messageId);
 		log.info("Started Processing get tabel availability request, messageId=" + request.getMessageId());
 		TableAvailResponse response = new TableAvailResponse();
 		response.setMessageId(request.getMessageId());
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
-			response.setErrors(errors);
-			response.setMessage("Request processing failed, Enter the valide values");
-			log.info("having constraint errors,stopped processing get tabel availability Request, messageId=" + request.getMessageId());
+		log.info("No constraint errors,started get tabel availability request");
+		GetTableAvailOperation operation = opsConfiguration.getGetTableAvailOperation(request);
+		response = operation.run();
+		response.setMessageId(request.getMessageId());
+		if (response.getErrors().isEmpty()) {
+			response.setMessage("get tabel availability successfully.");
+			log.info("get tabel availability successfully");
+			return new ResponseEntity<TableAvailResponse>(response, HttpStatus.OK);
+		} else {
+			response.setMessage("get tabel availability failed");
+			log.info("get tabel availability failed");
 			return new ResponseEntity<TableAvailResponse>(response, HttpStatus.BAD_REQUEST);
-		}
-		else {
-			log.info("No constraint errors,started get tabel availability request");
-			GetTableAvailOperation operation = opsConfiguration.getGetTableAvailOperation(request);
-			response = operation.run();
-			response.setMessageId(request.getMessageId());
-			if(response.getErrors().isEmpty()) {
-				response.setMessage("get tabel availability successfully.");
-				log.info("get tabel availability successfully");
-				return new ResponseEntity<TableAvailResponse>(response, HttpStatus.OK);
-			}
-			else {
-				response.setMessage("get tabel availability failed");
-				log.info("get tabel availability failed");
-				return new ResponseEntity<TableAvailResponse>(response, HttpStatus.BAD_REQUEST);
-			}
 		}
 	}
 	
