@@ -16,8 +16,13 @@ export class SearchRestaurantComponent implements OnInit {
   status: boolean;
   type: boolean;
   name;
+  private size = 10;
 
-  constructor(private appService: AppServiceService, private toastService: ToastService, private router: Router) { }
+  constructor(
+    private appService: AppServiceService,
+    private toastService: ToastService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.getResList();
@@ -25,6 +30,8 @@ export class SearchRestaurantComponent implements OnInit {
 
   public getResList() {
     let request = new GetRestaurantsRequest();
+    request.size = 5;
+    request.page = 0;
     request.resName = this.name;
     console.log(this.status);
     if (this.status)

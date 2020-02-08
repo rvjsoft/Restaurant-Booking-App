@@ -7,6 +7,8 @@ import java.util.Objects;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.rvj.app.dataaccess.OrderRepository;
@@ -104,10 +106,15 @@ public class UIGetService {
 		return orderModelList;
 	}
 
-	public boolean getRestaurants(Example<Restaurant> resExample, GetRestaurantResponse response, String action) {
+	public boolean getRestaurants(Example<Restaurant> resExample, GetRestaurantResponse response, String action, int page, int size) {
 		List<Restaurant> restaurants;
 		try {
-			restaurants = resRepo.findAll(resExample);
+			if(action.equalsIgnoreCase(AppConstants.RES_LIST)) {
+				Pageable pageRequest = PageRequest.of(page, size);
+				restaurants = resRepo.findAll(resExample, pageRequest).toList();
+			} else {
+				restaurants = resRepo.findAll(resExample);
+			}
 			response.setRestaurants(getRestaurantModels(restaurants));
 			if(action.equalsIgnoreCase(AppConstants.RES_SINGLE) && !restaurants.isEmpty()) {
 				response.setFoods(getFoodModel(restaurants.get(0)));

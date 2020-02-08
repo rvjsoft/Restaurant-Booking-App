@@ -83,6 +83,10 @@ export class AppServiceService {
       params = params.set('type', request.type);
     if (request.status != null && request.status != undefined)
       params = params.set('status', request.status);
+    if (request.page != null && request.page != undefined)
+      params = params.set('page', request.page);
+    if (request.size != null && request.size != undefined)
+      params = params.set('size', request.size);
     return this.http.get(requestURL, { headers: {}, params: params, withCredentials: true });
   }
 

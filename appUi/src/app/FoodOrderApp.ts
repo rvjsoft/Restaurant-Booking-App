@@ -132,6 +132,8 @@ export class GetRestaurantsRequest extends BaseRequest {
     resName: string;
     type: FoodType;
     status: Status;
+    page: number;
+    size: number;
 }
 
 export class GetTableRequest extends BaseRequest {

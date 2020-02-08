@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, Output, EventEmitter, HostListener } from '@angular/core';
 import { RestaurantModel } from '../../FoodOrderApp';
 import { Observable, Observer, of } from 'rxjs';
 import { AppServiceService } from 'src/app/app-service.service';
@@ -47,7 +47,13 @@ export class RestaurantListComponent implements OnInit {
     }
   }
 
+  @HostListener('window:scroll', ['$event'])
+  public windowScroll(event: any): void {
+    console.log(event);
+  }
+
   public selectRes(res: RestaurantModel) {
     this.resSelect.emit(res);
   }
+
 }

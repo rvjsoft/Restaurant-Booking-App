@@ -30,4 +30,8 @@ public class GetRestaurantsRequest extends BaseRequest {
 	
 	@JsonIgnore
 	private String action;
+	
+	private Integer page;
+	
+	private Integer size;
 }
