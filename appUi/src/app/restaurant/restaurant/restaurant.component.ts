@@ -3,7 +3,7 @@ import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel, FoodModel } from 'src/app/FoodOrderApp';
 import { Status } from 'src/app/AppEnums';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-restaurant',
@@ -25,11 +25,14 @@ export class RestaurantComponent implements OnInit {
   foods: Array<FoodModel>;
 
 
-  constructor(private appService: AppServiceService, private sanitizer: DomSanitizer, private router: Router) { }
+  constructor(private appService: AppServiceService, private sanitizer: DomSanitizer, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-
-    let request = new GetRestaurantsRequest;
+    let resId = this.route.snapshot.paramMap.get('id');
+    let request = new GetRestaurantsRequest();
+    if(resId != null && resId != undefined) {
+      request.resId = Number(resId);
+    }
     this.appService.getRestaurant(request).subscribe(
       (response: GetRestaurantResponse) => {
         let restaurant = response.restaurants[0];

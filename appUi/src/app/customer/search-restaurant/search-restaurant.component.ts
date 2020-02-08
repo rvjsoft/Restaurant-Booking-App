@@ -3,6 +3,7 @@ import { RestaurantModel, GetRestaurantsRequest, GetRestaurantResponse } from '.
 import { AppServiceService } from 'src/app/app-service.service';
 import { Status, FoodType } from 'src/app/AppEnums';
 import { ToastService } from 'src/app/ui-components/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-restaurant',
@@ -16,7 +17,7 @@ export class SearchRestaurantComponent implements OnInit {
   type: boolean;
   name;
 
-  constructor(private appService: AppServiceService, private toastService: ToastService) { }
+  constructor(private appService: AppServiceService, private toastService: ToastService, private router: Router) { }
 
   ngOnInit() {
     this.getResList();
@@ -40,6 +41,10 @@ export class SearchRestaurantComponent implements OnInit {
         this.toastService.showMessage(messages, true);
       }
     );
+  }
+
+  public selectRes(res: RestaurantModel) {
+    this.router.navigate(['/restaurant', {id: res.id}]);
   }
 
   private extractErrorMesage(errorObj: any): string[] {

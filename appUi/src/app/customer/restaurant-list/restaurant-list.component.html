@@ -1,6 +1,6 @@
-<div class="container res_list">
+<div class=" res_list ">
   <div *ngIf='restaurants != null && restaurants != undefined && restaurants.length > 0' class="list">
-    <div *ngFor="let restaurant of restaurants" class="row list_item align-items-center">
+    <!-- <div *ngFor="let restaurant of restaurants" class="row list_item align-items-center">
       <div class="col-auto">
         <img class="rounded-lg" width="60px" height="60px"
           [attr.src]='(restaurant.imageId == null || restaurant.imageId == undefined) ? resImage : resImages[restaurant.id] | async' />
@@ -12,6 +12,29 @@
         <span class=''>{{restaurant.type}}</span>
       </div>
       <span class="col-auto">{{restaurant.status}}</span>
+    </div> -->
+    <div *ngFor="let restaurant of restaurants" class="list_item card" (click)='selectRes(restaurant)'>
+      <div class=" item_data" style="width: 14rem;">
+        <img
+          [attr.src]='(restaurant.imageId == null || restaurant.imageId == undefined) ? resImage : resImages[restaurant.id] | async'
+          class="card-img-top res_image" width="120px" height="140px" />
+        <div class="card-body">
+          <span class="card-title font-weight-bold text-dark px-2 row">{{restaurant.name | titlecase}}</span>
+          <div class="row align-items-center justify-content-between">
+            <div class="col-auto align-self-center">
+              <img calss='image_type' width="20px" height="20px"
+                [attr.src]="restaurant.type == 'VEG' ? imageVeg : type == 'NON_VEG' ? imageNonVeg : null" />
+              <span class='font-italic text-secondary'>{{restaurant.type | titlecase}}</span>
+            </div>
+            <span class="col-auto font-italic text-secondary">{{restaurant.status | titlecase}}</span>
+          </div>
+          <div class="row text-body address">
+            <span class="col-auto">
+              {{restaurant.address.landmark | titlecase}}, {{restaurant.address.city | titlecase}}.
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div *ngIf='restaurants == null || restaurants == undefined || restaurants.length == 0'

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { RestaurantModel } from '../../FoodOrderApp';
 import { Observable, Observer, of } from 'rxjs';
 import { AppServiceService } from 'src/app/app-service.service';
@@ -11,13 +11,15 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class RestaurantListComponent implements OnInit {
 
-  private resImage = '/assets/images/res_small.svg';
+  resImage = '/assets/images/res_small.svg';
   imageVeg = '/assets/images/veg.svg';
   imageNonVeg = '/assets/images/non_veg.svg';
   private resImages: any = {};
 
   @Input()
   restaurants: RestaurantModel[];
+  @Output()
+  resSelect = new EventEmitter<RestaurantModel>();
 
   constructor(private appService: AppServiceService, private sanitizer: DomSanitizer) { }
 
@@ -45,4 +47,7 @@ export class RestaurantListComponent implements OnInit {
     }
   }
 
+  public selectRes(res: RestaurantModel) {
+    this.resSelect.emit(res);
+  }
 }

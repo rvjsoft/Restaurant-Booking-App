@@ -1,5 +1,5 @@
 <div class="container res_search">
-  <div class="search_io sticky-top">
+  <div class="search_io sticky-top bg-light p-3">
     <div class="search row align-items-center justify-content-center m-3">
       <div class="input-group col-sm-8 ">
         <input type="text" [(ngModel)]="name" class="form-control form-control-lg" placeholder="Search">
@@ -19,7 +19,7 @@
       </div>
     </div>
   </div>
-  <div class="row res_list">
-    <app-restaurant-list [restaurants]='restaurants' ></app-restaurant-list>
+  <div class="res_list row justify-content-center">
+    <app-restaurant-list [restaurants]='restaurants' (resSelect)='selectRes($event)' class="list col-auto"></app-restaurant-list>
   </div>
 </div>
