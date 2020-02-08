@@ -8,6 +8,7 @@ import { AddAddressComponent } from './customer/add-address/add-address.componen
 import { RestaurantComponent } from './restaurant/restaurant/restaurant.component';
 import { FoodEditComponent } from './general/food-edit/food-edit.component';
 import { ModifyTablesComponent } from './restaurant/modify-tables/modify-tables.component';
+import { SearchRestaurantComponent } from './customer/search-restaurant/search-restaurant.component';
 
 
 const routes: Routes = [
@@ -31,6 +32,9 @@ const routes: Routes = [
   },
   {
     path: 'restaurant/tables', component: ModifyTablesComponent
+  },
+  {
+    path: 'customer/search', component: SearchRestaurantComponent
   }
 ];
 

@@ -28,6 +28,9 @@ public class RestaurantModel {
 	@Size(min = 5, max = 20, message = "Name length should be from 5 to 20 characters")
 	private String name;
 	
+	@Null
+	private Long id;
+	
 	@NotNull(message = "food type is mandatory")
 	@EnumConstraint(enumType = FoodType.class)
 	@JsonDeserialize(using = FoodTypeDeserial.class)

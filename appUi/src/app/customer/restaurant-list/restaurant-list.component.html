@@ -1,0 +1,21 @@
+<div class="container res_list">
+  <div *ngIf='restaurants != null && restaurants != undefined && restaurants.length > 0' class="list">
+    <div *ngFor="let restaurant of restaurants" class="row list_item align-items-center">
+      <div class="col-auto">
+        <img class="rounded-lg" width="60px" height="60px"
+          [attr.src]='(restaurant.imageId == null || restaurant.imageId == undefined) ? resImage : resImages[restaurant.id] | async' />
+      </div>
+      <span class="col">{{restaurant.name}}</span>
+      <div class="col-auto">
+        <img calss='image_type' width="30px" height="30px"
+          [attr.src]="restaurant.type == 'VEG' ? imageVeg : type == 'NON_VEG' ? imageNonVeg : null" />
+        <span class=''>{{restaurant.type}}</span>
+      </div>
+      <span class="col-auto">{{restaurant.status}}</span>
+    </div>
+  </div>
+  <div *ngIf='restaurants == null || restaurants == undefined || restaurants.length == 0'
+    class="row justify-content-center">
+    <span class="col-auto h4">No Restaurants</span>
+  </div>
+</div>

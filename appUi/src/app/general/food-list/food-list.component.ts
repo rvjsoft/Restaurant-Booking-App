@@ -14,6 +14,8 @@ import { Observable, Observer, of } from 'rxjs';
 export class FoodListComponent implements OnInit, OnChanges {
 
   private foodImage = '/assets/images/food.svg';
+  imageVeg = '/assets/images/veg.svg';
+  imageNonVeg = '/assets/images/non_veg.svg';
   private quantityForm = this.fb.group({});
   private foodImages: any = {};
   private temp: any;

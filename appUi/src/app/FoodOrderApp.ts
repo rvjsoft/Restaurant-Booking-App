@@ -131,6 +131,7 @@ export class GetRestaurantsRequest extends BaseRequest {
     resId: number;
     resName: string;
     type: FoodType;
+    status: Status;
 }
 
 export class GetTableRequest extends BaseRequest {
@@ -191,6 +192,7 @@ export class RegisterUserResponse extends BaseResponse {
 }
 
 export class RestaurantModel {
+    id: number;
     name: string;
     type: FoodType;
     address: AddressModel;

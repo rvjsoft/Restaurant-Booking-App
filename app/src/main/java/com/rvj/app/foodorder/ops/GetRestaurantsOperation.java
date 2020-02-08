@@ -66,8 +66,7 @@ public class GetRestaurantsOperation extends Operation<GetRestaurantsRequest, Ge
 	@Override
 	protected void process() {
 		Restaurant restaurant = new Restaurant();
-		if(!StringUtils.equalsIgnoreCase(request.getAction(), AppConstants.RES_SINGLE))
-			restaurant.setStatus(Status.AVAILABLE);
+		restaurant.setStatus(request.getStatus());
 		restaurant.setType(request.getType());
 		restaurant.setId(request.getResId());
 		restaurant.setBookings(null);

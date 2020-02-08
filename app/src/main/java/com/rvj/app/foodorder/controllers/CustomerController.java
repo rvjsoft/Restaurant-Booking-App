@@ -271,8 +271,8 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping(path = "get/restlist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetRestaurantResponse> getRestaurants(@Valid @RequestBody GetRestaurantsRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "get/restlist", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetRestaurantResponse> getRestaurants(@Valid  GetRestaurantsRequest request, BindingResult bindingResult) {
 		log.info("Started Processing get restaurants request, messageId=" + request.getMessageId());
 		GetRestaurantResponse response = new GetRestaurantResponse();
 		response.setMessageId(request.getMessageId());

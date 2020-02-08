@@ -10,6 +10,9 @@ import { DOCUMENT } from '@angular/common';
 })
 export class AppServiceService {
 
+  readonly RES_SINGLE = 'single';
+  readonly RES_LIST = 'list';
+
   readonly PATH_LOGIN = 'login';
   readonly PATH_REGISTER = 'register/user';
   readonly PATH_ADD_ADDRESS = 'customer/add/address';
@@ -22,6 +25,7 @@ export class AppServiceService {
   readonly PATH_DELETE_FOOD = 'restaurant/delete/food';
   readonly PATH_TABLE_COUNT = 'restaurant/tablecount';
   readonly PATH_TABLE_AVAIL = 'restaurant/get/tablesAvail';
+  readonly PATH_GET_RES_LIST = 'customer/get/restlist';
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
 
@@ -67,15 +71,18 @@ export class AppServiceService {
     return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
   }
 
-  public getRestaurant(request: GetRestaurantsRequest): Observable<any> {
-    let requestURL = environment.appURI + this.PATH_GET_RESTAURANT;
+  public getRestaurant(request: GetRestaurantsRequest, isList?: boolean): Observable<any> {
+    let requestURL = environment.appURI + (isList ? this.PATH_GET_RES_LIST : this.PATH_GET_RESTAURANT);
     let params = new HttpParams();
+    params = params.set('messageId', (Date.now() / 1000).toString());
     if (request.resId != null && request.resId != undefined)
       params = params.set('resId', request.resId + '');
     if (request.resName != null && request.resName != undefined)
       params = params.set('resName', request.resName);
     if (request.type != null && request.type != undefined)
       params = params.set('type', request.type);
+    if (request.status != null && request.status != undefined)
+      params = params.set('status', request.status);
     return this.http.get(requestURL, { headers: {}, params: params, withCredentials: true });
   }
 
