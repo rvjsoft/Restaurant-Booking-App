@@ -2,14 +2,14 @@
   width: 75px;
 }
 
-.delete, .edit {
+/* .delete, .edit {
   display: none;
 }
 
 .food_item:hover .delete, .food_item:hover .edit {
   display: block;
 }
-
+ */
 .hide {
   height: 0px;
   width: 0px;

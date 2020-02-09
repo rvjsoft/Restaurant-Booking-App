@@ -6,6 +6,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { Observable, Observer, of, from } from 'rxjs';
 import { SessionService } from 'src/app/session.service';
 import { tap, filter } from 'rxjs/operators';
+import { Status } from 'src/app/AppEnums';
 
 @Component({
   selector: 'app-food-list',
@@ -21,6 +22,8 @@ export class FoodListComponent implements OnInit, OnChanges {
   private temp: any;
   readonly res;
   public total: number;
+  available: number[] = [];
+  unavailable: number[] = [];
 
   @Input()
   isEdit: boolean;
@@ -32,6 +35,8 @@ export class FoodListComponent implements OnInit, OnChanges {
   private isCheckout: boolean;
   @Input()
   private isAvailable: boolean;
+  @Input()
+  private isModify: boolean;
   @Output()
   private editFood = new EventEmitter<FoodModel>();
   @Output()
@@ -147,6 +152,24 @@ export class FoodListComponent implements OnInit, OnChanges {
 
   get _total() {
     return this.total;
+  }
+
+  public print(val: any) {
+    console.log(val);
+  }
+
+  public alterStatus(id: number, status: Status) {
+    if (status == Status.AVAILABLE) {
+      this.available.push(id);
+      if (this.unavailable.indexOf(id) != -1) {
+        this.unavailable.slice(this.unavailable.indexOf(id), 1);
+      }
+    } else {
+      this.unavailable.push(id);
+      if (this.available.indexOf(id) != -1) {
+        this.available.slice(this.available.indexOf(id), 1);
+      }
+    }
   }
 
 }
