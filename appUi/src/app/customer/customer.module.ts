@@ -4,18 +4,22 @@ import { AddAddressComponent } from './add-address/add-address.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchRestaurantComponent } from './search-restaurant/search-restaurant.component';
 import { RestaurantListComponent } from './restaurant-list/restaurant-list.component';
+import { OrderCheckoutComponent } from './order-checkout/order-checkout.component';
+import { GeneralModule } from '../general/general.module';
 
 
 @NgModule({
-  declarations: [AddAddressComponent, SearchRestaurantComponent, RestaurantListComponent],
+  declarations: [AddAddressComponent, SearchRestaurantComponent, RestaurantListComponent, OrderCheckoutComponent],
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GeneralModule
   ],
   exports: [
     AddAddressComponent,
-    SearchRestaurantComponent
+    SearchRestaurantComponent,
+    OrderCheckoutComponent
   ]
 })
 export class CustomerModule { }

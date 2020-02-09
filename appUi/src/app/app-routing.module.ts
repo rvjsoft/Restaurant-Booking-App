@@ -9,6 +9,7 @@ import { RestaurantComponent } from './restaurant/restaurant/restaurant.componen
 import { FoodEditComponent } from './general/food-edit/food-edit.component';
 import { ModifyTablesComponent } from './restaurant/modify-tables/modify-tables.component';
 import { SearchRestaurantComponent } from './customer/search-restaurant/search-restaurant.component';
+import { OrderCheckoutComponent } from './customer/order-checkout/order-checkout.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,9 @@ const routes: Routes = [
   },
   {
     path: 'customer/search', component: SearchRestaurantComponent
+  },
+  {
+    path: 'customer/checkout', component: OrderCheckoutComponent
   }
 ];
 

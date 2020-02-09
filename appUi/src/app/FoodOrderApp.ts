@@ -92,6 +92,7 @@ export class FoodModel {
     category: FoodCategory;
     imageId: string;
     image: any;
+    status: Status;
 }
 
 export class FoodStatusRequest extends BaseRequest {

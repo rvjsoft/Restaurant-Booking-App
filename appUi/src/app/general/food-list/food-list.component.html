@@ -1,4 +1,7 @@
 <div class="food_list container">
+  <div class="row checkout_button justify-content-end sticky-top py-3 bg-white">
+    <div *ngIf="!res && isCheckout" class=" col-auto btn btn-dark float-right" (click)='checkout()'>Checkout</div>
+  </div>
   <div *ngIf='foodList != null && foodList != undefined && foodList.length > 0' class="list">
     <div *ngFor='let food of foodList; trackBy: trackByFn' class="food_item">
       <form>
@@ -12,11 +15,13 @@
               [attr.src]='(food.imageId == null || food.imageId == undefined) ? foodImage : foodImages[food.id] | async' />
           </div>
           <span class="col">{{food.name}}</span>
-          <span class="col-auto">Rs.{{food.price}}</span>
-          <input name='quantity' #quantity='ngModel' type="number" min=0 max=10 class="form-control col-auto quantity"
-            [(ngModel)]="quantityValues[food.id+'']" [ngClass]='{"hide": quantity.value == 0}' />
-          <input *ngIf='quantity.value == 0 && !res' type="button" class="btn btn-light"
-            (click)='quantityValues[food.id+""] = 1; print();' value="add" />
+          <span class="col-auto">Rs.{{(!isCheckout && !res) ? quantity.value * food.price : food.price}}</span>
+          <input name='quantity' #quantity='ngModel' type="number" min='0' max='10'
+            class="form-control col-auto quantity" (click)='setTotal()' [(ngModel)]="quantityValues[food.id+'']"
+            [ngClass]='{"hide": quantity.value == 0}' />
+          <input *ngIf='quantity.value == 0 && !res && isAvailable && food.status == "AVAILABLE"' type="button" class="btn btn-light"
+            (click)='quantityValues[food.id+""] = 1' [attr.disabled] = '(!isAvailable || food.status != "AVAILABLE") ? "" : null' (click)='setTotal()' value="add" />
+          <div class="col-auto text-secondary font-italic" *ngIf= '(food.status == "UNAVAILABLE") ? true : false'>-NA-</div>
           <div *ngIf="res && isEdit" class='col-auto delete'>
             <img src='/assets/images/x-mark.svg' width="30px" height="30px" (click)='delete(food)' />
           </div>

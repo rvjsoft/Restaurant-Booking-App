@@ -1,0 +1,10 @@
+<div class="container food_list_component">
+  <div class="row justify-content-center h2 text-dark p-3">Checkout Orders</div>
+  <app-food-list #foodList [quantityValues]='quantity' [isAvailable]='true' [foodList]='foods' [isEdit]='false'></app-food-list>
+  <div class="row justify-content-end">
+    <span class="col-auto px-5">Total: {{priceTotal}}</span>
+  </div>
+  <div class="row justify-content-center m-3">
+    <button class="btn btn-dark" (click)='checkout()' >Checkout</button>
+  </div>
+</div>

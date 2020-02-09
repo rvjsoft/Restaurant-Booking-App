@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rvj.app.foodorder.entity.enums.FoodCategory;
 import com.rvj.app.foodorder.entity.enums.FoodType;
+import com.rvj.app.foodorder.entity.enums.Status;
 import com.rvj.app.foodorder.entity.enums.deserializers.FoodCategoryDeserial;
 import com.rvj.app.foodorder.entity.enums.deserializers.FoodTypeDeserial;
 import com.rvj.app.foodorder.validators.EnumConstraint;
@@ -40,4 +41,6 @@ public class FoodModel {
 	@Size(max = 20)
 	private String imageId;
 	
+	@Null
+	private Status status;
 }

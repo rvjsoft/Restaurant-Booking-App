@@ -1,12 +1,12 @@
 <div class="restaurant container">
   <div class="resimage row align-items-end" [ngStyle]='{background: "url("+temp+")"}'>
     <div class='col temp h2 '>
-      <span class="res_name">{{name}}</span>
+      <span class="res_name font-weight-bold">{{name | titlecase}}</span>
     </div>
-    <div class='col-auto h3'>
+    <div class='col-auto h5'>
       <div class="res_type">
-        <img calss='image_type' width="30px" height="30px" [attr.src]="type == 'VEG' ? imageVeg : type == 'NON_VEG' ? imageNonVeg : null" />
-        <span class=''>{{type}}</span>
+        <img calss='image_type' width="20px" height="20px" [attr.src]="type == 'VEG' ? imageVeg : type == 'NON_VEG' ? imageNonVeg : null" />
+        <span class='text-white font-italic'>{{type | titlecase}}</span>
       </div>
     </div>
   </div>
@@ -18,18 +18,18 @@
     </div>
     <div class="col-auto align-self-center">
       <div class="row align-items-start py-3">
-        <div class="col">{{isAvailable}}</div>
+        <div class="col font-italic">{{isAvailable | titlecase}}</div>
       </div>
       <div class="row align-items-end py-3">
-        <div class="col">Seats: {{baseCount}}</div>
+        <div class="col btn btn-dark">Book Seats</div>
       </div>
     </div>
   </div>
   <div class="row py-3 justify-content-between">
-    <div class="col h3">Foods</div>
+    <div class="col h3 text-dark font-weight-light">Foods</div>
     <div *ngIf="session.userLevel == 'RESTAURANT'" class="col-auto btn btn-dark" (click)='goToModifyFoods()'>Modify Foods</div>
   </div>
   <div class="food_list_component">
-    <app-food-list [foodList]='foods' [isEdit]='false'></app-food-list>
+    <app-food-list (checkoutOrder)='checkout($event)' [foodList]='foods' [isAvailable]='isAvailable' [isEdit]='false' [isCheckout]='true'></app-food-list>
   </div>
 </div>

@@ -28,11 +28,9 @@ export class LoginComponent implements OnInit {
     request.password = this.loginForm.get('password').value;
     this.appService.login(request).subscribe(
       (response: BaseResponse) => {
-        console.log(response);
         this.toastService.showMessage([response.message], false);
       },
       (error: any) => {
-        console.log(error);
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

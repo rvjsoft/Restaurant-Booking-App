@@ -5,6 +5,7 @@ import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantM
 import { Status } from 'src/app/AppEnums';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SessionService } from 'src/app/session.service';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-restaurant',
@@ -24,6 +25,7 @@ export class RestaurantComponent implements OnInit {
   isAvailable: Status;
   baseCount;
   foods: Array<FoodModel>;
+  resId;
 
 
   constructor(
@@ -35,10 +37,10 @@ export class RestaurantComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    let resId = this.route.snapshot.paramMap.get('id');
+     this.resId = this.route.snapshot.paramMap.get('id');
     let request = new GetRestaurantsRequest();
-    if(resId != null && resId != undefined) {
-      request.resId = Number(resId);
+    if(this.resId != null && this.resId != undefined) {
+      request.resId = Number(this.resId);
     }
     this.appService.getRestaurant(request).subscribe(
       (response: GetRestaurantResponse) => {
@@ -71,6 +73,10 @@ export class RestaurantComponent implements OnInit {
 
   public goToModifyFoods() {
     this.router.navigateByUrl('/restaurant/editfood', {state: {foods: JSON.stringify(this.foods)}});
+  }
+
+  public checkout(event: any) {
+    this.router.navigateByUrl('/customer/checkout', {state: {foods: JSON.stringify(event['foods']), quantity: JSON.stringify(event['quantity']), resId: this.resId}});
   }
 
 }

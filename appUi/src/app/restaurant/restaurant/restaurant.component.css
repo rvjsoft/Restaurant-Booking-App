@@ -11,19 +11,19 @@
 
 .res_name {
   color: white;
-  background-color: black;
+  background-color: gray;
   padding: 5px 20px;
   border-radius: 15px;
 }
 
 .res_type {
   color: white;
-  background-color: black;
+  background-color: gray;
   padding: 3px 15px;
   border-radius: 10px;
 }
 
 .res_address {
   color: white;
-  background-color: black;
+  background-color: gray;
 }
