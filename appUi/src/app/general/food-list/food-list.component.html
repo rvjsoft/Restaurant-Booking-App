@@ -1,7 +1,7 @@
 <div class="food_list container">
   <div *ngIf='foodList != null && foodList != undefined && foodList.length > 0' class="list">
     <div *ngFor='let food of foodList; trackBy: trackByFn' class="food_item">
-      <form [formGroup]='quantityForm'>
+      <form>
         <div class="row align-items-center ">
           <div class="col_auto">
             <img calss='image_type' width="30px" height="30px"
@@ -13,10 +13,10 @@
           </div>
           <span class="col">{{food.name}}</span>
           <span class="col-auto">Rs.{{food.price}}</span>
-          <input *ngIf='!isQuantityZero(food.id)' type="number" min=0 max=10 class="form-control col-auto quantity"
-            [formControlName]='food.id' />
-          <input *ngIf='isQuantityZero(food.id) && !res' type="button" class="btn btn-light"
-            (click)='initializeQuantity(food.id)' value="add" />
+          <input name='quantity' #quantity='ngModel' type="number" min=0 max=10 class="form-control col-auto quantity"
+            [(ngModel)]="quantityValues[food.id+'']" [ngClass]='{"hide": quantity.value == 0}' />
+          <input *ngIf='quantity.value == 0 && !res' type="button" class="btn btn-light"
+            (click)='quantityValues[food.id+""] = 1; print();' value="add" />
           <div *ngIf="res && isEdit" class='col-auto delete'>
             <img src='/assets/images/x-mark.svg' width="30px" height="30px" (click)='delete(food)' />
           </div>

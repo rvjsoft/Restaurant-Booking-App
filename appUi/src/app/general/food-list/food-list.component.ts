@@ -9,15 +9,14 @@ import { SessionService } from 'src/app/session.service';
 @Component({
   selector: 'app-food-list',
   templateUrl: './food-list.component.html',
-  styleUrls: ['./food-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./food-list.component.css']
 })
 export class FoodListComponent implements OnInit, OnChanges {
 
   private foodImage = '/assets/images/food.svg';
   imageVeg = '/assets/images/veg.svg';
   imageNonVeg = '/assets/images/non_veg.svg';
-  private quantityForm = this.fb.group({});
+  private quantityValues: any = {};
   private foodImages: any = {};
   private temp: any;
   readonly res;
@@ -43,7 +42,7 @@ export class FoodListComponent implements OnInit, OnChanges {
     console.log('inside init', this.foodList);
     for (let index in this.foodList) {
       let food = this.foodList[index];
-      this.quantityForm.addControl(food.id + '', new FormControl(''));
+      this.quantityValues[food.id+''] = 0;
     }
     for(let index in this.foodList) {
       let food = this.foodList[index];
@@ -68,8 +67,9 @@ export class FoodListComponent implements OnInit, OnChanges {
     let foods = changes['foodList'].currentValue
     for (let index in foods) {
       let food = foods[index];
-      if (!this.quantityForm.contains(food.id + ''))
-        this.quantityForm.addControl(food.id + '', new FormControl(''));
+      if (this.quantityValues[food.id + ''] == null || this.quantityValues[food.id + ''] == undefined){
+        this.quantityValues[food.id+''] = 0;
+      }
     }
     for(let index in this.foodList) {
       let food = this.foodList[index];
@@ -89,24 +89,12 @@ export class FoodListComponent implements OnInit, OnChanges {
     }
   }
 
-  public isQuantityZero(id: number): boolean {
-    console.log('data');
-    if (this.quantityForm.get(id+'').value == 0)
-      return true;
-    else return false;
-  }
-
-  public initializeQuantity(id: number): void {
-    this.quantityForm.get(id + '').setValue(1);
-    console.log('initialize quantity', this.quantityForm);
-  }
-
   trackByFn(index, item) {
     return item.id;
   }
 
-  print(val: any) {
-    console.log(val);
+  print() {
+    console.log(this.quantityValues);
   }
 
   private edit(foodData: FoodModel) {
