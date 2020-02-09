@@ -4,6 +4,7 @@ import { AppServiceService } from 'src/app/app-service.service';
 import { Status, FoodType } from 'src/app/AppEnums';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { Router } from '@angular/router';
+import { SessionService } from 'src/app/session.service';
 
 @Component({
   selector: 'app-search-restaurant',
@@ -12,40 +13,58 @@ import { Router } from '@angular/router';
 })
 export class SearchRestaurantComponent implements OnInit {
 
-  restaurants: RestaurantModel[];
+  restaurants: RestaurantModel[] = [];
   status: boolean;
   type: boolean;
   name;
-  private size = 10;
+  private size;
+  private page;
 
   constructor(
     private appService: AppServiceService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private session: SessionService
   ) { }
 
   ngOnInit() {
+    this.resetPage();
     this.getResList();
+  }
+
+  public loadNextPage() {
+    this.page++;
+    if (!this.session.loadingResPage) {
+      this.getResList();
+    }
+  }
+
+  public resetPage() {
+    this.page = 0;
+    this.size = 10;
+    this.restaurants = [];
   }
 
   public getResList() {
     let request = new GetRestaurantsRequest();
-    request.size = 5;
-    request.page = 0;
+    request.page = this.page;
+    request.size = this.size;
     request.resName = this.name;
-    console.log(this.status);
     if (this.status)
       request.status = Status.AVAILABLE;
     if (this.type)
       request.type = FoodType.VEG;
-    console.log(request);
+    this.session.loadingResPage = true;
     this.appService.getRestaurant(request, true).subscribe(
       (response: GetRestaurantResponse) => {
-        this.restaurants = response.restaurants;
+        // this.restaurants = response.restaurants;
+        this.restaurants = this.restaurants.concat(response.restaurants);
+        this.session.loadingResPage = false;
       },
       (error) => {
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
+        this.session.loadingResPage = false;
       }
     );
   }

@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, SimpleChanges, Output, EventEmitter, HostListener } from '@angular/core';
 import { RestaurantModel } from '../../FoodOrderApp';
 import { Observable, Observer, of } from 'rxjs';
-import { AppServiceService } from 'src/app/app-service.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { AppServiceService } from '../../app-service.service';
+import { SessionService } from '../../session.service';
 
 @Component({
   selector: 'app-restaurant-list',
@@ -20,8 +20,10 @@ export class RestaurantListComponent implements OnInit {
   restaurants: RestaurantModel[];
   @Output()
   resSelect = new EventEmitter<RestaurantModel>();
+  @Output()
+  loadNext = new EventEmitter<boolean>();
 
-  constructor(private appService: AppServiceService, private sanitizer: DomSanitizer) { }
+  constructor(private appService: AppServiceService, private session: SessionService) { }
 
   ngOnInit() {
 
@@ -32,6 +34,8 @@ export class RestaurantListComponent implements OnInit {
       let res = this.restaurants[index];
       if(res.imageId == null || res.imageId == undefined) {
         this.resImages[res.id] = of('url(' + this.resImage + ')');
+      } else if (this.resImages[res.id] != null && this.resImages[res.id] != undefined) {
+        continue;
       }
       this.resImages[res.id] = new Observable<any>(
         (observer: Observer<any>) => {
@@ -49,7 +53,9 @@ export class RestaurantListComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   public windowScroll(event: any): void {
-    console.log(event);
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      this.loadNext.emit(true);
+    }
   }
 
   public selectRes(res: RestaurantModel) {

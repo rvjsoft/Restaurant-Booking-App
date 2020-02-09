@@ -4,7 +4,7 @@
       <div class="input-group col-sm-8 ">
         <input type="text" [(ngModel)]="name" class="form-control form-control-lg" placeholder="Search">
         <div class="input-group-append">
-          <button class="btn btn-primary btn-lg" (click)="getResList()" >Search</button>
+          <button class="btn btn-primary btn-lg" (click)="resetPage(); getResList();" >Search</button>
         </div>
       </div>
     </div>
@@ -20,6 +20,6 @@
     </div>
   </div>
   <div class="res_list row justify-content-center">
-    <app-restaurant-list [restaurants]='restaurants' (resSelect)='selectRes($event)' class="list col-auto"></app-restaurant-list>
+    <app-restaurant-list [restaurants]='restaurants' (loadNext)='loadNextPage()' (resSelect)='selectRes($event)' class="list col-auto"></app-restaurant-list>
   </div>
 </div>
