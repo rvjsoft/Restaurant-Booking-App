@@ -21,7 +21,7 @@
             [ngClass]='{"hide": quantity.value == 0}' />
           <input *ngIf='quantity.value == 0 && !res && isAvailable && food.status == "AVAILABLE"' type="button" class="btn btn-light"
             (click)='quantityValues[food.id+""] = 1' [attr.disabled] = '(!isAvailable || food.status != "AVAILABLE") ? "" : null' (click)='setTotal()' value="add" />
-          <div class="col-auto text-secondary font-italic" *ngIf= '(food.status == "UNAVAILABLE") ? true : false'>-NA-</div>
+          <div class="col-auto text-secondary font-italic" *ngIf= '(food.status == "UNAVAILABLE" && !res) ? true : false'>-NA-</div>
           <div *ngIf="res && isEdit" class='col-auto delete'>
             <img src='/assets/images/x-mark.svg' width="30px" height="30px" (click)='delete(food)' />
           </div>
