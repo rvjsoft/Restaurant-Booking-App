@@ -2,6 +2,8 @@ package com.rvj.app.foodorder.controllers;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class SessionController {
 	LoginService loginService;
 
 	@PostMapping("/login")
-	public ResponseEntity<BaseResponse> login(@RequestBody LoginRequest request, BindingResult bindingResult) {
+	public ResponseEntity<BaseResponse> login(@RequestBody LoginRequest request, BindingResult bindingResult, HttpServletResponse servletResponse) {
 		BaseResponse response = new BaseResponse();
 		HttpStatus status = null;
 		response.setMessageId(request.getMessageId());
@@ -36,7 +38,7 @@ public class SessionController {
 			response.setMessage("Request processing failed, Enter the valide values");
 			status = HttpStatus.BAD_REQUEST;
 		} else {
-			boolean isValidUser = loginService.processLogin(request);
+			boolean isValidUser = loginService.processLogin(request, servletResponse);
 			if (isValidUser) {
 				response.setMessage("login successfull.");
 				status = HttpStatus.OK;

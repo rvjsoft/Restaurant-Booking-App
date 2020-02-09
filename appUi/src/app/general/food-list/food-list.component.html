@@ -15,12 +15,12 @@
           <span class="col-auto">Rs.{{food.price}}</span>
           <input *ngIf='!isQuantityZero(food.id)' type="number" min=0 max=10 class="form-control col-auto quantity"
             [formControlName]='food.id' />
-          <input *ngIf='isQuantityZero(food.id)' type="button" class="btn btn-light"
+          <input *ngIf='isQuantityZero(food.id) && !res' type="button" class="btn btn-light"
             (click)='initializeQuantity(food.id)' value="add" />
-          <div class='col-auto delete'>
+          <div *ngIf="res && isEdit" class='col-auto delete'>
             <img src='/assets/images/x-mark.svg' width="30px" height="30px" (click)='delete(food)' />
           </div>
-          <div class="col-auto edit btn btn-warning btn-sm" (click)='edit(food)'>edit</div>
+          <div *ngIf="res && isEdit" class="col-auto edit btn btn-warning btn-sm" (click)='edit(food)'>edit</div>
         </div>
       </form>
       <hr />

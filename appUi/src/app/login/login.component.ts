@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ToastService } from '../ui-components/toast.service';
 import { LoginRequest, BaseResponse } from '../FoodOrderApp';
 import { AppServiceService } from '../app-service.service';
+import { SessionService } from '../session.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
     password: ['']
   });
 
-  constructor(private toastService: ToastService, private formBuilder: FormBuilder, private appService: AppServiceService) { }
+  constructor(private toastService: ToastService, private formBuilder: FormBuilder, private appService: AppServiceService, private session: SessionService) { }
 
   ngOnInit() {
   }
@@ -36,6 +37,7 @@ export class LoginComponent implements OnInit {
         this.toastService.showMessage(messages, true);
       }
     );
+    console.log(this.session.userLevel);
   }
 
   private extractErrorMesage(errorObj: any): string[] {

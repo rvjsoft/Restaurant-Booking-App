@@ -4,6 +4,7 @@ import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Observable, Observer, of } from 'rxjs';
+import { SessionService } from 'src/app/session.service';
 
 @Component({
   selector: 'app-food-list',
@@ -19,7 +20,10 @@ export class FoodListComponent implements OnInit, OnChanges {
   private quantityForm = this.fb.group({});
   private foodImages: any = {};
   private temp: any;
+  readonly res;
 
+  @Input()
+  isEdit: boolean;
   @Input()
   private foodList: Array<FoodModel>;
   @Output()
@@ -27,7 +31,13 @@ export class FoodListComponent implements OnInit, OnChanges {
   @Output()
   private deleteFood = new EventEmitter<FoodModel>();
 
-  constructor(private appService: AppServiceService, private sanitizer: DomSanitizer, private fb: FormBuilder) { }
+  constructor(private appService: AppServiceService,
+    private sanitizer: DomSanitizer,
+    private fb: FormBuilder,
+    private session: SessionService
+    ) {
+        this.res = this.isRes;
+     }
 
   ngOnInit() {
     console.log('inside init', this.foodList);
@@ -79,39 +89,8 @@ export class FoodListComponent implements OnInit, OnChanges {
     }
   }
 
-
-  public getImage(imageId: string): Observable<any> {
-    console.log('in method getImage ', imageId);
-    let imageAsync = new Observable<any>(
-      (observer: Observer<any>) => {
-          this.appService.getRestaurantImage(imageId).subscribe(
-            (imageData) => {
-              observer.next(imageData);
-              console.log("got data");
-            }, (error) => {
-              observer.next(this.foodImage);
-              console.log("got error", error);
-            }
-          );
-        }
-    );
-        return imageAsync;
-    /* if (food.image != null && food.image != undefined)
-      return food;
-    this.appService.getRestaurantImage(food.imageId).subscribe(
-      (imageData) => {
-        food.image = imageData;
-        console.log("got data");
-      }, (error) => {
-        food.imageId = null;
-        food.image = this.foodImage;
-        console.log("got error", error);
-      }
-    );
-    return food; */
-  }
-
   public isQuantityZero(id: number): boolean {
+    console.log('data');
     if (this.quantityForm.get(id+'').value == 0)
       return true;
     else return false;
@@ -136,6 +115,14 @@ export class FoodListComponent implements OnInit, OnChanges {
 
   private delete(foodData: FoodModel) {
     this.deleteFood.emit(foodData);
+  }
+
+  get isRes() {
+    if(this.session.userLevel == 'RESTAURANT') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

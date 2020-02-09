@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel, FoodModel } from 'src/app/FoodOrderApp';
 import { Status } from 'src/app/AppEnums';
 import { Router, ActivatedRoute } from '@angular/router';
+import { SessionService } from 'src/app/session.service';
 
 @Component({
   selector: 'app-restaurant',
@@ -25,7 +26,13 @@ export class RestaurantComponent implements OnInit {
   foods: Array<FoodModel>;
 
 
-  constructor(private appService: AppServiceService, private sanitizer: DomSanitizer, private router: Router, private route: ActivatedRoute) { }
+  constructor(
+    private appService: AppServiceService,
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    private route: ActivatedRoute,
+    private session: SessionService
+    ) { }
 
   ngOnInit() {
     let resId = this.route.snapshot.paramMap.get('id');

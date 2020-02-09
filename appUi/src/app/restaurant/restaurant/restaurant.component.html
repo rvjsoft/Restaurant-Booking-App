@@ -27,9 +27,9 @@
   </div>
   <div class="row py-3 justify-content-between">
     <div class="col h3">Foods</div>
-    <div class="col-auto btn btn-dark" (click)='goToModifyFoods()'>Modify Foods</div>
+    <div *ngIf="session.userLevel == 'RESTAURANT'" class="col-auto btn btn-dark" (click)='goToModifyFoods()'>Modify Foods</div>
   </div>
   <div class="food_list_component">
-    <app-food-list [foodList]='foods'></app-food-list>
+    <app-food-list [foodList]='foods' [isEdit]='false'></app-food-list>
   </div>
 </div>
