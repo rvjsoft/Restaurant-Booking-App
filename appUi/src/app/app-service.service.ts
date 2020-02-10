@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoginRequest, RegisterUserRequest, AddressModel, AddAddressRequest, DeleteAddressRequest, GetRestaurantsRequest, AddFoodRequest, UpdateFoodRequest, DeleteFoodRequest, RestaurantTableRequest, TableAvailRequest, OrderFoodRequest, FoodStatusRequest } from './FoodOrderApp';
+import { LoginRequest, RegisterUserRequest, AddressModel, AddAddressRequest, DeleteAddressRequest, GetRestaurantsRequest, AddFoodRequest, UpdateFoodRequest, DeleteFoodRequest, RestaurantTableRequest, TableAvailRequest, OrderFoodRequest, FoodStatusRequest, RestaurantStatusReqeust } from './FoodOrderApp';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
@@ -23,6 +23,7 @@ export class AppServiceService {
   readonly PATH_ADD_FOOD = 'restaurant/add/food';
   readonly PATH_UPDATE_FOOD = 'restaurant/update/food';
   readonly PATH_FOOD_STATUS = 'restaurant/status/food';
+  readonly PATH_RES_STATUS = 'restaurant/status';
   readonly PATH_DELETE_FOOD = 'restaurant/delete/food';
   readonly PATH_TABLE_COUNT = 'restaurant/tablecount';
   readonly PATH_TABLE_AVAIL = 'restaurant/get/tablesAvail';
@@ -118,6 +119,12 @@ export class AppServiceService {
 
   public updateFoodStatus(request: FoodStatusRequest): Observable<any> {
     let requestURL = environment.appURI + this.PATH_FOOD_STATUS;
+    request.messageId = (Date.now() / 1000).toString();
+    return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
+  }
+
+  public changeStatus(request: RestaurantStatusReqeust): Observable<any> {
+    let requestURL = environment.appURI + this.PATH_RES_STATUS;
     request.messageId = (Date.now() / 1000).toString();
     return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
   }

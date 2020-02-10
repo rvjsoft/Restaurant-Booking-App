@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel, FoodModel } from 'src/app/FoodOrderApp';
+import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel, FoodModel, RestaurantStatusResponse, RestaurantStatusReqeust } from 'src/app/FoodOrderApp';
 import { Status } from 'src/app/AppEnums';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SessionService } from 'src/app/session.service';
 import { from } from 'rxjs';
+import { ToastService } from 'src/app/ui-components/toast.service';
 
 @Component({
   selector: 'app-restaurant',
@@ -33,7 +34,8 @@ export class RestaurantComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private router: Router,
     private route: ActivatedRoute,
-    private session: SessionService
+    private session: SessionService,
+    private toastService: ToastService
     ) { }
 
   ngOnInit() {
@@ -77,6 +79,44 @@ export class RestaurantComponent implements OnInit {
 
   public checkout(event: any) {
     this.router.navigateByUrl('/customer/checkout', {state: {foods: JSON.stringify(event['foods']), quantity: JSON.stringify(event['quantity']), resId: this.resId}});
+  }
+
+  get isRes() {
+    if (this.session.userLevel == 'RESTAURANT')
+      return true;
+    else
+      return false;
+  }
+
+  public changeStatus() {
+    let request = new RestaurantStatusReqeust();
+    request.status = this.isAvailable;
+    this.appService.changeStatus(request).subscribe(
+      (response: RestaurantStatusResponse) => {
+        this.toastService.showMessage([response.message], false);
+      }, (error) => {
+        let messages = this.extractErrorMesage(error.error);
+        this.toastService.showMessage(messages, true);
+      }
+    );
+  }
+
+  private extractErrorMesage(errorObj: any): string[] {
+    let messages: string[] = [];
+    if (errorObj == null || errorObj == undefined) {
+      messages.push('service not available');
+      return messages;
+    }
+    messages.push(errorObj.message);
+    let errors = errorObj.errors;
+    for (let error in errors) {
+      messages.push(errors[error]);
+    }
+    return messages;
+  }
+
+  public goToTables() {
+    this.router.navigate(['/restaurant/tables']);
   }
 
 }

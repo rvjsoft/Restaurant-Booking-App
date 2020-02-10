@@ -14,6 +14,8 @@ export class ModifyTablesComponent implements OnInit {
   PartOfDay = Object.keys(PartOfDay);
   tableData = new TableAvailData();
   availability: { [date: string]: { [part: string]: TableAvailModel } };
+  baseCount: number;
+  edit_part = 'Tables';
 
   constructor(private toastService: ToastService, private appService: AppServiceService) { }
 
@@ -23,7 +25,6 @@ export class ModifyTablesComponent implements OnInit {
   }
 
   updateTable() {
-    console.log(this.tableData);
     let request = new RestaurantTableRequest();
     request.date = this.tableData.date;
     request.part = this.tableData.part;
@@ -33,6 +34,21 @@ export class ModifyTablesComponent implements OnInit {
         this.toastService.showMessage([response.message], false);
         this.tableData = new TableAvailData();
         this.populateAvail();
+      },
+      (error: any) => {
+        let messages = this.extractErrorMesage(error.error);
+        this.toastService.showMessage(messages, true);
+      }
+
+    );
+  }
+
+  public updateBase() {
+    let request = new RestaurantTableRequest();
+    request.baseCount = this.baseCount;
+    this.appService.updateTable(request).subscribe(
+      (response: RestaurantTableResponse) => {
+        this.toastService.showMessage([response.message], false);
       },
       (error: any) => {
         let messages = this.extractErrorMesage(error.error);
@@ -61,6 +77,7 @@ export class ModifyTablesComponent implements OnInit {
     this.appService.getTableAvail().subscribe(
       (response: TableAvailResponse) => {
         this.availability = response.availability;
+        this.baseCount = response.baseCount;
         console.log(this.availability);
       },
       (error: any) => {
