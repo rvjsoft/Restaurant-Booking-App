@@ -1,6 +1,7 @@
 <div class="food_list container">
   <div class="row checkout_button justify-content-end sticky-top py-3 bg-white">
     <div *ngIf="!res && isCheckout" class=" col-auto btn btn-dark float-right" (click)='checkout()'>Checkout</div>
+    <div *ngIf="isModify" class=" col-auto btn btn-dark float-right" (click)='updateStatus()'>Update Status</div>
   </div>
   <div *ngIf='foodList != null && foodList != undefined && foodList.length > 0' class="list">
     <div *ngFor='let food of foodList; trackBy: trackByFn' class="food_item">

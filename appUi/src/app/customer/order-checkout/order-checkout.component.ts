@@ -4,7 +4,6 @@ import { ToastService } from 'src/app/ui-components/toast.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppServiceService } from 'src/app/app-service.service';
 import { FoodListComponent } from 'src/app/general/food-list/food-list.component';
-import { totalmem } from 'os';
 
 @Component({
   selector: 'app-order-checkout',

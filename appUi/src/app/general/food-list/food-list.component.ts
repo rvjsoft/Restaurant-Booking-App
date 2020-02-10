@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FoodModel } from 'src/app/FoodOrderApp';
+import { FoodModel, FoodStatusRequest } from 'src/app/FoodOrderApp';
 import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormControl } from '@angular/forms';
@@ -7,6 +7,7 @@ import { Observable, Observer, of, from } from 'rxjs';
 import { SessionService } from 'src/app/session.service';
 import { tap, filter } from 'rxjs/operators';
 import { Status } from 'src/app/AppEnums';
+import { ToastService } from 'src/app/ui-components/toast.service';
 
 @Component({
   selector: 'app-food-list',
@@ -47,7 +48,8 @@ export class FoodListComponent implements OnInit, OnChanges {
   constructor(private appService: AppServiceService,
     private sanitizer: DomSanitizer,
     private fb: FormBuilder,
-    private session: SessionService
+    private session: SessionService,
+    private toastService: ToastService
     ) {
         this.res = this.isRes;
      }
@@ -161,15 +163,48 @@ export class FoodListComponent implements OnInit, OnChanges {
   public alterStatus(id: number, status: Status) {
     if (status == Status.AVAILABLE) {
       this.available.push(id);
-      if (this.unavailable.indexOf(id) != -1) {
-        this.unavailable.slice(this.unavailable.indexOf(id), 1);
+      if (this.unavailable.indexOf(id) !== -1) {
+        this.unavailable.splice(this.unavailable.indexOf(id), 1);
       }
     } else {
       this.unavailable.push(id);
-      if (this.available.indexOf(id) != -1) {
-        this.available.slice(this.available.indexOf(id), 1);
+      if (this.available.indexOf(id) !== -1) {
+       this.available.splice(this.available.indexOf(id), 1);
       }
     }
+    console.log(this.available);
+    console.log(this.unavailable);
+  }
+
+  public updateStatus() {
+    let request = new FoodStatusRequest();
+    request.available = this.available;
+    request.unavailable = this.unavailable;
+    this.appService.updateFoodStatus(request).subscribe(
+      (response) => {
+        this.toastService.showMessage([response.message], false);
+        this.available = [];
+        this.unavailable = [];
+      },
+      (error: any) => {
+        let messages = this.extractErrorMesage(error.error);
+        this.toastService.showMessage(messages, true);
+      }
+    );
+  }
+
+  private extractErrorMesage(errorObj: any): string[] {
+    let messages: string[] = [];
+    if (errorObj == null || errorObj == undefined) {
+      messages.push('service not available');
+      return messages ;
+    }
+    messages.push(errorObj.message);
+    let errors = errorObj.errors;
+    for(let error in errors) {
+      messages.push(errors[error]);
+    }
+    return messages;
   }
 
 }
