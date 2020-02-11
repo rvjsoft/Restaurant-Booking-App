@@ -28,6 +28,8 @@ export class RestaurantComponent implements OnInit {
   baseCount;
   foods: Array<FoodModel>;
   resId;
+  email;
+  phone;
 
 
   constructor(
@@ -58,6 +60,8 @@ export class RestaurantComponent implements OnInit {
         this.isAvailable = restaurant.status;
         this.type = restaurant.type;
         this.name = restaurant.name;
+        this.email = restaurant.email;
+        this.phone = restaurant.phone;
         this.imageId = restaurant.imageId;
         if (this.imageId != null && this.imageId != undefined) {
           this.appService.getRestaurantImage(this.imageId).subscribe(
