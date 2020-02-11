@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { SessionService } from 'src/app/session.service';
 import { from } from 'rxjs';
 import { ToastService } from 'src/app/ui-components/toast.service';
+import { OrderCheckoutService } from 'src/app/customer/order-checkout.service';
 
 @Component({
   selector: 'app-restaurant',
@@ -35,7 +36,8 @@ export class RestaurantComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private session: SessionService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private orderService: OrderCheckoutService
     ) { }
 
   ngOnInit() {
@@ -78,6 +80,9 @@ export class RestaurantComponent implements OnInit {
   }
 
   public checkout(event: any) {
+    this.orderService.foods = event['foods'];
+    this.orderService.quantity = event['quantity'];
+    this.orderService.resId = this.resId;
     this.router.navigateByUrl('/customer/checkout', {state: {foods: JSON.stringify(event['foods']), quantity: JSON.stringify(event['quantity']), resId: this.resId}});
   }
 

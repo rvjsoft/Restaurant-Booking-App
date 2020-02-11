@@ -147,6 +147,7 @@ export class FoodListComponent implements OnInit, OnChanges {
 
   setTotal() {
     this.total = 0;
+    if(this.foodList == null) return;
     for(let food of this.foodList) {
       this.total = this.total + (food.price * this.quantityValues[food.id+'']);
     }

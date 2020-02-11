@@ -4,6 +4,8 @@ import { ToastService } from 'src/app/ui-components/toast.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppServiceService } from 'src/app/app-service.service';
 import { FoodListComponent } from 'src/app/general/food-list/food-list.component';
+import { OrderCheckoutService } from '../order-checkout.service';
+import { AddressService } from '../address.service';
 
 @Component({
   selector: 'app-order-checkout',
@@ -25,15 +27,20 @@ export class OrderCheckoutComponent implements OnInit, OnChanges, AfterViewCheck
     private toastService: ToastService,
     private appService: AppServiceService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private orderService: OrderCheckoutService,
+    private addressService: AddressService
   ) { }
 
   ngOnInit() {
-    this.temp = JSON.parse(history.state['foods']);
-    this.foods = this.temp;
-    this.temp = JSON.parse(history.state['quantity']);
-    this.quantity = this.temp;
-    this.resId = history.state['resId'];
+    // this.temp = JSON.parse(history.state['foods']);
+    // this.foods = this.temp;
+    // this.temp = JSON.parse(history.state['quantity']);
+    // this.quantity = this.temp;
+    // this.resId = history.state['resId'];
+    this.foods = this.orderService.foods;
+    this.quantity = this.orderService.quantity;
+    this.resId = this.orderService.resId;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -53,15 +60,30 @@ export class OrderCheckoutComponent implements OnInit, OnChanges, AfterViewCheck
     request.resId = this.resId;
     let requestFoods = {};
     let foods = this.foodList.last.quantityValues;
-    for(let val in Object.keys(foods)) {
+    console.log(foods);
+    if(foods == null || foods == undefined) {
+      this.toastService.showMessage(['no food selected'], true);
+      return;
+    }
+    if(this.address == null || this.address == undefined) {
+      this.toastService.showMessage(['no address selected'], true);
+      return;
+    }
+    for(let val of Object.keys(foods)) {
       if(foods[val+''] != 0){
         requestFoods[val+''] = foods[val+''];
       }
     }
     request.foods = requestFoods;
+    if(Object.keys(requestFoods).length == 0) {
+      this.toastService.showMessage(['no food selected'], true);
+      return;
+    }
     this.appService.orderFood(request).subscribe(
       (response) => {
         this.toastService.showMessage([response.message], false);
+        this.router.navigate(['customer/search']);
+        this.orderService.cleanup();
         this.router.navigate(['customer/search']);
       },
       (error: any) => {
@@ -86,4 +108,11 @@ export class OrderCheckoutComponent implements OnInit, OnChanges, AfterViewCheck
     return messages;
   }
 
+  get address() {
+    return this.addressService.deliveryAddress;
+  }
+
+  public selectAddress() {
+    this.router.navigate(['/customer/addaddress']);
+  }
 }

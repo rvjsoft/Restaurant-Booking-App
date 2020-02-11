@@ -4,6 +4,8 @@ import { ToastService } from '../../ui-components/toast.service';
 import { FormBuilder } from '@angular/forms';
 import { AppServiceService } from 'src/app/app-service.service';
 import { AddressService } from '../address.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-address',
@@ -26,8 +28,19 @@ export class AddAddressComponent implements OnInit {
     postalCode: [''],
   });
 
-  constructor(private toastService: ToastService, private formBuilder: FormBuilder, private appService: AppServiceService, private addressService: AddressService) {
+  constructor(
+    private toastService: ToastService,
+    private formBuilder: FormBuilder,
+    private appService: AppServiceService,
+    private addressService: AddressService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location
+  ) {
     this.addresses = new Array();
+    if (this.addressService.deliveryAddress != null) {
+      this.selected = this.addressService.deliveryAddress.id;
+    }
   }
 
   ngOnInit() {
@@ -104,5 +117,9 @@ export class AddAddressComponent implements OnInit {
   public closeIO() {
     this.show_io = false;
     this.addressForm.reset();
+  }
+
+  public addressSelected() {
+    this.location.back();
   }
 }
