@@ -2,8 +2,13 @@
   <div class="row addresses">
     <p class="h1 col-12">Address</p>
     <div class="col-sm-10">
-      <div *ngFor="let address of addresses" class="row align-items-center px-5 address-data my-2 mx-3 address rounded border">
-        <div class='col'>
+      <div class="row justify-content-center">
+        <button [attr.disabled]='(addresses.length == 0 || addressService.deliveryAddress == null) ? "" : null'
+          class='col-sm-auto btn btn-success'>Select</button>
+      </div>
+      <div *ngFor="let address of addresses" [ngClass]="{'selected': selected == address.id}"
+        class="row align-items-center px-5 address-data my-2 mx-3 address rounded border">
+        <div class='col' (click)='selectAddress(address)'>
           <p class='row'>{{address.address1}}, {{address.address2}}</p>
           <p class='row'>{{address.landmark}}, {{address.city}}</p>
           <p class="row">{{address.state}} - {{address.postalCode}}</p>
@@ -17,13 +22,20 @@
         </div>
         <div>
           <!-- <div class='col-auto btn btn-primary btn-sm delete' (click)='deleteAddress(address)' >delete</div> -->
-          <div class='col-auto delete' (click)='deleteAddress(address)' >
-            <img [attr.src]='x_mark' width="30px" height="30px"/>
+          <div class='col-auto delete' (click)='deleteAddress(address)'>
+            <img [attr.src]='x_mark' width="30px" height="30px" />
           </div>
         </div>
       </div>
+      <div *ngIf="addresses == null || addresses == undefined || addresses.length == 0"
+        class="row justify-content-center">
+        <div class="col-sm-auto p-3 text-secondary">No Address found</div>
+      </div>
     </div>
-    <div class="col-sm-12 col-md-11 col-lg-10 col-xl-8 my-5 mx-5">
+    <div class="col-sm-12">
+        <button *ngIf="!show_io" class="col-sm-auto m-3 btn btn-primary" (click)='show_io = true'>Add Address</button>
+    </div>
+    <div *ngIf="show_io" class="col-sm-12 col-md-11 col-lg-10 col-xl-8 my-5 mx-5">
       <p class="h2">Add Address</p>
       <form [formGroup]="addressForm" (ngSubmit)='addAddress()' class="row ">
         <div class="form-group col-sm-6">
@@ -52,7 +64,8 @@
         </div>
         <div class="submit-wrapper my-3 col-12 w-100">
           <div class="submit row justify-content-center">
-            <button type="submit" class="col-sm-3 col-auto btn btn-primary">Create</button>
+            <button type="submit" class="col-sm-3 col-auto btn btn-primary mx-3">Create</button>
+            <button class="col-sm-3 col-auto btn btn-danger mx-3" (click)='closeIO()'>Close</button>
           </div>
         </div>
       </form>

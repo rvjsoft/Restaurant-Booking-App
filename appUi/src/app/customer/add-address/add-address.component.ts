@@ -3,6 +3,7 @@ import { AddressModel, AddAddressResponse, DeleteAddressResponse } from 'src/app
 import { ToastService } from '../../ui-components/toast.service';
 import { FormBuilder } from '@angular/forms';
 import { AppServiceService } from 'src/app/app-service.service';
+import { AddressService } from '../address.service';
 
 @Component({
   selector: 'app-add-address',
@@ -13,6 +14,8 @@ export class AddAddressComponent implements OnInit {
 
   private addresses: AddressModel[];
   private x_mark = '../../../assets/images/x-mark.svg';
+  selected = null;
+  show_io = false;
 
   private addressForm = this.formBuilder.group({
     address1: [''],
@@ -23,7 +26,7 @@ export class AddAddressComponent implements OnInit {
     postalCode: [''],
   });
 
-  constructor(private toastService: ToastService, private formBuilder: FormBuilder, private appService: AppServiceService) {
+  constructor(private toastService: ToastService, private formBuilder: FormBuilder, private appService: AppServiceService, private addressService: AddressService) {
     this.addresses = new Array();
   }
 
@@ -51,6 +54,7 @@ export class AddAddressComponent implements OnInit {
         address.id = response.ids[0];
         this.addresses.push(address);
         this.addressForm.reset();
+        this.show_io = false;
       },
       (error: any) => {
         let messages = this.extractErrorMesage(error.error);
@@ -85,5 +89,20 @@ export class AddAddressComponent implements OnInit {
     }
 
     return messages;
+  }
+
+  selectAddress(address: AddressModel) {
+    if (this.selected == address.id) {
+      this.selected = null;
+      this.addressService.deliveryAddress = null;
+      return;
+    }
+    this.addressService.deliveryAddress = address;
+    this.selected = address.id;
+  }
+
+  public closeIO() {
+    this.show_io = false;
+    this.addressForm.reset();
   }
 }
