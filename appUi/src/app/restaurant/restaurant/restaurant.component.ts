@@ -128,4 +128,23 @@ export class RestaurantComponent implements OnInit {
     this.router.navigate(['/restaurant/tables']);
   }
 
+  public uploadImage(files: any) {
+    let file = files[0];
+    this.appService.uploadImage(file).subscribe(
+      (response: any) => {
+        this.imageId = response.imageId;
+        this.appService.getRestaurantImage(this.imageId).subscribe(
+          (imageData) => {
+            this.temp = imageData;
+            this.image = this.sanitizer.bypassSecurityTrustUrl(imageData);
+          }
+        );
+      },
+      (error) => {
+        let messages = this.extractErrorMesage(error.error);
+        this.toastService.showMessage(messages, true);
+      }
+    );
+  }
+
 }

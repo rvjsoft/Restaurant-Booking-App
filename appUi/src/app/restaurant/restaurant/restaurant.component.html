@@ -3,6 +3,12 @@
     <div class='col temp h2 '>
       <span class="res_name font-weight-bold">{{name | titlecase}}</span>
     </div>
+    <div *ngIf="isRes" class='col-sm-auto align-self-end'>
+      <label class='file_upload_label row justify-content-center' for='upload_image'>
+        <span class='btn btn-dark'>upload</span>
+      </label>
+      <input type="file" id='upload_image' class="file_upload" (change)='uploadImage($event.target.files)' />
+    </div>
     <div class='col-auto h5'>
       <div class="res_type">
         <img calss='image_type' width="25px" height="25px" [attr.src]="type == 'VEG' ? imageVeg : type == 'NON_VEG' ? imageNonVeg : null" />
