@@ -26,7 +26,7 @@ export enum FoodCategory {
 export enum OrderStatus {
   ORDERED = 'ORDERED',
   ACKNOWLEDGED = 'ACKNOWLEDGED',
-  PREPARING = 'PREPARING',
+  // PREPARING = 'PREPARING',
   DELIVERED = 'DELIVERED'
 }
 

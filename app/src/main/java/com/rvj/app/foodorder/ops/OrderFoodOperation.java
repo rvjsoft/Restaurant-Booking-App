@@ -32,6 +32,9 @@ public class OrderFoodOperation extends Operation<OrderFoodRequest, OrderFoodRes
 			if(invalidQuantity.isPresent()) {
 				this.getErrors().addError("quantity", "quantity should be between 1 to 10");
 			}
+			if(!customerService.canProcessOrder(request.getResId())) {
+				this.getErrors().addError("orders", "Restaurant is unable to process the order.");
+			}
 		}
 		return this.getErrors().hasNoError();
 	}

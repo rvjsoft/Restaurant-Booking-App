@@ -108,6 +108,8 @@ export class GetOrderRequest extends BaseRequest {
     resId: number;
     custId: number;
     status: OrderStatus;
+    page: number;
+    size: number;
 }
 
 export class GetOrderResponse extends BaseResponse {

@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FoodListComponent } from './food-list/food-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FoodEditComponent } from './food-edit/food-edit.component';
+import { OrdersComponent } from './orders/orders.component';
 
 
 @NgModule({
-  declarations: [FoodListComponent, FoodEditComponent],
+  declarations: [FoodListComponent, FoodEditComponent, OrdersComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -14,7 +15,8 @@ import { FoodEditComponent } from './food-edit/food-edit.component';
   ],
   exports: [
     FoodListComponent,
-    FoodEditComponent
+    FoodEditComponent,
+    OrdersComponent
   ]
 })
 export class GeneralModule { }

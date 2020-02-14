@@ -271,4 +271,20 @@ public class CustomerService {
 		return null;
 	}
 	
+	public boolean canProcessOrder(Long id) {
+		int liveOrder = getLiveOrders(id);
+		if(liveOrder >= 30) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	private int getLiveOrders(Long id) {
+		List<OrderStatus> statusList = new ArrayList<OrderStatus>();
+		statusList.add(OrderStatus.ORDERED);
+		statusList.add(OrderStatus.ACKNOWLEDGED);
+		return orderRepository.countByStatusIn(statusList);
+	}
+	
 }

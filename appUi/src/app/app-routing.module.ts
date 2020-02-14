@@ -10,6 +10,7 @@ import { FoodEditComponent } from './general/food-edit/food-edit.component';
 import { ModifyTablesComponent } from './restaurant/modify-tables/modify-tables.component';
 import { SearchRestaurantComponent } from './customer/search-restaurant/search-restaurant.component';
 import { OrderCheckoutComponent } from './customer/order-checkout/order-checkout.component';
+import { OrdersComponent } from './general/orders/orders.component';
 
 
 const routes: Routes = [
@@ -39,6 +40,9 @@ const routes: Routes = [
   },
   {
     path: 'customer/checkout', component: OrderCheckoutComponent
+  },
+  {
+    path: 'restaurant/orders', component: OrdersComponent
   }
 ];
 

@@ -49,10 +49,11 @@ public class UIGetService {
 	@Autowired
 	RestaurantService restaurantService;
 
-	public boolean getOrders(Example<Order> orderExample, GetOrderResponse response) {
+	public boolean getOrders(Example<Order> orderExample, GetOrderResponse response, int page, int size) {
 		List<Order> orders;
 		try {
-			orders = orderRepository.findAll(orderExample);
+			Pageable pageRequest = PageRequest.of(page, size);
+			orders = orderRepository.findAll(orderExample, pageRequest).toList();
 			response.setOrders(getOrderModel(orders));
 		} catch (Exception e) {
 			log.info("caught exception while processing request, Exception:" + e.getMessage());

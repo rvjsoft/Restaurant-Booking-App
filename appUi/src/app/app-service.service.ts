@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoginRequest, RegisterUserRequest, AddressModel, AddAddressRequest, DeleteAddressRequest, GetRestaurantsRequest, AddFoodRequest, UpdateFoodRequest, DeleteFoodRequest, RestaurantTableRequest, TableAvailRequest, OrderFoodRequest, FoodStatusRequest, RestaurantStatusReqeust } from './FoodOrderApp';
+import { LoginRequest, RegisterUserRequest, AddressModel, AddAddressRequest, DeleteAddressRequest, GetRestaurantsRequest, AddFoodRequest, UpdateFoodRequest, DeleteFoodRequest, RestaurantTableRequest, TableAvailRequest, OrderFoodRequest, FoodStatusRequest, RestaurantStatusReqeust, GetOrderRequest, OrderStatusRequest } from './FoodOrderApp';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
@@ -29,6 +29,8 @@ export class AppServiceService {
   readonly PATH_TABLE_AVAIL = 'restaurant/get/tablesAvail';
   readonly PATH_GET_RES_LIST = 'customer/get/restlist';
   readonly PATH_ORDER_FOOD = 'customer/order';
+  readonly PATH_RES_GET_ORDERS = 'restaurant/get/orders';
+  readonly PATH_RES_ORDER_STATUS = 'restaurant/orderstatus';
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
 
@@ -137,7 +139,7 @@ export class AppServiceService {
 
   public getTableAvail(): Observable<any> {
     let requestURL = environment.appURI + this.PATH_TABLE_AVAIL;
-    let params = new HttpParams().set("messageId", (Date.now() / 1000).toString())
+    let params = new HttpParams().set("messageId", (Date.now() / 1000).toString());
     return this.http.get(requestURL, {params: params, headers: {}, withCredentials: true});
   }
 
@@ -154,5 +156,29 @@ export class AppServiceService {
       params = params.set('foodId', foodId);
     let requestURL = environment.appURI + 'restaurant/upload';
     return this.http.post(requestURL, formData, { headers: {}, params: params, withCredentials: true });
+  }
+
+  public getOrders(request: GetOrderRequest): Observable<any> {
+    let requestURL = environment.appURI + this.PATH_RES_GET_ORDERS;
+    let params = new HttpParams();
+    params = params.set('messageId', (Date.now() / 1000).toString());
+    if (request.custId != null && request.custId != undefined)
+      params = params.set('custId', request.custId + '');
+    if (request.resId != null && request.resId != undefined)
+      params = params.set('resId', request.resId + '');
+    if (request.status != null && request.status != undefined)
+      params = params.set('status', request.status + '');
+    if (request.page != null && request.page != undefined)
+      params = params.set('page', request.page + '');
+    if (request.size != null && request.size != undefined)
+      params = params.set('size', request.size + '');
+
+    return this.http.get(requestURL, { headers: {}, params: params, withCredentials: true });
+  }
+
+  public changeOrderStatus(request: OrderStatusRequest): Observable<any> {
+    let requestURL = environment.appURI + this.PATH_RES_ORDER_STATUS;
+    request.messageId = (Date.now() / 1000).toString();
+    return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
   }
 }
