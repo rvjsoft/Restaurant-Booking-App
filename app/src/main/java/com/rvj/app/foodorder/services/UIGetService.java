@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.rvj.app.dataaccess.OrderRepository;
@@ -52,7 +53,7 @@ public class UIGetService {
 	public boolean getOrders(Example<Order> orderExample, GetOrderResponse response, int page, int size) {
 		List<Order> orders;
 		try {
-			Pageable pageRequest = PageRequest.of(page, size);
+			Pageable pageRequest = PageRequest.of(page, size , Sort.by("orderedOn").descending());
 			orders = orderRepository.findAll(orderExample, pageRequest).toList();
 			response.setOrders(getOrderModel(orders));
 		} catch (Exception e) {
