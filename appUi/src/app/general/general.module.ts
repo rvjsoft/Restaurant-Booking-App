@@ -17,7 +17,8 @@ import { CustomerOrdersComponent } from './customer-orders/customer-orders.compo
   exports: [
     FoodListComponent,
     FoodEditComponent,
-    OrdersComponent
+    OrdersComponent,
+    CustomerOrdersComponent
   ]
 })
 export class GeneralModule { }

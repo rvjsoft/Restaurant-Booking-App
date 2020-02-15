@@ -11,6 +11,7 @@ import { ModifyTablesComponent } from './restaurant/modify-tables/modify-tables.
 import { SearchRestaurantComponent } from './customer/search-restaurant/search-restaurant.component';
 import { OrderCheckoutComponent } from './customer/order-checkout/order-checkout.component';
 import { OrdersComponent } from './general/orders/orders.component';
+import { CustomerOrdersComponent } from './general/customer-orders/customer-orders.component';
 
 
 const routes: Routes = [
@@ -43,6 +44,9 @@ const routes: Routes = [
   },
   {
     path: 'restaurant/orders', component: OrdersComponent
+  },
+  {
+    path: 'customer/orders', component: CustomerOrdersComponent
   }
 ];
 

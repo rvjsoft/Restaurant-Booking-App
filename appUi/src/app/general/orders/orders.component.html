@@ -15,7 +15,7 @@
       <div class="list_item bg-light col-md-8 border rounded-lg py-2" *ngFor="let order of orders">
         <div class="row item_box justify-content-between align-items-center">
           <p class="col-auto text-secondary">Order Id: #{{order.id}}</p>
-          <p class="col-auto text-secondary" [attr.innerHTML]='orderDate[order.id + ""]'>{{orderDate[order.id]}}</p>
+          <p class="col-auto text-secondary" >{{orderDate[order.id]}}</p>
           <div class="col-auto food_status">
             <select class="form-control-sm" (change)='changeOrderStatus(order, $event.target.value)'
               [(ngModel)]="statusTracker[order.id+'']">

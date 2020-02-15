@@ -16,6 +16,8 @@ export class CustomerOrdersComponent implements OnInit {
   statusTracker: { [index: string]: OrderStatus } = {};
   newPage = 0;
   newSize = 15;
+  orderDate: {[index: string]: string} = {};
+  dayMillis = 8.64e+7;
 
   constructor(private appService: AppServiceService, private toastService: ToastService) { }
 
@@ -39,6 +41,14 @@ export class CustomerOrdersComponent implements OnInit {
             if (this.statusTracker[order.id + ''] == null || this.statusTracker[order.id + ''] == undefined) {
               this.statusTracker[order.id + ''] = order.status;
             }
+            let orderDate = new Date(Date.parse(order.orderedOn + ''));
+            if (this.isSameDay(orderDate, new Date(Date.now()))) {
+              this.orderDate[order.id + ''] = 'today, ' + orderDate.getHours() + ':' + orderDate.getMinutes();
+              console.log(this.orderDate);
+            } else {
+              let difference = this.getDifference(new Date(Date.parse(order.orderedOn + '')), new Date(Date.now()));
+              this.orderDate[order.id + ''] = difference + ((difference == 1) ? ' day' : ' days' + ' ago');
+            }
           }
         );
       },
@@ -47,6 +57,12 @@ export class CustomerOrdersComponent implements OnInit {
         this.toastService.showMessage(messages, true);
       }
     );
+  }
+
+  public refresh() {
+    this.newPage = 0;
+    this.orders = [];
+    this.loadOrders();
   }
 
   private extractErrorMesage(errorObj: any): string[] {
@@ -71,5 +87,18 @@ export class CustomerOrdersComponent implements OnInit {
       this.loadOrders();
     }
    }
+
+  private isSameDay(date1: Date, date2: Date): boolean {
+    if (date1.getDate() == date2.getDate() && date1.getMonth() == date2.getMonth() && date1.getFullYear() == date2.getFullYear()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private getDifference(date1: Date, date2: Date): number {
+    let difference = Math.abs(date2.getTime() - date1.getTime());
+    return Math.round(difference / this.dayMillis);
+  }
 
 }

@@ -88,8 +88,9 @@ export class OrdersComponent implements OnInit {
             this.orderByCategory[request.status].push(order);
             if(this.statusTracker[order.id+''] == null || this.statusTracker[order.id+''] == undefined) {
               this.statusTracker[order.id+''] = order.status;
-              this.prevStatus[order.id+''] = order.status;
-              if (this.isSameDay(new Date(Date.parse(order.orderedOn + '')), new Date(Date.now()))) {
+              this.prevStatus[order.id + ''] = order.status;
+              let orderDate = new Date(Date.parse(order.orderedOn + ''));
+              if (this.isSameDay(orderDate, new Date(Date.now()))) {
                 this.orderDate[order.id + ''] = 'today';
                 console.log(this.orderDate);
               } else {
