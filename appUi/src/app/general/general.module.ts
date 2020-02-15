@@ -5,10 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FoodEditComponent } from './food-edit/food-edit.component';
 import { OrdersComponent } from './orders/orders.component';
 import { CustomerOrdersComponent } from './customer-orders/customer-orders.component';
+import { TablesHistoryComponent } from './tables-history/tables-history.component';
 
 
 @NgModule({
-  declarations: [FoodListComponent, FoodEditComponent, OrdersComponent, CustomerOrdersComponent],
+  declarations: [FoodListComponent, FoodEditComponent, OrdersComponent, CustomerOrdersComponent, TablesHistoryComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -18,7 +19,8 @@ import { CustomerOrdersComponent } from './customer-orders/customer-orders.compo
     FoodListComponent,
     FoodEditComponent,
     OrdersComponent,
-    CustomerOrdersComponent
+    CustomerOrdersComponent,
+    TablesHistoryComponent
   ]
 })
 export class GeneralModule { }

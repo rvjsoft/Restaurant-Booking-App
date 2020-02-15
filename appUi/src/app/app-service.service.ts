@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoginRequest, RegisterUserRequest, AddressModel, AddAddressRequest, DeleteAddressRequest, GetRestaurantsRequest, AddFoodRequest, UpdateFoodRequest, DeleteFoodRequest, RestaurantTableRequest, TableAvailRequest, OrderFoodRequest, FoodStatusRequest, RestaurantStatusReqeust, GetOrderRequest, OrderStatusRequest } from './FoodOrderApp';
+import { LoginRequest, RegisterUserRequest, AddressModel, AddAddressRequest, DeleteAddressRequest, GetRestaurantsRequest, AddFoodRequest, UpdateFoodRequest, DeleteFoodRequest, RestaurantTableRequest, TableAvailRequest, OrderFoodRequest, FoodStatusRequest, RestaurantStatusReqeust, GetOrderRequest, OrderStatusRequest, GetTableRequest, BookTableRequest } from './FoodOrderApp';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
@@ -26,12 +26,15 @@ export class AppServiceService {
   readonly PATH_RES_STATUS = 'restaurant/status';
   readonly PATH_DELETE_FOOD = 'restaurant/delete/food';
   readonly PATH_TABLE_COUNT = 'restaurant/tablecount';
-  readonly PATH_TABLE_AVAIL = 'restaurant/get/tablesAvail';
+  readonly PATH_TABLE_AVAIL = 'gen/get/tablesAvail';
   readonly PATH_GET_RES_LIST = 'customer/get/restlist';
   readonly PATH_ORDER_FOOD = 'customer/order';
   readonly PATH_RES_GET_ORDERS = 'restaurant/get/orders';
   readonly PATH_CUST_GET_ORDERS = 'customer/get/orders';
   readonly PATH_RES_ORDER_STATUS = 'restaurant/orderstatus';
+  readonly PATH_RES_GET_TABLE = 'restaurant/get/tables';
+  readonly PATH_CUST_GET_TABLE = 'customer/get/tables';
+  readonly PATH_BOOK_TABLE = 'customer/booktable';
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
 
@@ -138,9 +141,18 @@ export class AppServiceService {
     return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
   }
 
-  public getTableAvail(): Observable<any> {
+  public bookTable(request: BookTableRequest): Observable<any> {
+    let requestURL = environment.appURI + this.PATH_BOOK_TABLE;
+    request.messageId = (Date.now() / 1000).toString();
+    return this.http.post(requestURL, request, {headers: {}, withCredentials: true});
+  }
+
+  public getTableAvail(resId?: number): Observable<any> {
     let requestURL = environment.appURI + this.PATH_TABLE_AVAIL;
     let params = new HttpParams().set("messageId", (Date.now() / 1000).toString());
+    if(resId != null) {
+      params = params.set('resId', resId + '');
+    }
     return this.http.get(requestURL, {params: params, headers: {}, withCredentials: true});
   }
 
@@ -174,6 +186,27 @@ export class AppServiceService {
       params = params.set('resId', request.resId + '');
     if (request.status != null && request.status != undefined)
       params = params.set('status', request.status + '');
+    if (request.page != null && request.page != undefined)
+      params = params.set('page', request.page + '');
+    if (request.size != null && request.size != undefined)
+      params = params.set('size', request.size + '');
+
+    return this.http.get(requestURL, { headers: {}, params: params, withCredentials: true });
+  }
+
+  public getTables(request: GetTableRequest, isCustomer?: boolean): Observable<any> {
+    let requestURL = environment.appURI;
+    if (isCustomer === true) {
+      requestURL += this.PATH_CUST_GET_TABLE;
+    } else {
+      requestURL += this.PATH_RES_GET_TABLE;
+    }
+    let params = new HttpParams();
+    params = params.set('messageId', (Date.now() / 1000).toString());
+    if (request.custId != null && request.custId != undefined)
+      params = params.set('custId', request.custId + '');
+    if (request.resId != null && request.resId != undefined)
+      params = params.set('resId', request.resId + '');
     if (request.page != null && request.page != undefined)
       params = params.set('page', request.page + '');
     if (request.size != null && request.size != undefined)

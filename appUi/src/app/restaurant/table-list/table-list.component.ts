@@ -11,6 +11,9 @@ export class TableListComponent implements OnInit {
   @Input()
   private availability: Array<{ [date: string]: { [part: string]: TableAvailModel } }>;
 
+  @Input()
+  private baseCount: number;
+
   constructor() { }
 
   ngOnInit() {
@@ -32,15 +35,15 @@ export class TableListComponent implements OnInit {
   public getDummyAvail(): any {
     let dummyAvail = {
       BREAKFAST: {
-        total: 0,
+        total: -1,
         bookedTables: 0
       },
       LUNCH: {
-        total: 0,
+        total: -1,
         bookedTables: 0
       },
       DINNER: {
-        total: 0,
+        total: -1,
         bookedTables: 0
       }
     }

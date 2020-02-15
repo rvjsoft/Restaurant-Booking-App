@@ -6,20 +6,24 @@ import { SearchRestaurantComponent } from './search-restaurant/search-restaurant
 import { RestaurantListComponent } from './restaurant-list/restaurant-list.component';
 import { OrderCheckoutComponent } from './order-checkout/order-checkout.component';
 import { GeneralModule } from '../general/general.module';
+import { BookTableComponent } from './book-table/book-table.component';
+import { RestaurantModule } from '../restaurant/restaurant.module';
 
 
 @NgModule({
-  declarations: [AddAddressComponent, SearchRestaurantComponent, RestaurantListComponent, OrderCheckoutComponent],
+  declarations: [AddAddressComponent, SearchRestaurantComponent, RestaurantListComponent, OrderCheckoutComponent, BookTableComponent],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    GeneralModule
+    GeneralModule,
+    RestaurantModule
   ],
   exports: [
     AddAddressComponent,
     SearchRestaurantComponent,
-    OrderCheckoutComponent
+    OrderCheckoutComponent,
+    BookTableComponent
   ]
 })
 export class CustomerModule { }

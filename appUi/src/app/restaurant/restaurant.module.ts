@@ -17,7 +17,8 @@ import { TableListComponent } from './table-list/table-list.component';
   ],
   exports: [
     RestaurantComponent,
-    ModifyTablesComponent
+    ModifyTablesComponent,
+    TableListComponent
   ]
 })
 export class RestaurantModule { }

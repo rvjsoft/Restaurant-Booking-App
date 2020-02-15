@@ -316,8 +316,8 @@ public class RestaurantController {
 		}
 	}
 	
-	@GetMapping(path = "get/tables", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetTableResponse> getTables(@Valid @RequestBody GetTableRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "get/tables", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetTableResponse> getTables(@Valid GetTableRequest request, BindingResult bindingResult) {
 		log.info("Started Processing get tabel booking request, messageId=" + request.getMessageId());
 		GetTableResponse response = new GetTableResponse();
 		response.setMessageId(request.getMessageId());
@@ -347,28 +347,6 @@ public class RestaurantController {
 		}
 	}
 
-	@GetMapping(path = "get/tablesAvail", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TableAvailResponse> getTablesAvailability(@RequestParam("messageId") String messageId) {
-		TableAvailRequest request = new TableAvailRequest();
-		request.setMessageId(messageId);
-		log.info("Started Processing get tabel availability request, messageId=" + request.getMessageId());
-		TableAvailResponse response = new TableAvailResponse();
-		response.setMessageId(request.getMessageId());
-		log.info("No constraint errors,started get tabel availability request");
-		GetTableAvailOperation operation = opsConfiguration.getGetTableAvailOperation(request);
-		response = operation.run();
-		response.setMessageId(request.getMessageId());
-		if (response.getErrors().isEmpty()) {
-			response.setMessage("get tabel availability successfully.");
-			log.info("get tabel availability successfully");
-			return new ResponseEntity<TableAvailResponse>(response, HttpStatus.OK);
-		} else {
-			response.setMessage("get tabel availability failed");
-			log.info("get tabel availability failed");
-			return new ResponseEntity<TableAvailResponse>(response, HttpStatus.BAD_REQUEST);
-		}
-	}
-	
 	@PostMapping(path = "upload", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file, @Nullable @RequestParam("foodId") Long foodId) {
 		FileUploadRequest request = new FileUploadRequest();

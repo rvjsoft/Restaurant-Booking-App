@@ -63,10 +63,11 @@ public class UIGetService {
 		return true;
 	}
 	
-	public boolean getTableBookings(Example<TableBooking> bookingExample, GetTableResponse response) {
+	public boolean getTableBookings(Example<TableBooking> bookingExample, GetTableResponse response, int page, int size) {
 		List<TableBooking> bookingList;
 		try {
-			bookingList = bookingRepository.findAll(bookingExample);
+			Pageable pageRequest = PageRequest.of(page, size, Sort.by("bookingDate", "partOfDay").descending());
+			bookingList = bookingRepository.findAll(bookingExample, pageRequest).toList();
 			response.setTableBookings(getBookingModel(bookingList));
 		} catch (Exception e) {
 			log.info("caught exception while processing request, Exception:" + e.getMessage());

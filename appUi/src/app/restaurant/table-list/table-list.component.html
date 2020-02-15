@@ -11,9 +11,12 @@
       </div>
       <div *ngFor="let part of avail.value | keyvalue" class="col-sm-auto m-3">
         <div class="row justify-content-center m-1 text-dark">{{part.key | titlecase}}</div>
-        <div class="row justify-content-center m-1 text-dark font-weight-bold">{{(part.value.total == 0) ? "-" : part.value.total}}</div>
-        <div class="row justify-content-center m-1 text-dark font-weight-bold">{{(part.value.bookedTables == 0) ? "-" : part.value.bookedTables}}</div>
-      </div>
+        <div class="row justify-content-center m-1 text-dark font-weight-bold">
+          {{(part.value.total == -1) ? baseCount : (part.value.total == 0) ?"-" : part.value.total}}
+        </div>
+        <div class="row justify-content-center m-1 text-dark font-weight-bold">
+          {{(part.value.bookedTables == 0) ? "-" : part.value.bookedTables}}</div>
+        </div>
     </div>
   </div>
   <div *ngIf="availability == null || availability == undefined">

@@ -66,7 +66,11 @@ public class GetTableOperation extends Operation<GetTableRequest, GetTableRespon
 		booking.setRestaurant(restaurant);
 		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
 		Example<TableBooking> bookingExample = Example.of(booking, matcher);
-		status = uiService.getTableBookings(bookingExample, response);
+		if (request.getPage() == null || request.getSize() == null) {
+			request.setPage(0);
+			request.setSize(20);
+		}
+		status = uiService.getTableBookings(bookingExample, response, request.getPage(), request.getSize());
 		if(!status) {
 			log.info("error while getting table booking list");
 			this.getErrors().addError("request", "error getting table booking list");

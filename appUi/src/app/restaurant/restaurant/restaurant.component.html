@@ -42,7 +42,7 @@
         </select>
       </div>
       <div class="row align-items-end py-2">
-        <div *ngIf='!isRes' class="col btn btn-dark">Book Seats</div>
+        <div *ngIf='!isRes' class="col btn btn-dark" (click)='goToBookTable()'>Book Seats</div>
         <div *ngIf='isRes' class="col btn btn-dark" (click)='goToTables()'>Base Seats: {{baseCount}}</div>
       </div>
     </div>

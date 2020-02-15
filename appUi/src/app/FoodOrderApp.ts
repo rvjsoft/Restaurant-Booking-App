@@ -142,6 +142,8 @@ export class GetRestaurantsRequest extends BaseRequest {
 export class GetTableRequest extends BaseRequest {
     resId: number;
     custId: number;
+    page: number;
+    size: number;
 }
 
 export class GetTableResponse extends BaseResponse {

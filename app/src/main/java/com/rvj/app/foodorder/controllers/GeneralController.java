@@ -23,7 +23,10 @@ import com.rvj.app.foodorder.config.AppOperationConfiguration;
 import com.rvj.app.foodorder.entity.enums.FoodType;
 import com.rvj.app.foodorder.models.GetRestaurantResponse;
 import com.rvj.app.foodorder.models.GetRestaurantsRequest;
+import com.rvj.app.foodorder.models.TableAvailRequest;
+import com.rvj.app.foodorder.models.TableAvailResponse;
 import com.rvj.app.foodorder.ops.GetRestaurantsOperation;
+import com.rvj.app.foodorder.ops.GetTableAvailOperation;
 import com.rvj.app.foodorder.services.FileUploadService;
 import com.rvj.app.foodorder.utils.AppConstants;
 import com.rvj.app.foodorder.utils.ValidationUtils;
@@ -63,6 +66,29 @@ public class GeneralController {
 			response.setMessage("get restaurants failed");
 			log.info("get restaurants failed");
 			return new ResponseEntity<GetRestaurantResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping(path = "get/tablesAvail", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<TableAvailResponse> getTablesAvailability(@RequestParam("messageId") String messageId, @Nullable @RequestParam("resId") Long resId) {
+		TableAvailRequest request = new TableAvailRequest();
+		request.setMessageId(messageId);
+		request.setResId(resId);
+		log.info("Started Processing get tabel availability request, messageId=" + request.getMessageId());
+		TableAvailResponse response = new TableAvailResponse();
+		response.setMessageId(request.getMessageId());
+		log.info("No constraint errors,started get tabel availability request");
+		GetTableAvailOperation operation = opsConfiguration.getGetTableAvailOperation(request);
+		response = operation.run();
+		response.setMessageId(request.getMessageId());
+		if (response.getErrors().isEmpty()) {
+			response.setMessage("get tabel availability successfully.");
+			log.info("get tabel availability successfully");
+			return new ResponseEntity<TableAvailResponse>(response, HttpStatus.OK);
+		} else {
+			response.setMessage("get tabel availability failed");
+			log.info("get tabel availability failed");
+			return new ResponseEntity<TableAvailResponse>(response, HttpStatus.BAD_REQUEST);
 		}
 	}
 	

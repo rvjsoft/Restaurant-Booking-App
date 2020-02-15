@@ -21,4 +21,8 @@ public class GetTableRequest extends BaseRequest{
 	
 	@JsonIgnore
 	private UserLevel userLevel;
+	
+	private Integer page;
+	
+	private Integer size;
 }

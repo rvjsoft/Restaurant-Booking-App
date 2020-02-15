@@ -240,8 +240,8 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping(path = "get/tables", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetTableResponse> getTables(@Valid @RequestBody GetTableRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "get/tables", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetTableResponse> getTables(@Valid GetTableRequest request, BindingResult bindingResult) {
 		log.info("Started Processing get tabel booking request, messageId=" + request.getMessageId());
 		GetTableResponse response = new GetTableResponse();
 		response.setMessageId(request.getMessageId());

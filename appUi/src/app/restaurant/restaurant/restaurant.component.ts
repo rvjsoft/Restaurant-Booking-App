@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AppServiceService } from 'src/app/app-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel, FoodModel, RestaurantStatusResponse, RestaurantStatusReqeust } from 'src/app/FoodOrderApp';
+import { AddressModel, GetRestaurantsRequest, GetRestaurantResponse, RestaurantModel, FoodModel, RestaurantStatusResponse, RestaurantStatusReqeust, TableAvailModel } from 'src/app/FoodOrderApp';
 import { Status } from 'src/app/AppEnums';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SessionService } from 'src/app/session.service';
 import { from } from 'rxjs';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { OrderCheckoutService } from 'src/app/customer/order-checkout.service';
+import { BookTableService } from 'src/app/customer/book-table.service';
 
 @Component({
   selector: 'app-restaurant',
@@ -30,6 +31,7 @@ export class RestaurantComponent implements OnInit {
   resId;
   email;
   phone;
+  availability: { [date: string]: { [part: string]: TableAvailModel } };
 
 
   constructor(
@@ -39,7 +41,8 @@ export class RestaurantComponent implements OnInit {
     private route: ActivatedRoute,
     private session: SessionService,
     private toastService: ToastService,
-    private orderService: OrderCheckoutService
+    private orderService: OrderCheckoutService,
+    private bookTableService: BookTableService
     ) { }
 
   ngOnInit() {
@@ -56,6 +59,7 @@ export class RestaurantComponent implements OnInit {
           this.address = restaurant.address;
         else
           this.address = new AddressModel();
+        this.availability = response.availability;
         this.baseCount = restaurant.tableCount;
         this.isAvailable = restaurant.status;
         this.type = restaurant.type;
@@ -126,6 +130,13 @@ export class RestaurantComponent implements OnInit {
 
   public goToTables() {
     this.router.navigate(['/restaurant/tables']);
+  }
+
+  public goToBookTable() {
+    this.bookTableService.availability = this.availability;
+    this.bookTableService.resId = this.resId;
+    this.bookTableService.baseCount = this.baseCount;
+    this.router.navigate(['/customer/booktable']);
   }
 
   public uploadImage(files: any) {

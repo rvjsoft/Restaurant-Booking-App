@@ -12,6 +12,8 @@ import { SearchRestaurantComponent } from './customer/search-restaurant/search-r
 import { OrderCheckoutComponent } from './customer/order-checkout/order-checkout.component';
 import { OrdersComponent } from './general/orders/orders.component';
 import { CustomerOrdersComponent } from './general/customer-orders/customer-orders.component';
+import { TablesHistoryComponent } from './general/tables-history/tables-history.component';
+import { BookTableComponent } from './customer/book-table/book-table.component';
 
 
 const routes: Routes = [
@@ -47,6 +49,15 @@ const routes: Routes = [
   },
   {
     path: 'customer/orders', component: CustomerOrdersComponent
+  },
+  {
+    path: 'restaurant/bookings', component: TablesHistoryComponent
+  },
+  {
+    path: 'customer/bookings', component: TablesHistoryComponent
+  },
+  {
+    path: 'customer/booktable', component: BookTableComponent
   }
 ];
 
