@@ -20,6 +20,9 @@ export class OrdersComponent implements OnInit {
   newPage = 0;
   newSize = 30;
   scrollData: boolean = false;
+  visibleStatusType: OrderStatus;
+  orderDate: {[index: string]: string} = {};
+  dayMillis = 8.64e+7;
 
   constructor(private appService: AppServiceService, private toastService: ToastService) {
     this.foodStatusOption = Object.keys(OrderStatus);
@@ -86,6 +89,13 @@ export class OrdersComponent implements OnInit {
             if(this.statusTracker[order.id+''] == null || this.statusTracker[order.id+''] == undefined) {
               this.statusTracker[order.id+''] = order.status;
               this.prevStatus[order.id+''] = order.status;
+              if (this.isSameDay(new Date(Date.parse(order.orderedOn + '')), new Date(Date.now()))) {
+                this.orderDate[order.id + ''] = 'today';
+                console.log(this.orderDate);
+              } else {
+                let difference = this.getDifference(new Date(Date.parse(order.orderedOn + '')), new Date(Date.now()));
+                this.orderDate[order.id + ''] = difference + ((difference == 1) ? ' day' : ' days' + ' ago');
+              }
             }
             console.log(this.statusTracker);
           }
@@ -103,6 +113,8 @@ export class OrdersComponent implements OnInit {
     request.status = OrderStatus.ORDERED;
     this.orders = this.orderByCategory[request.status];
     this.loadOrdersData(request);
+    this.foodStatusOption = Object.keys(OrderStatus);
+    this.visibleStatusType = OrderStatus.ORDERED;
   }
 
   public getLive() {
@@ -110,6 +122,8 @@ export class OrdersComponent implements OnInit {
     request.status = OrderStatus.ACKNOWLEDGED;
     this.orders = this.orderByCategory[request.status];
     this.loadOrdersData(request);
+    this.foodStatusOption = [OrderStatus.ACKNOWLEDGED, OrderStatus.DELIVERED];
+    this.visibleStatusType = OrderStatus.ACKNOWLEDGED;
   }
 
   public getHistory() {
@@ -117,6 +131,8 @@ export class OrdersComponent implements OnInit {
     request.status = OrderStatus.DELIVERED;
     this.orders = this.orderByCategory[request.status];
     this.loadOrdersData(request);
+    this.foodStatusOption = [OrderStatus.DELIVERED];
+    this.visibleStatusType = OrderStatus.DELIVERED;
   }
 
   public loadOrdersData(request: GetOrderRequest) {
@@ -137,7 +153,6 @@ export class OrdersComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   public windowScroll(event: any): void {
-    console.log(event);
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
       if(this.orders == this.orderByCategory[OrderStatus.DELIVERED]) {
         this.scrollData = true;
@@ -145,6 +160,19 @@ export class OrdersComponent implements OnInit {
         this.scrollData = false;
       }
     }
-   }
+  }
+
+  private isSameDay(date1: Date, date2: Date): boolean {
+    if (date1.getDate() == date2.getDate() && date1.getMonth() == date2.getMonth() && date1.getFullYear() == date2.getFullYear()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private getDifference(date1: Date, date2: Date): number {
+    let difference = Math.abs(date2.getTime() - date1.getTime());
+    return Math.round(difference / this.dayMillis);
+  }
 
 }

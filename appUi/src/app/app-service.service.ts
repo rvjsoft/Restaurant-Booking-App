@@ -30,6 +30,7 @@ export class AppServiceService {
   readonly PATH_GET_RES_LIST = 'customer/get/restlist';
   readonly PATH_ORDER_FOOD = 'customer/order';
   readonly PATH_RES_GET_ORDERS = 'restaurant/get/orders';
+  readonly PATH_CUST_GET_ORDERS = 'customer/get/orders';
   readonly PATH_RES_ORDER_STATUS = 'restaurant/orderstatus';
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
@@ -158,8 +159,13 @@ export class AppServiceService {
     return this.http.post(requestURL, formData, { headers: {}, params: params, withCredentials: true });
   }
 
-  public getOrders(request: GetOrderRequest): Observable<any> {
-    let requestURL = environment.appURI + this.PATH_RES_GET_ORDERS;
+  public getOrders(request: GetOrderRequest, isCustomer?: boolean): Observable<any> {
+    let requestURL = environment.appURI;
+    if (isCustomer === true) {
+      requestURL += this.PATH_CUST_GET_ORDERS;
+    } else {
+      requestURL += this.PATH_RES_GET_ORDERS;
+    }
     let params = new HttpParams();
     params = params.set('messageId', (Date.now() / 1000).toString());
     if (request.custId != null && request.custId != undefined)

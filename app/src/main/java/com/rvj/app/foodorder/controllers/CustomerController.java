@@ -209,8 +209,8 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping(path = "get/orders", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetOrderResponse> getOrders(@Valid @RequestBody GetOrderRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "get/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetOrderResponse> getOrders(@Valid GetOrderRequest request, BindingResult bindingResult) {
 		log.info("Started Processing get Orders request, messageId=" + request.getMessageId());
 		GetOrderResponse response = new GetOrderResponse();
 		response.setMessageId(request.getMessageId());

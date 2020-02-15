@@ -1,23 +1,41 @@
 <div class="container Orders_page">
   <div class="orders_list">
-    <div class="row list_title">
-      <p class="h3 align-content-center text-dark">Orders</p>
+    <div class="row my-2 list_title align-items-center">
+      <p class="h3 col-12 font-weight-bold text-dark">Orders</p>
     </div>
-    <div class="row menu align-items-center justify-content-center">
-      <div class="col-sm-auto" (click)='getNew()'>New</div>
-      <div class="col-sm-auto" (click)='getLive()'>Live</div>
-      <div class='col-sm-auto' (click)='getHistory()'>History</div>
+    <div class="row menu bg- btn-dark rounded justify-content-center align-items-center">
+      <div class="col-auto px-5 py-3 text-white" [ngClass]="{'selected': orderByCategory['ORDERED'] == orders}"
+        (click)='getNew()'>New</div>
+      <div class="col-auto px-5 py-3 text-white" [ngClass]="{'selected': orderByCategory['ACKNOWLEDGED'] == orders}"
+        (click)='getLive()'>Live</div>
+      <div class='col-auto px-5 py-3 text-white' [ngClass]="{'selected': orderByCategory['DELIVERED'] == orders}"
+        (click)='getHistory()'>History</div>
     </div>
-    <div class="list_body row justify-content-center">
-      <div class="list_item col-md-8 border rounded-lg " *ngFor="let order of orders">
-        <div class="col item_box justify-content-between">
-          <p class="float-left text-secondary">Order Id: #{{order.id}}</p>
-          <div class="float-right food_status">
-            <select class="form-control" (change)='changeOrderStatus(order, $event.target.value)' [(ngModel)]="statusTracker[order.id+'']">
+    <div class="list_body mx-2 row justify-content-center" [ngClass]="[visibleStatusType | lowercase]">
+      <div class="list_item bg-light col-md-8 border rounded-lg py-2" *ngFor="let order of orders">
+        <div class="row item_box justify-content-between align-items-center">
+          <p class="col-auto text-secondary">Order Id: #{{order.id}}</p>
+          <p class="col-auto text-secondary" [attr.innerHTML]='orderDate[order.id + ""]'>{{orderDate[order.id]}}</p>
+          <div class="col-auto food_status">
+            <select class="form-control-sm" (change)='changeOrderStatus(order, $event.target.value)'
+              [(ngModel)]="statusTracker[order.id+'']">
               <option *ngFor="let option of foodStatusOption" [attr.value]="option">{{option}}</option>
             </select>
           </div>
         </div>
+        <div class="row px-2 py-1 text-white bg-secondary rounded m-2 justify-content-center align-items-center">
+          <div class='col-3'>Food id</div>
+          <div class='col-3'>Food</div>
+          <div class='col-3'>Quantity</div>
+        </div>
+        <div class="row px-2 text-dark rounded mx-2 justify-content-center align-items-center" *ngFor="let item of order.foodItems">
+          <div class='col-3'>{{item.id}}</div>
+          <div class='col-3'>{{item.food}}</div>
+          <div class='col-3'>{{item.quantity}}</div>
+        </div>
+      </div>
+      <div *ngIf="orders.length == 0" class='row'>
+        <p class=''>-- No Orders Found --</p>
       </div>
     </div>
   </div>
