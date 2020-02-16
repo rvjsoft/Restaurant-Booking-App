@@ -84,7 +84,7 @@ export class RestaurantComponent implements OnInit {
   }
 
   public goToModifyFoods() {
-    this.router.navigateByUrl('/restaurant/editfood', {state: {foods: JSON.stringify(this.foods)}});
+    this.router.navigateByUrl('/res/editfood', {state: {foods: JSON.stringify(this.foods)}});
   }
 
   public checkout(event: any) {
@@ -129,7 +129,7 @@ export class RestaurantComponent implements OnInit {
   }
 
   public goToTables() {
-    this.router.navigate(['/restaurant/tables']);
+    this.router.navigate(['/res/tables']);
   }
 
   public goToBookTable() {

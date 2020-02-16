@@ -8,16 +8,19 @@ import { OrderCheckoutComponent } from './order-checkout/order-checkout.componen
 import { GeneralModule } from '../general/general.module';
 import { BookTableComponent } from './book-table/book-table.component';
 import { RestaurantModule } from '../restaurant/restaurant.module';
+import { CustLandingComponent } from './cust-landing/cust-landing.component';
+import { CustomerRoutingModule } from './customer-routing.module';
 
 
 @NgModule({
-  declarations: [AddAddressComponent, SearchRestaurantComponent, RestaurantListComponent, OrderCheckoutComponent, BookTableComponent],
+  declarations: [AddAddressComponent, SearchRestaurantComponent, RestaurantListComponent, OrderCheckoutComponent, BookTableComponent, CustLandingComponent],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     GeneralModule,
-    RestaurantModule
+    RestaurantModule,
+    CustomerRoutingModule
   ],
   exports: [
     AddAddressComponent,

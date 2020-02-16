@@ -4,6 +4,7 @@ import { ToastService } from '../ui-components/toast.service';
 import { LoginRequest, BaseResponse } from '../FoodOrderApp';
 import { AppServiceService } from '../app-service.service';
 import { SessionService } from '../session.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,13 @@ export class LoginComponent implements OnInit {
     password: ['']
   });
 
-  constructor(private toastService: ToastService, private formBuilder: FormBuilder, private appService: AppServiceService, private session: SessionService) { }
+  constructor(
+    private toastService: ToastService,
+    private formBuilder: FormBuilder,
+    private appService: AppServiceService,
+    private session: SessionService,
+    private router: Router
+    ) { }
 
   ngOnInit() {
   }
@@ -29,6 +36,7 @@ export class LoginComponent implements OnInit {
     this.appService.login(request).subscribe(
       (response: BaseResponse) => {
         this.toastService.showMessage([response.message], false);
+        this.navigateToUserLanding();
       },
       (error: any) => {
         let messages = this.extractErrorMesage(error.error);
@@ -51,6 +59,23 @@ export class LoginComponent implements OnInit {
     }
 
     return messages;
+  }
+
+  public navigateToUserLanding() {
+    let usrLevel = this.session.userLevel;
+    if(usrLevel == 'RESTAURANT') {
+      this.router.navigate(['res/restaurant']);
+    } else if(usrLevel == 'CUSTOMER') {
+      this.router.navigate(['customer/home']);
+    }
+  }
+
+  public goToCustomerCreation() {
+    this.router.navigate(['register/customer']);
+  }
+
+  public goToRestaurantCreation() {
+    this.router.navigate(['register/restaurant']);
   }
 
 }

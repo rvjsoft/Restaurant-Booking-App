@@ -16,6 +16,14 @@
   visibility: hidden;
 }
 
+.food_item {
+  background-color: rgb(254, 255, 244);
+}
+
 .food_image {
   /* box-shadow: 0px 1px 5px black !important; */
+}
+
+.checkout_button {
+  padding-top: 40px;
 }

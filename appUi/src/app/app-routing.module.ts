@@ -25,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: 'register/restaurant', component: RestaurantRegistrationComponent
-  },
+  }/* ,
   {
     path: 'customer/addaddress', component: AddAddressComponent
   },
@@ -58,7 +58,7 @@ const routes: Routes = [
   },
   {
     path: 'customer/booktable', component: BookTableComponent
-  }
+  } */
 ];
 
 @NgModule({

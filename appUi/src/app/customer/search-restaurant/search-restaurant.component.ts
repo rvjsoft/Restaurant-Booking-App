@@ -70,7 +70,7 @@ export class SearchRestaurantComponent implements OnInit {
   }
 
   public selectRes(res: RestaurantModel) {
-    this.router.navigate(['/restaurant', {id: res.id}]);
+    this.router.navigate(['/customer/restaurant', {id: res.id}]);
   }
 
   private extractErrorMesage(errorObj: any): string[] {

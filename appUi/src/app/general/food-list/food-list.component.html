@@ -1,10 +1,13 @@
 <div class="food_list container">
-  <div class="row checkout_button justify-content-end sticky-top py-1 bg-white">
+  <div class="checkout_button  sticky-top bg-white">
+  <div class="row justify-content-end bg-white">
     <div *ngIf="!res && isCheckout" class=" col-auto btn btn-dark float-right" (click)='checkout()'>Checkout</div>
     <div *ngIf="isModify" class=" col-auto btn btn-dark float-right" (click)='updateStatus()'>Update Status</div>
+    <div class=" col-2 float-right"></div>
   </div>
+</div>
   <div *ngIf='foodList != null && foodList != undefined && foodList.length > 0' class="list row justify-content-center">
-    <div *ngFor='let food of foodList; trackBy: trackByFn' class="food_item col-md-10 col-lg-8 px-3 py-2 m-2 border rounded bg-light justify-content-center align-items-center">
+    <div *ngFor='let food of foodList; trackBy: trackByFn' class="food_item col-md-10 col-lg-8 px-3 py-2 m-2 border rounded justify-content-center align-items-center">
         <div class="row align-items-center ">
           <div class="col-1 py-2">
             <img calss='image_type' width="30px" height="30px"
@@ -25,7 +28,7 @@
           <input name='quantity' #quantity='ngModel' type="number" min='0' max='10'
             class="form-control py-2 col-auto quantity" (click)='setTotal()' [(ngModel)]="quantityValues[food.id+'']"
             [ngClass]='{"hide": quantity.value == 0}' />
-          <input *ngIf='quantity.value == 0 && !res && isAvailable && food.status == "AVAILABLE"' type="button" class="btn btn-light col-auto py-2"
+          <input *ngIf='quantity.value == 0 && !res && isAvailable && food.status == "AVAILABLE"' type="button" class="btn btn-light mx-2 col-auto py-2"
             (click)='quantityValues[food.id+""] = 1' [attr.disabled] = '(!isAvailable || food.status != "AVAILABLE") ? "" : null' (click)='setTotal()' value="add" />
           <div class="col-auto py-2 text-secondary font-italic" *ngIf= '(food.status == "UNAVAILABLE" && !res) ? true : false'>-NA-</div>
           <div *ngIf="res && isEdit" class='col-auto py-2 delete'>

@@ -82,9 +82,9 @@ export class OrderCheckoutComponent implements OnInit, OnChanges, AfterViewCheck
     this.appService.orderFood(request).subscribe(
       (response) => {
         this.toastService.showMessage([response.message], false);
-        this.router.navigate(['customer/search']);
+        // this.router.navigate(['customer/search']);
         this.orderService.cleanup();
-        this.router.navigate(['customer/search']);
+        this.router.navigate(['customer/home']);
       },
       (error: any) => {
         let messages = this.extractErrorMesage(error.error);

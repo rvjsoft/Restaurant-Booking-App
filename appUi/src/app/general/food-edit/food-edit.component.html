@@ -40,9 +40,9 @@
       <div class="col-auto btn btn-dark mx-3" (click)='clear()'>Clear</div>
     </div>
   </div>
-  <div class="row py-3 justify-content-between">
-    <div class="col h3">Foods</div>
-  </div>
+  <!-- <div class="row food_list justify-content-around align-items-center">
+    <div class="col-2 h3 text-dark font-weight-light">Foods</div>
+  </div> -->
   <div class="food_list_component">
     <app-food-list [foodList]='foods' [isModify]='true' [isEdit]='true' (deleteFood)='deleteFood($event)' (editFood)='editFood($event)' ></app-food-list>
   </div>

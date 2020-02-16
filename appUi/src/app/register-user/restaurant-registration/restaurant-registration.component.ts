@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { AppServiceService } from '../../app-service.service';
 import { RegisterUserRequest, RegisterUserResponse, CustomerModel, RestaurantModel, AddressModel } from 'src/app/FoodOrderApp';
 import { FoodType } from '../../AppEnums';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -33,7 +34,10 @@ export class RestaurantRegistrationComponent implements OnInit {
     image: ['']
   });
 
-  constructor(private toastService: ToastService, private formBuilder: FormBuilder, private appService: AppServiceService) { }
+  constructor(private toastService: ToastService,
+    private formBuilder: FormBuilder,
+    private appService: AppServiceService,
+    private router: Router) { }
 
   ngOnInit() {
   }
@@ -67,6 +71,7 @@ export class RestaurantRegistrationComponent implements OnInit {
       (response: RegisterUserResponse) => {
         this.toastService.showMessage([response.message], false);
         this.registrationForm.reset();
+        this.router.navigate(['/login']);
       },
       (error: any) => {
         let messages = this.extractErrorMesage(error.error);
