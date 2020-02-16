@@ -22,7 +22,11 @@
               <option *ngFor="let option of foodStatusOption" [attr.value]="option">{{option}}</option>
             </select>
           </div>
-        </div>
+          </div>
+          <div class="row name">
+            <span class="col-auto text-secondary">Customer:</span>
+            <span class="col-auto">{{order.customerName | titlecase}}</span>
+          </div>
         <div class="row px-2 py-1 text-white bg-secondary rounded m-2 justify-content-center align-items-center">
           <div class='col-3'>Food id</div>
           <div class='col-3'>Food</div>

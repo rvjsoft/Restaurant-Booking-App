@@ -43,11 +43,11 @@ export class CustomerOrdersComponent implements OnInit {
             }
             let orderDate = new Date(Date.parse(order.orderedOn + ''));
             if (this.isSameDay(orderDate, new Date(Date.now()))) {
-              this.orderDate[order.id + ''] = 'today, ' + orderDate.getHours() + ':' + orderDate.getMinutes();
+              this.orderDate[order.id + ''] = 'today, ' + this.getTime(orderDate);
               console.log(this.orderDate);
             } else {
               let difference = this.getDifference(new Date(Date.parse(order.orderedOn + '')), new Date(Date.now()));
-              this.orderDate[order.id + ''] = difference + ((difference == 1) ? ' day' : ' days' + ' ago');
+              this.orderDate[order.id + ''] = difference + ((difference == 1) ? ' day' : ' days') + ' ago';
             }
           }
         );
@@ -57,6 +57,16 @@ export class CustomerOrdersComponent implements OnInit {
         this.toastService.showMessage(messages, true);
       }
     );
+  }
+
+  public getTime(orderDate: Date) {
+    if (orderDate == null || orderDate == undefined)
+      return '';
+    let minutes = orderDate.getMinutes().toString();
+    if (minutes.length == 1) {
+      minutes = '0' + minutes;
+    }
+    return orderDate.getHours() + ":" + minutes;
   }
 
   public refresh() {

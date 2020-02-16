@@ -14,6 +14,10 @@
           <p class="col-auto text-secondary">{{orderDate[order.id]}}</p>
           <p class="col-auto text-secondary font-italic" >{{order.status | titlecase}}</p>
         </div>
+        <div class="row name">
+          <span class="col-auto text-secondary">Restaurant:</span>
+          <span class="col-auto">{{order.restaurantName | titlecase}}</span>
+        </div>
         <div class="row px-2 py-1 text-white bg-secondary rounded m-2 justify-content-center align-items-center">
           <div class='col-3'>Food id</div>
           <div class='col-3'>Food</div>

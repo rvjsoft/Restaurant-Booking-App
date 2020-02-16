@@ -22,3 +22,8 @@
 .ordered {
   border-top: 5px solid green !important;
 }
+
+.name {
+  margin-top: -5px;
+}
+

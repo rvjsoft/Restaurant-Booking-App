@@ -15,3 +15,7 @@
   width: 0px;
   visibility: hidden;
 }
+
+.food_image {
+  /* box-shadow: 0px 1px 5px black !important; */
+}
