@@ -25,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: 'register/restaurant', component: RestaurantRegistrationComponent
-  },
+  }/*,
   {
     path: '**', redirectTo: 'login'
   }/* ,
