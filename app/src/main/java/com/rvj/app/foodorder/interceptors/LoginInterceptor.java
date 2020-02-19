@@ -34,7 +34,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 	
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			@Nullable ModelAndView modelAndView) throws Exception {
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(false);
 		if(Objects.nonNull(session) && (response.getStatus() != 200 || Objects.isNull(session.getAttribute(AppConstants.APP_USER)))) {
 			session.invalidate();
 		}

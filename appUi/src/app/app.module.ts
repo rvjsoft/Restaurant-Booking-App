@@ -11,11 +11,13 @@ import { RegisterUserModule } from './register-user/register-user.module';
 import { CustomerModule } from './customer/customer.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { GeneralModule } from './general/general.module';
+import { LoadBarComponent } from './load-bar/load-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    LoadBarComponent,
   ],
   imports: [
     BrowserModule,

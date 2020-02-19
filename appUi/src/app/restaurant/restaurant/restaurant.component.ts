@@ -9,6 +9,7 @@ import { from } from 'rxjs';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { OrderCheckoutService } from 'src/app/customer/order-checkout.service';
 import { BookTableService } from 'src/app/customer/book-table.service';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-restaurant',
@@ -42,7 +43,8 @@ export class RestaurantComponent implements OnInit {
     private session: SessionService,
     private toastService: ToastService,
     private orderService: OrderCheckoutService,
-    private bookTableService: BookTableService
+    private bookTableService: BookTableService,
+    private loadBarService: LoadBarService
     ) { }
 
   ngOnInit() {
@@ -141,8 +143,11 @@ export class RestaurantComponent implements OnInit {
 
   public uploadImage(files: any) {
     let file = files[0];
+    this.loadBarService.showLoadBar();
     this.appService.uploadImage(file).subscribe(
       (response: any) => {
+        this.loadBarService.hideLoadBar();
+        this.toastService.showMessage([response.message], false);
         this.imageId = response.imageId;
         this.appService.getRestaurantImage(this.imageId).subscribe(
           (imageData) => {
@@ -152,6 +157,7 @@ export class RestaurantComponent implements OnInit {
         );
       },
       (error) => {
+        this.loadBarService.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

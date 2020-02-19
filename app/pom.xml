@@ -9,6 +9,7 @@
 		<version>2.2.2.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+	<packaging>jar</packaging>
 	<groupId>com.rvj.app</groupId>
 	<artifactId>FoodOrderApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -48,7 +49,12 @@
 		<dependency>
     		<groupId>org.hibernate</groupId>
     		<artifactId>hibernate-validator</artifactId>
-    		<version>6.0.18.Final</version>
+			<version>6.0.18.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>com.box</groupId>
+			<artifactId>box-java-sdk</artifactId>
+			<version>2.32.0</version>
 		</dependency>
 		
 		<dependency>

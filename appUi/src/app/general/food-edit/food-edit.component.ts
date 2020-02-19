@@ -8,6 +8,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { of, from } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-food-edit',
@@ -30,7 +31,8 @@ export class FoodEditComponent implements OnInit {
       private appService: AppServiceService,
       private route: ActivatedRoute,
       private router: Router,
-      private sanitizer: DomSanitizer
+      private sanitizer: DomSanitizer,
+      private loadBarService: LoadBarService
     ) { }
 
   ngOnInit() {
@@ -99,8 +101,11 @@ export class FoodEditComponent implements OnInit {
   public uploadImage(files: any) {
     let file = files[0];
     let id = '-1'; //NO_FOOD_ID
+    this.loadBarService.showLoadBar();
     this.appService.uploadImage(file, id).subscribe(
       (response: any) => {
+        this.loadBarService.hideLoadBar();
+        this.toastService.showMessage([response.message], false);
         this.foodData.imageId = response.imageId;
         this.appService.getRestaurantImage(this.foodData.imageId).subscribe(
           (imageData) => {
@@ -112,6 +117,7 @@ export class FoodEditComponent implements OnInit {
       (error) => {
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
+        this.loadBarService.hideLoadBar();
       }
     );
   }

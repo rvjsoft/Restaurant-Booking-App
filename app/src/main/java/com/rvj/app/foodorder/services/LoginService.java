@@ -45,8 +45,11 @@ public class LoginService {
 		return userRepository.findByUserNameAndPassword(userName, password).isPresent();
 	}
 
-	public void logout() {
+	public void logout(HttpServletResponse response) {
 		session.invalidate();
+		Cookie userLevel = new Cookie(AppConstants.USR_LEVEL, null);
+		userLevel.setMaxAge(0);
+		response.addCookie(userLevel);
 	}
 	
 }

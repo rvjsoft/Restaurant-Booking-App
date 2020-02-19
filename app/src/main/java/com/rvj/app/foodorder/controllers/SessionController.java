@@ -1,5 +1,6 @@
 package com.rvj.app.foodorder.controllers;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -52,8 +53,10 @@ public class SessionController {
 	}
 	
 	@PostMapping("/logout")
-	public String logout() {
-		loginService.logout();
-		return "logout successfully";
+	public Map<String, String> logout(HttpServletResponse response) {
+		loginService.logout(response);
+		Map<String, String> responseMap = new HashMap<String, String>();
+		responseMap.put("message", "logout successfully");
+		return responseMap;
 	}
 }

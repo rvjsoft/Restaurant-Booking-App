@@ -11,4 +11,5 @@ import lombok.Data;
 public class ImageUploadProperties {
 
 	public String path;
+	public Boolean toBox;
 }

@@ -1,5 +1,7 @@
 package com.rvj.app.foodorder.controllers;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -19,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.box.sdk.BoxAPIConnection;
+import com.box.sdk.BoxFile;
+import com.box.sdk.BoxFolder;
+import com.box.sdk.BoxItem;
 import com.rvj.app.foodorder.config.AppOperationConfiguration;
 import com.rvj.app.foodorder.entity.enums.FoodType;
 import com.rvj.app.foodorder.models.GetRestaurantResponse;
@@ -94,6 +100,7 @@ public class GeneralController {
 	
 	@GetMapping(path = "get/image/{imageId}", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String getImage(@PathVariable String imageId){
+//		temp();
 		log.info("getting image");
 		if(StringUtils.isBlank(imageId))
 			return null;
@@ -101,5 +108,16 @@ public class GeneralController {
 		if(Objects.isNull(imagebytes))
 			return null;
 		return "data:image/jpg;base64,"+ (new String(imagebytes));
+	}
+	
+	public void temp() throws Exception {
+		BoxAPIConnection api = new BoxAPIConnection("Q6su5BIDq5B9kp8Xglwq9LvfJptyPMey");
+		BoxFolder rootFolder = BoxFolder.getRootFolder(api);
+		for (BoxItem.Info itemInfo : rootFolder) {
+		    System.out.format("[%s] %s\n", itemInfo.getID(), itemInfo.getName());
+		}
+		FileInputStream stream = new FileInputStream("My File.txt");
+		BoxFile.Info newFileInfo = rootFolder.uploadFile(stream, "My File.txt");
+		stream.close();
 	}
 }

@@ -19,9 +19,11 @@
 </ul>
  -->
 <div class="container-fluid">
-  <div class="row heading p-2 justify-content-center">
-    <div class="col-auto h1 text-white">Food Order App</div>
-  </div>
+  <app-load-bar></app-load-bar>
   <app-toast></app-toast>
+  <div class="row heading p-2 justify-content-center align-items-center">
+    <div class="col-auto h1 text-white">Food Order App</div>
+    <span *ngIf="isUserLogged" class="float-right logout_link text-white btn-link" (click)='logout()'>logout</span>
+  </div>
   <router-outlet></router-outlet>
 </div>

@@ -35,6 +35,7 @@ export class AppServiceService {
   readonly PATH_RES_GET_TABLE = 'restaurant/get/tables';
   readonly PATH_CUST_GET_TABLE = 'customer/get/tables';
   readonly PATH_BOOK_TABLE = 'customer/booktable';
+  readonly PATH_LOGOUT = 'logout';
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
 
@@ -45,6 +46,11 @@ export class AppServiceService {
       'Content-Type': 'application/json'
     });
     return this.http.post(requestURL, request, {headers: headers, withCredentials: true});
+  }
+
+  public logout(): Observable<any> {
+    let requestURL = environment.appURI + this.PATH_LOGOUT;
+    return this.http.post(requestURL, null, {withCredentials: true});
   }
 
   public createUser(request: RegisterUserRequest): Observable<any> {
