@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  private loginForm = this.formBuilder.group({
+  public loginForm = this.formBuilder.group({
     userName: [''],
     password: ['']
   });
@@ -63,6 +63,7 @@ export class LoginComponent implements OnInit {
 
   public navigateToUserLanding() {
     let usrLevel = this.session.userLevel;
+    console.log(this.session.userLevel);
     if(usrLevel == 'RESTAURANT') {
       this.router.navigate(['res/restaurant']);
     } else if(usrLevel == 'CUSTOMER') {

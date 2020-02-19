@@ -9,10 +9,10 @@ import { TableAvailModel } from 'src/app/FoodOrderApp';
 export class TableListComponent implements OnInit {
 
   @Input()
-  private availability: Array<{ [date: string]: { [part: string]: TableAvailModel } }>;
+  public availability: Array<{ [date: string]: { [part: string]: TableAvailModel } }>;
 
   @Input()
-  private baseCount: number;
+  public baseCount: number;
 
   constructor() { }
 

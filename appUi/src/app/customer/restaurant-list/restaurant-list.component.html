@@ -23,7 +23,7 @@
           <div class="row align-items-center justify-content-between">
             <div class="col-auto align-self-center">
               <img calss='image_type' width="20px" height="20px"
-                [attr.src]="restaurant.type == 'VEG' ? imageVeg : type == 'NON_VEG' ? imageNonVeg : null" />
+                [attr.src]="restaurant.type == 'VEG' ? imageVeg : restaurant.type == 'NON_VEG' ? imageNonVeg : null" />
               <span class='font-italic text-secondary'>{{restaurant.type | titlecase}}</span>
             </div>
             <span class="col-auto font-italic text-secondary">{{restaurant.status | titlecase}}</span>

@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class CustomerRegistrationComponent implements OnInit {
 
-  private registrationForm = this.formBuilder.group({
+  public registrationForm = this.formBuilder.group({
     firstName: [''],
     lastName: [''],
     email: [''],

@@ -27,6 +27,7 @@ public class LoginService {
 			session.setAttribute(AppConstants.USR_LEVEL, getUserLevel(request.getUserName()));
 			String level = getUserLevel(request.getUserName()).toString();
 			Cookie userLevel = new Cookie(AppConstants.USR_LEVEL, level);
+			userLevel.setSecure(true);
 			response.addCookie(userLevel);
 			System.out.println(getUserLevel(request.getUserName()));
 			//TODO:set auth token here
@@ -49,6 +50,7 @@ public class LoginService {
 		session.invalidate();
 		Cookie userLevel = new Cookie(AppConstants.USR_LEVEL, null);
 		userLevel.setMaxAge(0);
+		userLevel.setSecure(true);
 		response.addCookie(userLevel);
 	}
 	

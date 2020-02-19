@@ -16,11 +16,11 @@ import { ToastService } from 'src/app/ui-components/toast.service';
 })
 export class FoodListComponent implements OnInit, OnChanges {
 
-  private foodImage = '/assets/images/food.svg';
+  public foodImage = '/assets/images/food.svg';
   imageVeg = '/assets/images/veg.svg';
   imageNonVeg = '/assets/images/non_veg.svg';
-  private foodImages: any = {};
-  private temp: any;
+  public foodImages: any = {};
+  public temp: any;
   readonly res;
   public total: number;
   available: number[] = [];
@@ -29,26 +29,26 @@ export class FoodListComponent implements OnInit, OnChanges {
   @Input()
   isEdit: boolean;
   @Input()
-  private foodList: Array<FoodModel>;
+  public foodList: Array<FoodModel>;
   @Input()
   public quantityValues: any = {};
   @Input()
-  private isCheckout: boolean;
+  public isCheckout: boolean;
   @Input()
-  private isAvailable: boolean;
+  public isAvailable: boolean;
   @Input()
-  private isModify: boolean;
+  public isModify: boolean;
   @Output()
-  private editFood = new EventEmitter<FoodModel>();
+  public editFood = new EventEmitter<FoodModel>();
   @Output()
-  private deleteFood = new EventEmitter<FoodModel>();
+  public deleteFood = new EventEmitter<FoodModel>();
   @Output()
-  private checkoutOrder = new EventEmitter<any>();
+  public checkoutOrder = new EventEmitter<any>();
 
   constructor(private appService: AppServiceService,
     private sanitizer: DomSanitizer,
     private fb: FormBuilder,
-    private session: SessionService,
+    public session: SessionService,
     private toastService: ToastService
     ) {
         this.res = this.isRes;
@@ -111,11 +111,11 @@ export class FoodListComponent implements OnInit, OnChanges {
     return item.id;
   }
 
-  private edit(foodData: FoodModel) {
+  public edit(foodData: FoodModel) {
     this.editFood.emit(foodData);
   }
 
-  private delete(foodData: FoodModel) {
+  public delete(foodData: FoodModel) {
     this.deleteFood.emit(foodData);
   }
 

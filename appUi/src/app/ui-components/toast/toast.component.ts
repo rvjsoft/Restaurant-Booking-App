@@ -35,7 +35,7 @@ export class ToastComponent implements OnInit {
    });
   }
 
-  private closeMessage() {
+  public closeMessage() {
     this.show = false;
   }
 

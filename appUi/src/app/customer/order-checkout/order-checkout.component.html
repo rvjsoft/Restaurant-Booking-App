@@ -4,7 +4,7 @@
     <div class="col-sm-auto text-dark font-weight-bold">Delivered To</div>
     <div *ngIf="address == null" class="col-sm-auto btn btn-success m-2" (click)='selectAddress()'>Select Address</div>
     <div *ngIf="address != null" class=' mx-3 col-sm-6 address border rounded'>
-      <div class='col' (click)='selectAddress(address)'>
+      <div class='col' (click)='selectAddress()'>
         <p class='row '>{{address.address1}}, {{address.address2}}</p>
         <p class='row'>{{address.landmark}}, {{address.city}}</p>
       </div>

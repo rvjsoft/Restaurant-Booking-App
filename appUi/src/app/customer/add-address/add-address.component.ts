@@ -14,12 +14,12 @@ import { Location } from '@angular/common';
 })
 export class AddAddressComponent implements OnInit {
 
-  private addresses: AddressModel[];
-  private x_mark = '../../../assets/images/x-mark.svg';
+  public addresses: AddressModel[];
+  public x_mark = '../../../assets/images/x-mark.svg';
   selected = null;
   show_io = false;
 
-  private addressForm = this.formBuilder.group({
+  public addressForm = this.formBuilder.group({
     address1: [''],
     address2: [''],
     city: [''],
@@ -32,7 +32,7 @@ export class AddAddressComponent implements OnInit {
     private toastService: ToastService,
     private formBuilder: FormBuilder,
     private appService: AppServiceService,
-    private addressService: AddressService,
+    public addressService: AddressService,
     private router: Router,
     private route: ActivatedRoute,
     private location: Location

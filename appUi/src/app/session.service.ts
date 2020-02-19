@@ -10,6 +10,7 @@ export class SessionService {
   readonly USER_LEVEL = 'USR_LEVEL';
 
   get userLevel() {
+    console.log(document.cookie);
     let cookies = document.cookie.split('; ');
     for(let val in cookies) {
       let cookie = cookies[val];

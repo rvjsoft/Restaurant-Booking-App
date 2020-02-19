@@ -40,7 +40,7 @@ export class RestaurantComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private router: Router,
     private route: ActivatedRoute,
-    private session: SessionService,
+    public session: SessionService,
     private toastService: ToastService,
     private orderService: OrderCheckoutService,
     private bookTableService: BookTableService,

@@ -14,7 +14,7 @@ export class RestaurantListComponent implements OnInit {
   resImage = '/assets/images/res_small.svg';
   imageVeg = '/assets/images/veg.svg';
   imageNonVeg = '/assets/images/non_veg.svg';
-  private resImages: any = {};
+  public resImages: any = {};
 
   @Input()
   restaurants: RestaurantModel[];

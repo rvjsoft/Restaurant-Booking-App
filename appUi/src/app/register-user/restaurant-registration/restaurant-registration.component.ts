@@ -14,8 +14,8 @@ import { Router } from '@angular/router';
 })
 export class RestaurantRegistrationComponent implements OnInit {
 
-  private image;
-  private registrationForm = this.formBuilder.group({
+  public image;
+  public registrationForm = this.formBuilder.group({
     resName: [''],
     type: [''],
     email: [''],
