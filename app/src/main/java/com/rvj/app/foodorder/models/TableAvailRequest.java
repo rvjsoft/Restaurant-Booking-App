@@ -6,5 +6,5 @@ import lombok.Data;
 
 @Data
 public class TableAvailRequest extends BaseRequest{
-
+	private Long resId;
 }

@@ -24,7 +24,7 @@ public class AddFoodOperation extends Operation<AddFoodRequest, AddFoodResponse>
 	@Override
 	protected void process() {
 		boolean status = false;
-		status = restaurantService.addFoods(request);
+		status = restaurantService.addFoods(request, response);
 		if(!status) {
 			this.getErrors().addError("operationError", "error adding food");
 		}

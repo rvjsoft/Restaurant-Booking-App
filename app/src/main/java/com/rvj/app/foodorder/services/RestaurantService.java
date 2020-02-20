@@ -11,11 +11,13 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.rvj.app.dataaccess.FoodRepository;
 import com.rvj.app.dataaccess.OrderRepository;
 import com.rvj.app.dataaccess.RestaurantRepository;
 import com.rvj.app.dataaccess.TableAvailRepository;
@@ -28,6 +30,7 @@ import com.rvj.app.foodorder.entity.enums.PartOfDay;
 import com.rvj.app.foodorder.entity.enums.Status;
 import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.AddFoodRequest;
+import com.rvj.app.foodorder.models.AddFoodResponse;
 import com.rvj.app.foodorder.models.DeleteFoodRequest;
 import com.rvj.app.foodorder.models.FoodModel;
 import com.rvj.app.foodorder.models.FoodStatusRequest;
@@ -59,6 +62,9 @@ public class RestaurantService {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	FoodRepository foodRepository;
 
 	public Restaurant getRestaurant(String userName) {
 		return restaurantRepository.findByUserName(userName);
@@ -69,16 +75,17 @@ public class RestaurantService {
 	}
 
 	@Transactional
-	public boolean addFoods(AddFoodRequest request) {
+	public boolean addFoods(AddFoodRequest request, AddFoodResponse response) {
 		Restaurant restaurant = getRestaurant(request.getUserName());
-		for (FoodModel food : request.getFoods()) {
-			Food foodData = new Food();
-			BeanUtils.copyProperties(food, foodData);
-			foodData.setStatus(Status.UNAVAILABLE);
-			restaurant.addFood(foodData);
-		}
 		try {
-			restaurantRepository.save(restaurant);
+			for (FoodModel food : request.getFoods()) {
+				Food foodData = new Food();
+				BeanUtils.copyProperties(food, foodData);
+				foodData.setStatus(Status.UNAVAILABLE);
+				restaurant.addFood(foodData);
+				foodData = foodRepository.save(foodData);
+				response.getIds().add(foodData.getId());
+			}
 		} catch (Exception e) {
 			log.info("Caught exception while adding food, Exception:" + e.getMessage());
 			return false;
@@ -95,7 +102,7 @@ public class RestaurantService {
 			return false;
 		}
 		Food food = foods.get(0);
-		BeanUtils.copyProperties(request.getFood(), food);
+		BeanUtils.copyProperties(request.getFood(), food, "id", "status");
 		try {
 			restaurantRepository.save(restaurant);
 		} catch (Exception e) {
@@ -267,6 +274,8 @@ public class RestaurantService {
 	}
 
 	public boolean getTableAvailability(TableAvailRequest request, TableAvailResponse response) {
+		Restaurant restaurant = restaurantRepository.findByUserName(request.getUserName());
+		response.setBaseCount(restaurant.getTableCount());
 		response.setAvailability(getTableAvail(request.getUserName()));
 		return true;
 	}
@@ -288,6 +297,40 @@ public class RestaurantService {
 			responseMap.put(date, models);
 		}
 		return responseMap;
+	}
+
+	public void updateImage(String userName, String imageId) {
+		Restaurant restaurant = restaurantRepository.findByUserName(userName);
+		restaurant.setImageId(imageId);
+		try {
+			restaurantRepository.save(restaurant);
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	public void updateFoodImage(String userName, String foodId, String imageId) {
+		Restaurant restaurant = restaurantRepository.findByUserName(userName);
+		try {
+			Optional<Food> food = restaurant.getFoods().stream().filter(data -> data.getId().toString().equals(foodId)).findFirst();
+			if(food.isPresent()) {
+				food.get().setImageId(imageId);
+			}
+			restaurantRepository.save(restaurant);
+		} catch (Exception e) {
+			
+		}
+	}
+
+	public boolean isSameFood(FoodModel foodModel, Food food) {
+		if (StringUtils.equalsIgnoreCase(foodModel.getName(), food.getName())
+				&& foodModel.getPrice().equals(food.getPrice()) && foodModel.getType().equals(food.getType())
+				&& foodModel.getCategory().equals(food.getCategory())
+				&& StringUtils.equalsIgnoreCase(foodModel.getImageId(), food.getImageId())) {
+			return true;
+		}
+		else
+			return false;
 	}
 
 }

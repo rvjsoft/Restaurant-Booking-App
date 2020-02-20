@@ -18,7 +18,7 @@ public enum FoodType {
 		if (code == 'V' || code == 'v') {
 			return VEG;
 		} else if (code == 'N' || code == 'n') {
-			return VEG;
+			return NON_VEG;
 		} else throw new UnsupportedOperationException("the code " + code + " is not valid");
 	}
 }

@@ -8,6 +8,7 @@ import com.rvj.app.foodorder.models.AddAddressRequest;
 import com.rvj.app.foodorder.models.AddAddressResponse;
 import com.rvj.app.foodorder.models.AddFoodRequest;
 import com.rvj.app.foodorder.models.AddFoodResponse;
+import com.rvj.app.foodorder.models.BaseRequest;
 import com.rvj.app.foodorder.models.BookTableRequest;
 import com.rvj.app.foodorder.models.BookTableResponse;
 import com.rvj.app.foodorder.models.DeleteAddressRequest;
@@ -16,6 +17,7 @@ import com.rvj.app.foodorder.models.DeleteFoodRequest;
 import com.rvj.app.foodorder.models.DeleteFoodResponse;
 import com.rvj.app.foodorder.models.FoodStatusRequest;
 import com.rvj.app.foodorder.models.FoodStatusResponse;
+import com.rvj.app.foodorder.models.GetAddressResponse;
 import com.rvj.app.foodorder.models.GetOrderRequest;
 import com.rvj.app.foodorder.models.GetOrderResponse;
 import com.rvj.app.foodorder.models.GetRestaurantResponse;
@@ -44,6 +46,7 @@ import com.rvj.app.foodorder.ops.BookTableOperation;
 import com.rvj.app.foodorder.ops.DeleteAddressOperation;
 import com.rvj.app.foodorder.ops.DeleteFoodOperation;
 import com.rvj.app.foodorder.ops.FoodStatusOperation;
+import com.rvj.app.foodorder.ops.GetAddressOperation;
 import com.rvj.app.foodorder.ops.GetOrderOperation;
 import com.rvj.app.foodorder.ops.GetRestaurantsOperation;
 import com.rvj.app.foodorder.ops.GetTableAvailOperation;
@@ -209,6 +212,15 @@ public class AppOperationConfiguration {
 		GetTableAvailOperation operation = new GetTableAvailOperation();
 		operation.setRequest(request);
 		operation.setResponse(new TableAvailResponse());
+		return operation;
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public GetAddressOperation getAddressOperation(BaseRequest request) {
+		GetAddressOperation operation = new GetAddressOperation();
+		operation.setRequest(request);
+		operation.setResponse(new GetAddressResponse());
 		return operation;
 	}
 	

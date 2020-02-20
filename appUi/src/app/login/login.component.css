@@ -1,0 +1,12 @@
+.login {
+  background-color: white;
+}
+
+.login-row {
+  margin-top: 50px;
+}
+
+.container {
+  max-width: 100%;
+  min-width: 50%;
+}

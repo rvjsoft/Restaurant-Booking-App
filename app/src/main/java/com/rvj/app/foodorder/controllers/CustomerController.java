@@ -9,20 +9,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rvj.app.foodorder.config.AppOperationConfiguration;
 import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.AddAddressRequest;
 import com.rvj.app.foodorder.models.AddAddressResponse;
+import com.rvj.app.foodorder.models.BaseRequest;
 import com.rvj.app.foodorder.models.BookTableRequest;
 import com.rvj.app.foodorder.models.BookTableResponse;
 import com.rvj.app.foodorder.models.DeleteAddressRequest;
 import com.rvj.app.foodorder.models.DeleteAddressResponse;
+import com.rvj.app.foodorder.models.GetAddressResponse;
 import com.rvj.app.foodorder.models.GetOrderRequest;
 import com.rvj.app.foodorder.models.GetOrderResponse;
 import com.rvj.app.foodorder.models.GetRestaurantResponse;
@@ -36,6 +40,7 @@ import com.rvj.app.foodorder.models.UpdateAddressResponse;
 import com.rvj.app.foodorder.ops.AddressOperation;
 import com.rvj.app.foodorder.ops.BookTableOperation;
 import com.rvj.app.foodorder.ops.DeleteAddressOperation;
+import com.rvj.app.foodorder.ops.GetAddressOperation;
 import com.rvj.app.foodorder.ops.GetOrderOperation;
 import com.rvj.app.foodorder.ops.GetRestaurantsOperation;
 import com.rvj.app.foodorder.ops.GetTableOperation;
@@ -204,8 +209,8 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping(path = "get/orders", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetOrderResponse> getOrders(@Valid @RequestBody GetOrderRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "get/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetOrderResponse> getOrders(@Valid GetOrderRequest request, BindingResult bindingResult) {
 		log.info("Started Processing get Orders request, messageId=" + request.getMessageId());
 		GetOrderResponse response = new GetOrderResponse();
 		response.setMessageId(request.getMessageId());
@@ -235,8 +240,8 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping(path = "get/tables", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetTableResponse> getTables(@Valid @RequestBody GetTableRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "get/tables", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetTableResponse> getTables(@Valid GetTableRequest request, BindingResult bindingResult) {
 		log.info("Started Processing get tabel booking request, messageId=" + request.getMessageId());
 		GetTableResponse response = new GetTableResponse();
 		response.setMessageId(request.getMessageId());
@@ -266,8 +271,8 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping(path = "get/restlist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetRestaurantResponse> getRestaurants(@Valid @RequestBody GetRestaurantsRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "get/restlist", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetRestaurantResponse> getRestaurants(@Valid  GetRestaurantsRequest request, BindingResult bindingResult) {
 		log.info("Started Processing get restaurants request, messageId=" + request.getMessageId());
 		GetRestaurantResponse response = new GetRestaurantResponse();
 		response.setMessageId(request.getMessageId());
@@ -297,4 +302,25 @@ public class CustomerController {
 		}
 	}
 	
+	@GetMapping(path = "/get/address")
+	public ResponseEntity<GetAddressResponse> getAddress(@RequestParam String messageId) {
+		BaseRequest request = new BaseRequest();
+		request.setMessageId(messageId);
+		log.info("Started Processing get address request, messageId=" + request.getMessageId());
+		GetAddressResponse response = new GetAddressResponse();
+		response.setMessageId(request.getMessageId());
+		GetAddressOperation operation = opsConfiguration.getAddressOperation(request);
+		response = operation.run();
+		response.setMessageId(request.getMessageId());
+		if (response.getErrors().isEmpty()) {
+			response.setMessage("get address successfully.");
+			log.info("get address successfully");
+			return new ResponseEntity<GetAddressResponse>(response, HttpStatus.OK);
+		} else {
+			response.setMessage("get address failed");
+			log.info("get address failed");
+			return new ResponseEntity<GetAddressResponse>(response, HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }

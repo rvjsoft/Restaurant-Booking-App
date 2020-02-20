@@ -4,15 +4,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.apache.catalina.Context;
+import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.rvj.app.dataaccess.UserRepository;
 
@@ -31,10 +34,17 @@ public class FoodOrderAppApplication implements CommandLineRunner{
 	public static void main(String[] args) {
 		SpringApplication.run(FoodOrderAppApplication.class, args);
 	}
-
-	@RequestMapping("/app")
-	public String foo() {
-		return "I am RVJ";
+	
+	@Bean
+	public ServletWebServerFactory servletContainer() {
+	    return new TomcatServletWebServerFactory() {
+	        @Override
+	        protected void postProcessContext(Context context) {
+	            Rfc6265CookieProcessor rfc6265CookieProcessor = new Rfc6265CookieProcessor();
+	            rfc6265CookieProcessor.setSameSiteCookies("None");
+	            context.setCookieProcessor(rfc6265CookieProcessor);
+	        }
+	    };
 	}
 
 	@Override

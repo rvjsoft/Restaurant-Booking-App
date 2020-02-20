@@ -1,5 +1,6 @@
 package com.rvj.app.foodorder.services;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,8 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Base64;
 import java.util.Objects;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.RandomUtils;
@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.box.sdk.BoxAPIConnection;
+import com.box.sdk.BoxFile;
+import com.box.sdk.BoxFolder;
+import com.box.sdk.BoxItem;
 import com.rvj.app.dataaccess.FoodRepository;
 import com.rvj.app.dataaccess.ImageRespository;
 import com.rvj.app.foodorder.config.ImageUploadProperties;
@@ -43,7 +47,14 @@ public class FileUploadService {
 	@Autowired
 	ImageRespository imageRespository;
 	
+	@Autowired
+	HttpSession session;
+	
+	@Autowired
+	BoxClientService boxService;
+	
 	public String validate(FileUploadRequest request) {
+		request.setUserName((String)session.getAttribute(AppConstants.APP_USER));
 		Restaurant restaurant = restaurantService.getRestaurant(request.getUserName());
 		if(Objects.isNull(restaurant)) {
 			return "restaurant doesn't exist";
@@ -62,9 +73,14 @@ public class FileUploadService {
 			fileName = baseName + encoder.encodeToString(RandomUtils.nextBytes(6));
 			fileName = fileName.replaceAll("/", "");
 			Path path = Paths.get(uploadProperties.getPath() + fileName + AppConstants.IMAGE_EXTENSION);
-			Files.write(path, bytes, StandardOpenOption.CREATE);
+			if (uploadProperties.toBox) {
+				fileName = boxService.uploadImage(file, fileName);
+			} else {
+				Files.write(path, bytes, StandardOpenOption.CREATE);
+			}
 			persistImage(fileName);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 		return fileName;
@@ -80,9 +96,19 @@ public class FileUploadService {
 	}
 
 	public byte[] getImageBytes(String imageId) {
-		Path path = Paths.get(uploadProperties.getPath() + imageId + AppConstants.IMAGE_EXTENSION);
-		Base64.Encoder encoder = Base64.getEncoder();
 		byte[] bytes = null;
+		Base64.Encoder encoder = Base64.getEncoder();
+		if (uploadProperties.toBox) {
+			try {
+				bytes = encoder.encode(boxService.getImage(imageId));
+				return bytes;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		Path path = Paths.get(uploadProperties.getPath() + imageId + AppConstants.IMAGE_EXTENSION);
 		try {
 			bytes = encoder.encode(Files.readAllBytes(path));
 		} catch (IOException e) {
@@ -91,4 +117,22 @@ public class FileUploadService {
 		return bytes;
 	}
 
+	public void updateRestaurantImage(FileUploadRequest request, String imageId) {
+		restaurantService.updateImage(request.getUserName(), imageId);
+	}
+
+	public void updateFoodImage(FileUploadRequest request, String imageId) {
+		restaurantService.updateFoodImage(request.getUserName(),request.getFoodId().toString(), imageId);		
+	}
+
+	public void temp(String imageId) throws Exception {
+		BoxAPIConnection api = new BoxAPIConnection("Q6su5BIDq5B9kp8Xglwq9LvfJptyPMey");
+		BoxFolder rootFolder = BoxFolder.getRootFolder(api);
+		for (BoxItem.Info itemInfo : rootFolder) {
+		    System.out.format("[%s] %s\n", itemInfo.getID(), itemInfo.getName());
+		}
+		FileInputStream stream = new FileInputStream(uploadProperties.getPath() + imageId + AppConstants.IMAGE_EXTENSION);
+		BoxFile.Info newFileInfo = rootFolder.uploadFile(stream, "My File.txt");
+		stream.close();
+	}
 }

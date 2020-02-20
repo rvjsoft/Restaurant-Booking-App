@@ -1,0 +1,50 @@
+<div class="container modify_table">
+  <div class="h1 text-center px-3 py-3">Update Tables</div>
+  <div class="update_tables">
+    <div class="h4">Edit Table Counts:</div>
+  </div>
+  <div class="px-3">
+    <div class="row p-3 justify-content-center">
+      <div class="form-check form-check-inline col-sm-auto">
+        <input class="form-check-input font-italic" type="radio" name='edit_part' id="table_daily" [(ngModel)]="edit_part" value="Tables">
+        <label class="form-check-label" for="table_daily">Tables</label>
+      </div>
+      <div class="form-check form-check-inline col-sm-auto">
+        <input class="form-check-input font-italic" type="radio" name='edit_part' id="base" [(ngModel)]="edit_part" value="Base">
+        <label class="form-check-label" for="base">Base</label>
+      </div>
+    </div>
+    <div *ngIf="edit_part == 'Tables'" class="table_io row align-content-center rounded justify-content-center ">
+      <div class="col-sm-auto align-self-center m-3 mx-5">
+        <div class="row">Booking Date</div>
+        <input type="date" [(ngModel)]="tableData.date" name='booking_date' class="form-control row" />
+      </div>
+      <div class="col-sm-auto align-self-center m-3 mx-5">
+        <div class="row">Part of Day</div>
+        <div class="row part_of_day_io">
+          <select name="part_of_day" [(ngModel)]="tableData.part" class="form-control">
+            <option [ngValue]='null'>All</option>
+            <option *ngFor="let part of PartOfDay" [attr.value]='part'>{{part}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-auto align-self-center m-3 mx-5">
+        <div class="row">Count</div>
+        <input type="number" [(ngModel)]="tableData.baseCount" class="row form-control" />
+      </div>
+      <div class="col-sm-auto align-self-center m-3 mx-5">
+        <button class="btn btn-dark" (click)='updateTable()'>Update</button>
+      </div>
+    </div>
+    <div *ngIf="edit_part == 'Base'" class="table_io row align-content-center rounded justify-content-center ">
+        <div class="col-sm-auto align-self-center m-3">Base Count</div>
+        <input type="number" [(ngModel)]="baseCount" class="col-sm-2 align-self-center m-3 form-control" />
+        <div class="col-sm-2 align-self-center m-3">
+          <button class="btn btn-dark" (click)='updateBase()'>Update</button>
+        </div>
+    </div>
+  </div>
+  <div>
+    <app-table-list [availability]='availability' [baseCount]='baseCount'></app-table-list>
+  </div>
+</div>

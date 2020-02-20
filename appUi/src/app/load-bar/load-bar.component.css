@@ -1,0 +1,27 @@
+
+.loading-bar-container {
+  width: 100%;
+  height: 5px;
+  left: 0px;
+  position: sticky;
+  z-index: 1600;
+}
+
+.loading-bar {
+  height: 5px;
+  background-color: red;
+  animation-name: load;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes load {
+
+  0% {float: left; width: 0%;}
+  10% {float: left; width: 0%;}
+  50% {float:left; width: 100%;}
+  60% {float:left; width: 100%;}
+  61% {float: right; width: 100%;}
+  100% {float: right;width: 0%;}
+}

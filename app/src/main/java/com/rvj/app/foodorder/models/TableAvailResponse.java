@@ -12,5 +12,5 @@ import lombok.Data;
 public class TableAvailResponse extends BaseResponse{
 
 	private Map<LocalDate, Map<PartOfDay, TableAvailModel>> availability = new HashMap<LocalDate, Map<PartOfDay,TableAvailModel>>();
-	
+	private Integer baseCount;
 }

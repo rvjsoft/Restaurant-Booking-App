@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.NumberFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rvj.app.foodorder.entity.enums.OrderStatus;
@@ -27,4 +29,8 @@ public class GetOrderRequest extends BaseRequest {
 	
 	@JsonIgnore
 	private UserLevel userLevel;
+	
+	private Integer page;
+	
+	private Integer size;
 }

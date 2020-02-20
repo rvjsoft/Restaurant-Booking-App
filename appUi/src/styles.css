@@ -1,0 +1,20 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+body {
+  background-image: url(assets/images/app_background.jpeg);
+  background-size: 300px 300px;
+}
+
+.container:not(.login_page) {
+  background-color: white;
+}
+@media (min-width: 1200px) {
+  .container{
+      max-width: 970px;
+  }
+}
+
+router-outlet {
+  background-color: white;
+}

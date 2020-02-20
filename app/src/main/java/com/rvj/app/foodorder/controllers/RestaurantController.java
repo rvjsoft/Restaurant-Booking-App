@@ -11,12 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rvj.app.foodorder.config.AppOperationConfiguration;
 import com.rvj.app.foodorder.entity.enums.UserLevel;
@@ -282,8 +285,8 @@ public class RestaurantController {
 		}
 	}
 	
-	@GetMapping(path = "get/orders", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetOrderResponse> getOrders(@Valid @RequestBody GetOrderRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "get/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetOrderResponse> getOrders(@Valid GetOrderRequest request, BindingResult bindingResult) {
 		log.info("Started Processing get Orders request, messageId=" + request.getMessageId());
 		GetOrderResponse response = new GetOrderResponse();
 		response.setMessageId(request.getMessageId());
@@ -313,8 +316,8 @@ public class RestaurantController {
 		}
 	}
 	
-	@GetMapping(path = "get/tables", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GetTableResponse> getTables(@Valid @RequestBody GetTableRequest request, BindingResult bindingResult) {
+	@GetMapping(path = "get/tables", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GetTableResponse> getTables(@Valid GetTableRequest request, BindingResult bindingResult) {
 		log.info("Started Processing get tabel booking request, messageId=" + request.getMessageId());
 		GetTableResponse response = new GetTableResponse();
 		response.setMessageId(request.getMessageId());
@@ -343,44 +346,13 @@ public class RestaurantController {
 			}
 		}
 	}
-	
-	@GetMapping(path = "get/tablesAvail", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TableAvailResponse> getTablesAvailability(@Valid @RequestBody TableAvailRequest request, BindingResult bindingResult) {
-		log.info("Started Processing get tabel availability request, messageId=" + request.getMessageId());
-		TableAvailResponse response = new TableAvailResponse();
-		response.setMessageId(request.getMessageId());
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errors = ValidationUtils.getErrorMap(bindingResult);
-			response.setErrors(errors);
-			response.setMessage("Request processing failed, Enter the valide values");
-			log.info("having constraint errors,stopped processing get tabel availability Request, messageId=" + request.getMessageId());
-			return new ResponseEntity<TableAvailResponse>(response, HttpStatus.BAD_REQUEST);
-		}
-		else {
-			log.info("No constraint errors,started get tabel availability request");
-			GetTableAvailOperation operation = opsConfiguration.getGetTableAvailOperation(request);
-			response = operation.run();
-			response.setMessageId(request.getMessageId());
-			if(response.getErrors().isEmpty()) {
-				response.setMessage("get tabel availability successfully.");
-				log.info("get tabel availability successfully");
-				return new ResponseEntity<TableAvailResponse>(response, HttpStatus.OK);
-			}
-			else {
-				response.setMessage("get tabel availability failed");
-				log.info("get tabel availability failed");
-				return new ResponseEntity<TableAvailResponse>(response, HttpStatus.BAD_REQUEST);
-			}
-		}
-	}
-	
+
 	@PostMapping(path = "upload", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, String>> uploadImage(@Valid FileUploadRequest request, BindingResult bindingResult) {
+	public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file, @Nullable @RequestParam("foodId") Long foodId) {
+		FileUploadRequest request = new FileUploadRequest();
+		request.setFile(file);
+		request.setFoodId(foodId);
 		Map<String, String> response = new HashMap<String, String>();
-		if(bindingResult.hasErrors()) {
-			response.put(AppConstants.MESSAGE, "invalid request data");
-			return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
-		}
 		String message = fileService.validate(request);
 		if(Objects.nonNull(message)) {
 			response.put(AppConstants.MESSAGE, message);
@@ -389,13 +361,17 @@ public class RestaurantController {
 		try {
 			String imageId = null;
 			if(Objects.nonNull(request.getFoodId())) {
-				imageId = fileService.uploadImage(request.getFile(), request.getFoodId().toString());
+				imageId = fileService.uploadImage(request.getFile(), "food");
+				if(request.getFoodId() != AppConstants.NO_FOOD)
+					fileService.updateFoodImage(request, imageId);
 			} else {
 				imageId = fileService.uploadImage(request.getFile(), request.getUserName());
+				fileService.updateRestaurantImage(request, imageId);
 			}
 			response.put(AppConstants.MESSAGE, "image uploaded");
 			response.put(AppConstants.IMAGE_ID, imageId);
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.put(AppConstants.MESSAGE,"image upload failed");
 		}
 		System.out.println(session.getId());

@@ -1,0 +1,4 @@
+.menubar {
+  position: sticky;
+  z-index: 1200;
+}

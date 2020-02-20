@@ -1,0 +1,13 @@
+* {
+  color: white;
+}
+.app-toast {
+  position: absolute;
+  background-color: green;
+  z-index: 1500;
+  margin-left: -15px;
+}
+
+.error {
+  background-color: red;
+}

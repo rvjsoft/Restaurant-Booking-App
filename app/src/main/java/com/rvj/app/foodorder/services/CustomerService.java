@@ -1,8 +1,10 @@
 package com.rvj.app.foodorder.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,9 +36,12 @@ import com.rvj.app.foodorder.entity.enums.PartOfDay;
 import com.rvj.app.foodorder.entity.enums.Status;
 import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.AddAddressRequest;
+import com.rvj.app.foodorder.models.AddAddressResponse;
 import com.rvj.app.foodorder.models.AddressModel;
+import com.rvj.app.foodorder.models.BaseRequest;
 import com.rvj.app.foodorder.models.BookTableRequest;
 import com.rvj.app.foodorder.models.DeleteAddressRequest;
+import com.rvj.app.foodorder.models.GetAddressResponse;
 import com.rvj.app.foodorder.models.OrderFoodRequest;
 import com.rvj.app.foodorder.models.OrderFoodResponse;
 import com.rvj.app.foodorder.models.UpdateAddressRequest;
@@ -70,7 +75,7 @@ public class CustomerService {
 	}
 	
 	@Transactional
-	public boolean addAddresses(AddAddressRequest request) {
+	public boolean addAddresses(AddAddressRequest request, AddAddressResponse response) {
 		Customer customer= getCustomer(request.getUserName());
 		for(AddressModel address : request.getAddresses()) {
 			Address userAddress = new Address();
@@ -81,6 +86,18 @@ public class CustomerService {
 		}
 		try {
 			customerRepository.save(customer);
+			List<Long> ids = new ArrayList<Long>();
+			for (int i = 0; i < request.getAddresses().size(); i++) {
+				AddressModel model = request.getAddresses().get(i);
+				Optional<Address> addr = customer.getAddresses().stream().filter(data -> model.isSame(data))
+						.findFirst();
+				if(addr.isPresent()) {
+					ids.add(addr.get().getId());
+				} else {
+					ids.add(null);
+				}
+			}
+			response.setIds(ids);
 		} catch (Exception e) {
 			log.info("Caught exception while adding address");
 			e.printStackTrace();
@@ -223,6 +240,51 @@ public class CustomerService {
 		if(res.isPresent())
 			return res.get();
 		return null;
+	}
+
+	public boolean getAddresses(BaseRequest request, GetAddressResponse response) {
+		Customer customer = customerRepository.findByUserName(request.getUserName());
+		if(Objects.isNull(customer)) {
+			log.info("customer doesn't exist.");
+			return false;
+		} else {
+			List<Address> addresses = customer.getAddresses();
+			response.setAddresses(new ArrayList<AddressModel>());
+			addresses.forEach(
+					(address) -> {
+						AddressModel addressModel = new AddressModel();
+						addressModel.setId(address.getId());
+						BeanUtils.copyProperties(address.getAddress(), addressModel);
+						response.getAddresses().add(addressModel);
+					}
+			);
+		}
+		
+		return true;
+	}
+	
+	public User getUser(String userName) {
+		List<User> user = userRepository.findByUserName(userName);
+		if(!CollectionUtils.isEmpty(user)) {
+			return user.get(0);
+		}
+		return null;
+	}
+	
+	public boolean canProcessOrder(Long id) {
+		int liveOrder = getLiveOrders(id);
+		if(liveOrder >= 30) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	private int getLiveOrders(Long id) {
+		List<OrderStatus> statusList = new ArrayList<OrderStatus>();
+		statusList.add(OrderStatus.ORDERED);
+		statusList.add(OrderStatus.ACKNOWLEDGED);
+		return orderRepository.countByStatusIn(statusList);
 	}
 	
 }

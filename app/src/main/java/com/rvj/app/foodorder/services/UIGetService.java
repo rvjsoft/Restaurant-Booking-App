@@ -7,6 +7,9 @@ import java.util.Objects;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.rvj.app.dataaccess.OrderRepository;
@@ -17,6 +20,7 @@ import com.rvj.app.foodorder.entity.Order;
 import com.rvj.app.foodorder.entity.OrderItem;
 import com.rvj.app.foodorder.entity.Restaurant;
 import com.rvj.app.foodorder.entity.TableBooking;
+import com.rvj.app.foodorder.models.AddressModel;
 import com.rvj.app.foodorder.models.FoodModel;
 import com.rvj.app.foodorder.models.GetOrderResponse;
 import com.rvj.app.foodorder.models.GetRestaurantResponse;
@@ -46,10 +50,11 @@ public class UIGetService {
 	@Autowired
 	RestaurantService restaurantService;
 
-	public boolean getOrders(Example<Order> orderExample, GetOrderResponse response) {
+	public boolean getOrders(Example<Order> orderExample, GetOrderResponse response, int page, int size) {
 		List<Order> orders;
 		try {
-			orders = orderRepository.findAll(orderExample);
+			Pageable pageRequest = PageRequest.of(page, size , Sort.by("orderedOn").descending());
+			orders = orderRepository.findAll(orderExample, pageRequest).toList();
 			response.setOrders(getOrderModel(orders));
 		} catch (Exception e) {
 			log.info("caught exception while processing request, Exception:" + e.getMessage());
@@ -58,10 +63,11 @@ public class UIGetService {
 		return true;
 	}
 	
-	public boolean getTableBookings(Example<TableBooking> bookingExample, GetTableResponse response) {
+	public boolean getTableBookings(Example<TableBooking> bookingExample, GetTableResponse response, int page, int size) {
 		List<TableBooking> bookingList;
 		try {
-			bookingList = bookingRepository.findAll(bookingExample);
+			Pageable pageRequest = PageRequest.of(page, size, Sort.by("bookingDate", "partOfDay").descending());
+			bookingList = bookingRepository.findAll(bookingExample, pageRequest).toList();
 			response.setTableBookings(getBookingModel(bookingList));
 		} catch (Exception e) {
 			log.info("caught exception while processing request, Exception:" + e.getMessage());
@@ -103,14 +109,20 @@ public class UIGetService {
 		return orderModelList;
 	}
 
-	public boolean getRestaurants(Example<Restaurant> resExample, GetRestaurantResponse response, String action) {
+	public boolean getRestaurants(Example<Restaurant> resExample, GetRestaurantResponse response, String action, int page, int size) {
 		List<Restaurant> restaurants;
 		try {
-			restaurants = resRepo.findAll(resExample);
+			if(action.equalsIgnoreCase(AppConstants.RES_LIST)) {
+				Pageable pageRequest = PageRequest.of(page, size);
+				restaurants = resRepo.findAll(resExample, pageRequest).toList();
+			} else {
+				restaurants = resRepo.findAll(resExample);
+			}
 			response.setRestaurants(getRestaurantModels(restaurants));
-			if(action.equalsIgnoreCase(AppConstants.RES_SINGLE) && !restaurants.isEmpty())
+			if(action.equalsIgnoreCase(AppConstants.RES_SINGLE) && !restaurants.isEmpty()) {
 				response.setFoods(getFoodModel(restaurants.get(0)));
 				response.setAvailability(restaurantService.getTableAvail(restaurants.get(0).getUserName()));
+			}
 		} catch (Exception e) {
 			log.info("caught exception while processing request, Exception:" + e.getMessage());
 			return false;
@@ -134,7 +146,9 @@ public class UIGetService {
 		List<RestaurantModel> restaurantList = new ArrayList<RestaurantModel>();
 		for(Restaurant res : restaurants) {
 			RestaurantModel resModel = new RestaurantModel();
+			resModel.setAddress(new AddressModel());
 			BeanUtils.copyProperties(res, resModel);
+			BeanUtils.copyProperties(res.getAddress(), resModel.getAddress());
 			restaurantList.add(resModel);
 		}
 		return restaurantList;

@@ -64,9 +64,12 @@ public class GetOrderOperation extends Operation<GetOrderRequest, GetOrderRespon
 		order.setItems(null);
 		ExampleMatcher orderMatcher = ExampleMatcher.matching().withIgnoreNullValues();
 		Example<Order> orderExample = Example.of(order, orderMatcher);
-		
+		if (request.getPage() == null || request.getSize() == null) {
+			request.setPage(0);
+			request.setSize(50);
+		}
 		boolean status = false;
-		status = uiService.getOrders(orderExample, response);
+		status = uiService.getOrders(orderExample, response, request.getPage(), request.getSize());
 		if(!status) {
 			this.getErrors().addError("request", "error while getting orders list");
 		}

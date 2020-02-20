@@ -1,0 +1,54 @@
+<div class="container Orders_page">
+  <div class="orders_list">
+    <div class="row my-2 list_title align-items-center justify-content-center">
+      <p class="h3 col-auto font-weight-bold text-dark">Table Bookings</p>
+    </div>
+    <div class="list_body mx-2 row justify-content-center">
+      <div class="col-8 justify-content-center align-items-center">
+        <button class="col-sm-auto btn btn-dark" (click)='refresh()'>Refresh</button>
+      </div>
+      <div class="lineBreaker col-12">
+        <div *ngFor="let bookingTime of tableByCategory | keyvalue"
+          class="row align-items-center justify-content-center">
+          <div class="col-10 p-2 m-2 h5 font-weight-bold justify-content-center align-self-center">
+            <span class="col-sm-auto">{{heading[bookingTime.key] | titlecase}}</span>
+          </div>
+          <div>{{bookingTime.value}}</div>
+          <div class="col-sm-10 col-md-10">
+            <div class="table_header row justify-content-center align-items-center border rounded-lg py-2 bg-dark">
+              <span class="col-1 mx-1 text-white">ID</span>
+              <span class="col-3 mx-1 text-white" *ngIf="res">Customer</span>
+              <span class="col-3 mx-1 text-white" *ngIf="!res">Restaurant</span>
+              <span class="col-3 mx-1 text-white">Date</span>
+              <span class="col-2 mx-1 text-white">Part</span>
+              <span class="col-1 mx-1 text-white">No.</span>
+            </div>
+          </div>
+          <div class="col-sm-10 col-md-10">
+            <div class="list_item bg-light row my-3 justify-content-center align-items-center border rounded-lg py-2"
+              *ngFor="let booking of bookingTime.value">
+              <div class="col-1 mx-1 my-2">
+                <span class="row">#{{booking.bookingId}}</span>
+              </div>
+              <div class="col-3 mx-1 my-2" *ngIf="res">
+                <span class="row">{{booking.customer}}</span>
+              </div>
+              <div class="col-3 mx-1 my-2" *ngIf="!res">
+                <span class="row">{{booking.restaurant}}</span>
+              </div>
+              <div class="col-3 mx-1 my-2">
+                <span class="row">{{booking.bookingDate}}</span>
+              </div>
+              <div class="col-2 mx-1 my-2">
+                <span class="row">{{booking.partOfDay}}</span>
+              </div>
+              <div class="col-1 mx-1 my-2">
+                <span class="row">{{booking.count}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

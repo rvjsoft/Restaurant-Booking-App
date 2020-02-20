@@ -1,0 +1,32 @@
+.selected {
+  font-weight: bold;
+  background-color: black;
+}
+
+.list_title {
+  margin: 5px 20px;
+}
+
+.menu {
+  margin: 20px 5px;
+}
+
+.list_item {
+  margin-top: 10px;
+}
+
+.delivered .list_item{
+  border-top: 5px solid #464646 !important;
+}
+
+.acknowledged .list_item{
+  border-top: 5px solid darkorange !important;
+}
+
+.ordered .list_item{
+  border-top: 5px solid green !important;
+}
+
+.name {
+  margin-top: -5px;
+}

@@ -37,6 +37,14 @@ public class RestaurantTableOperation extends Operation<RestaurantTableRequest, 
 		} else if (request.getDate() != null && request.getTableCount() != null) {
 			request.setAction(AppConstants.DAY_TABLE_ACTION);
 		}
+		if(request.getBaseCount() != null && request.getTableCount() != null) {
+			this.getErrors().addError("confilctRequest", "invalid request");
+			return false;
+		}
+		if(request.getAction() == null) {
+			this.getErrors().addError("confilctRequest", "invalid request");
+			return false;
+		}
 		if (!Objects.nonNull(restaurant)) {
 			this.getErrors().addError("username", "the restaurant does not exist");
 		} else {
@@ -55,7 +63,7 @@ public class RestaurantTableOperation extends Operation<RestaurantTableRequest, 
 							this.getErrors().addError("tablecount",
 									"in the mentioned date the tables are already booked above "
 											+ request.getTableCount());
-						} else if (getMaxOfPart(table, request.getPart()) > request.getTableCount()) {
+						} else if (request.getPart() != null && getMaxOfPart(table, request.getPart()) > request.getTableCount()) {
 							this.getErrors().addError("tablecount",
 									"in the mentioned date and part of the tables are already booked above "
 											+ request.getTableCount());
