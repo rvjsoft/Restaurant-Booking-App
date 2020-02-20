@@ -53,8 +53,10 @@ export class RestaurantComponent implements OnInit {
     if(this.resId != null && this.resId != undefined) {
       request.resId = Number(this.resId);
     }
+    this.loadBarService.showLoadBar();
     this.appService.getRestaurant(request).subscribe(
       (response: GetRestaurantResponse) => {
+        this.loadBarService.hideLoadBar();
         let restaurant = response.restaurants[0];
         this.foods = response.foods;
         if (restaurant.address != null)
@@ -81,6 +83,9 @@ export class RestaurantComponent implements OnInit {
             }
           );
         }
+      },
+      (error: any) => {
+        this.loadBarService.hideLoadBar();
       }
     );
   }

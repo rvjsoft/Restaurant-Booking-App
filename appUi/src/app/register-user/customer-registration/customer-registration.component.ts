@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { AppServiceService } from '../../app-service.service';
 import { RegisterUserRequest, RegisterUserResponse, CustomerModel } from 'src/app/FoodOrderApp';
 import { Router } from '@angular/router';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-customer-registration',
@@ -24,7 +25,8 @@ export class CustomerRegistrationComponent implements OnInit {
   constructor(private toastService: ToastService,
     private formBuilder: FormBuilder,
     private appService: AppServiceService,
-    private router: Router
+    private router: Router,
+    public loadBar: LoadBarService
     ) { }
 
   ngOnInit() {
@@ -40,13 +42,16 @@ export class CustomerRegistrationComponent implements OnInit {
     request.customer.email = this.registrationForm.get('email').value;
     request.customer.phone = this.registrationForm.get('phone').value;
     console.log('sending request');
+    this.loadBar.showLoadBar();
     this.appService.createUser(request).subscribe(
       (response: RegisterUserResponse) => {
+        this.loadBar.hideLoadBar();
         this.toastService.showMessage([response.message], false);
         this.registrationForm.reset();
         this.router.navigate(['/login']);
       },
       (error: any) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

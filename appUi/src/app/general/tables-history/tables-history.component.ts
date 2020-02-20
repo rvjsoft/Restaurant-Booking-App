@@ -4,6 +4,7 @@ import { AppServiceService } from 'src/app/app-service.service';
 import { GetTableRequest, GetTableResponse, TableModel } from 'src/app/FoodOrderApp';
 import { from } from 'rxjs';
 import { SessionService } from 'src/app/session.service';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-tables-history',
@@ -23,7 +24,7 @@ export class TablesHistoryComponent implements OnInit {
   res: boolean;
   heading = {};
 
-  constructor(private toastService: ToastService, private appService: AppServiceService, private sessionService: SessionService) {
+  constructor(private toastService: ToastService, private appService: AppServiceService, private sessionService: SessionService, public loadBar: LoadBarService) {
     this.tableByCategory[this.TODAY] = this.todayBookings;
     this.tableByCategory[this.HISTORY] = this.historyBookings;
     this.heading[this.TODAY] = 'Upcoming';
@@ -50,8 +51,10 @@ export class TablesHistoryComponent implements OnInit {
   }
 
   public getTables(request: GetTableRequest) {
+    this.loadBar.showLoadBar();
     this.appService.getTables(request, !this.res).subscribe(
       (response: GetTableResponse) => {
+        this.loadBar.hideLoadBar();
         from(response.tableBookings).subscribe(
           (booking) => {
             let orderDate = new Date(Date.parse(booking.bookingDate + ''));
@@ -61,12 +64,12 @@ export class TablesHistoryComponent implements OnInit {
               this.historyBookings.push(booking);
             }
             console.log(this.tableByCategory);
-          },
-          (error) => {
-            let messages = this.extractErrorMesage(error.error);
-            this.toastService.showMessage(messages, true);
           }
         );
+      },
+      (error) => {
+        let messages = this.extractErrorMesage(error.error);
+        this.toastService.showMessage(messages, true);
       }
     );
   }

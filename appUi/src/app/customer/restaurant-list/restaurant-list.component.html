@@ -37,7 +37,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf='restaurants == null || restaurants == undefined || restaurants.length == 0'
+  <div *ngIf='!loadBar.loading && (restaurants == null || restaurants == undefined || restaurants.length == 0)'
     class="row justify-content-center">
     <span class="col-auto h4">No Restaurants</span>
   </div>

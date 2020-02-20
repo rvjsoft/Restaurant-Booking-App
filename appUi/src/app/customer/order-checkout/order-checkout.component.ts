@@ -6,6 +6,7 @@ import { AppServiceService } from 'src/app/app-service.service';
 import { FoodListComponent } from 'src/app/general/food-list/food-list.component';
 import { OrderCheckoutService } from '../order-checkout.service';
 import { AddressService } from '../address.service';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-order-checkout',
@@ -29,7 +30,8 @@ export class OrderCheckoutComponent implements OnInit, OnChanges, AfterViewCheck
     private route: ActivatedRoute,
     private router: Router,
     private orderService: OrderCheckoutService,
-    private addressService: AddressService
+    private addressService: AddressService,
+    public loadBar: LoadBarService
   ) { }
 
   ngOnInit() {
@@ -79,14 +81,17 @@ export class OrderCheckoutComponent implements OnInit, OnChanges, AfterViewCheck
       this.toastService.showMessage(['no food selected'], true);
       return;
     }
+    this.loadBar.showLoadBar();
     this.appService.orderFood(request).subscribe(
       (response) => {
+        this.loadBar.hideLoadBar();
         this.toastService.showMessage([response.message], false);
         // this.router.navigate(['customer/search']);
         this.orderService.cleanup();
         this.router.navigate(['customer/home']);
       },
       (error: any) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

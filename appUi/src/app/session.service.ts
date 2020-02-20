@@ -11,7 +11,11 @@ export class SessionService {
 
   get userLevel() {
     let level = sessionStorage.getItem(this.USER_LEVEL);
-    return level;
+    if (level != 'CUSTOMER' && level != 'RESTAURANT') {
+      return null;
+    } else {
+      return level;
+    }
   }
 
   set userLevel(val: string) {

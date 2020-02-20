@@ -4,6 +4,7 @@ import { OrderStatus } from 'src/app/AppEnums';
 import { AppServiceService } from 'src/app/app-service.service';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { from } from 'rxjs';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-customer-orders',
@@ -19,7 +20,7 @@ export class CustomerOrdersComponent implements OnInit {
   orderDate: {[index: string]: string} = {};
   dayMillis = 8.64e+7;
 
-  constructor(private appService: AppServiceService, private toastService: ToastService) { }
+  constructor(private appService: AppServiceService, private toastService: ToastService, public loadBar: LoadBarService) { }
 
   ngOnInit() {
     this.loadOrders();
@@ -33,8 +34,10 @@ export class CustomerOrdersComponent implements OnInit {
   }
 
   public getOrders(request: GetOrderRequest) {
+    this.loadBar.showLoadBar();
     this.appService.getOrders(request, true).subscribe(
       (response: GetOrderResponse) => {
+        this.loadBar.hideLoadBar();
         from(response.orders).subscribe(
           (order) => {
             this.orders.push(order);
@@ -53,6 +56,7 @@ export class CustomerOrdersComponent implements OnInit {
         );
       },
       (error) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

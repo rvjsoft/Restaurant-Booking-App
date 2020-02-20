@@ -32,7 +32,7 @@ export class FoodEditComponent implements OnInit {
       private route: ActivatedRoute,
       private router: Router,
       private sanitizer: DomSanitizer,
-      private loadBarService: LoadBarService
+      private loadBar: LoadBarService
     ) { }
 
   ngOnInit() {
@@ -54,8 +54,10 @@ export class FoodEditComponent implements OnInit {
     }
     let request = new AddFoodRequest();
     request.foods = [this.foodData];
+    this.loadBar.showLoadBar();
     this.appService.addFood(request).subscribe(
       (response: AddFoodResponse) => {
+        this.loadBar.hideLoadBar();
         this.toastService.showMessage([response.message], false);
         this.foodData.id = response.ids[0];
         let food = new FoodModel();
@@ -66,6 +68,7 @@ export class FoodEditComponent implements OnInit {
         this.tempImage = this.greyImage;
       },
       (error: any) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }
@@ -79,8 +82,10 @@ export class FoodEditComponent implements OnInit {
     food.id = null;
     request.foodId = this.foodData.id;
     request.food = food;
+    this.loadBar.showLoadBar();
     this.appService.updateFood(request).subscribe(
       (response: UpdateFoodResponse) => {
+        this.loadBar.showLoadBar();
         this.toastService.showMessage([response.message], false);
         for(let fd of this.foods) {
           if (fd.id == this.foodData.id){
@@ -92,6 +97,7 @@ export class FoodEditComponent implements OnInit {
         this.foodData = new FoodModel();
       },
       (error: any) => {
+        this.loadBar.showLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }
@@ -101,10 +107,10 @@ export class FoodEditComponent implements OnInit {
   public uploadImage(files: any) {
     let file = files[0];
     let id = '-1'; //NO_FOOD_ID
-    this.loadBarService.showLoadBar();
+    this.loadBar.showLoadBar();
     this.appService.uploadImage(file, id).subscribe(
       (response: any) => {
-        this.loadBarService.hideLoadBar();
+        this.loadBar.hideLoadBar();
         this.toastService.showMessage([response.message], false);
         this.foodData.imageId = response.imageId;
         this.appService.getRestaurantImage(this.foodData.imageId).subscribe(
@@ -117,7 +123,7 @@ export class FoodEditComponent implements OnInit {
       (error) => {
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
-        this.loadBarService.hideLoadBar();
+        this.loadBar.hideLoadBar();
       }
     );
   }
@@ -139,13 +145,16 @@ export class FoodEditComponent implements OnInit {
   deleteFood(food: FoodModel) {
     let request = new DeleteFoodRequest();
     request.foodId = food.id;
+    this.loadBar.showLoadBar();
     this.appService.deleteFood(request).subscribe(
       (response: DeleteFoodResponse) => {
+        this.loadBar.hideLoadBar();
         this.toastService.showMessage([response.message], false);
         this.foods.splice(this.foods.indexOf(food), 1);
         this.foods = [... this.foods];
       },
       (error) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

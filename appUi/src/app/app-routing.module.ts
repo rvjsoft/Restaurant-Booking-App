@@ -16,7 +16,7 @@ const routes: Routes = [
     path: 'register/restaurant', component: RestaurantRegistrationComponent
   },
   {
-    path: '*', redirectTo: 'login'
+    path: '', pathMatch: 'full', redirectTo: '/login'
   }/*,
   {
     path: '**', redirectTo: 'login'

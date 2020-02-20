@@ -6,6 +6,7 @@ import { AppServiceService } from 'src/app/app-service.service';
 import { AddressService } from '../address.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-add-address',
@@ -35,7 +36,8 @@ export class AddAddressComponent implements OnInit {
     public addressService: AddressService,
     private router: Router,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    public loadBar: LoadBarService
   ) {
     this.addresses = new Array();
     if (this.addressService.deliveryAddress != null) {
@@ -44,9 +46,14 @@ export class AddAddressComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadBar.showLoadBar();
     this.appService.getAddresses().subscribe(
       (response) => {
+        this.loadBar.hideLoadBar();
         this.addresses = response.addresses;
+      },
+      (error) => {
+        this.loadBar.hideLoadBar();
       }
     );
   }
@@ -61,8 +68,10 @@ export class AddAddressComponent implements OnInit {
     address.landmark = this.addressForm.get('landmark').value;
     address.state = this.addressForm.get('state').value;
     address.postalCode = this.addressForm.get('postalCode').value;
+    this.loadBar.showLoadBar();
     this.appService.addAddress([address]).subscribe(
       (response: AddAddressResponse) => {
+        this.loadBar.hideLoadBar();
         this.toastService.showMessage([response.message], false);
         address.id = response.ids[0];
         this.addresses.push(address);
@@ -70,6 +79,7 @@ export class AddAddressComponent implements OnInit {
         this.show_io = false;
       },
       (error: any) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

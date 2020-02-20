@@ -4,6 +4,7 @@ import { AppServiceService } from 'src/app/app-service.service';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { from } from 'rxjs';
 import { OrderStatus } from 'src/app/AppEnums';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-orders',
@@ -24,7 +25,7 @@ export class OrdersComponent implements OnInit {
   orderDate: {[index: string]: string} = {};
   dayMillis = 8.64e+7;
 
-  constructor(private appService: AppServiceService, private toastService: ToastService) {
+  constructor(private appService: AppServiceService, private toastService: ToastService, public loadBar: LoadBarService) {
     this.foodStatusOption = Object.keys(OrderStatus);
     for(let status of Object.keys(OrderStatus)) {
       this.orderByCategory[status] = new Array<OrderModel>();
@@ -81,8 +82,10 @@ export class OrdersComponent implements OnInit {
   }
 
   public getOrders(request: GetOrderRequest) {
+    this.loadBar.showLoadBar();
     this.appService.getOrders(request).subscribe(
       (response: GetOrderResponse) => {
+        this.loadBar.hideLoadBar();
         from(response.orders).subscribe(
           (order) => {
             this.orderByCategory[request.status].push(order);
@@ -103,6 +106,7 @@ export class OrdersComponent implements OnInit {
         );
       },
       (error) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

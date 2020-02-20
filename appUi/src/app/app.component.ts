@@ -22,7 +22,8 @@ export class AppComponent {
   }
 
   get isUserLogged(): boolean {
-    if (this.session.userLevel == null || undefined) {
+    console.log(this.session.userLevel == null);
+    if (this.session.userLevel == null) {
       return false;
     } else {
       return true;
@@ -30,9 +31,11 @@ export class AppComponent {
   }
 
   public logout() {
+    console.log(this.isUserLogged);
     this.appService.logout().subscribe(
-      (response: string) => {
-        this.toastService.showMessage([response], false);
+      (response: any) => {
+        this.session.userLevel = null;
+        this.toastService.showMessage([response.message], false);
         this.router.navigate(['login']);
       }
     );

@@ -3,6 +3,7 @@ import { PartOfDay } from 'src/app/AppEnums';
 import { TableAvailData, RestaurantTableRequest, RestaurantTableResponse, TableAvailRequest, TableAvailResponse, TableAvailModel } from 'src/app/FoodOrderApp';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { AppServiceService } from 'src/app/app-service.service';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-modify-tables',
@@ -17,7 +18,7 @@ export class ModifyTablesComponent implements OnInit {
   baseCount: number;
   edit_part = 'Tables';
 
-  constructor(private toastService: ToastService, private appService: AppServiceService) { }
+  constructor(private toastService: ToastService, private appService: AppServiceService, public loadBar: LoadBarService) { }
 
   ngOnInit() {
     this.populateAvail();
@@ -29,13 +30,16 @@ export class ModifyTablesComponent implements OnInit {
     request.date = this.tableData.date;
     request.part = this.tableData.part;
     request.tableCount = this.tableData.baseCount;
+    this.loadBar.showLoadBar();
     this.appService.updateTable(request).subscribe(
       (response: RestaurantTableResponse) => {
+        this.loadBar.hideLoadBar();
         this.toastService.showMessage([response.message], false);
         this.tableData = new TableAvailData();
         this.populateAvail();
       },
       (error: any) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }
@@ -46,11 +50,14 @@ export class ModifyTablesComponent implements OnInit {
   public updateBase() {
     let request = new RestaurantTableRequest();
     request.baseCount = this.baseCount;
+    this.loadBar.showLoadBar();
     this.appService.updateTable(request).subscribe(
       (response: RestaurantTableResponse) => {
+        this.loadBar.hideLoadBar();
         this.toastService.showMessage([response.message], false);
       },
       (error: any) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

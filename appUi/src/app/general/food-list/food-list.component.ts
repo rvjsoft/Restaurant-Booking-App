@@ -8,6 +8,7 @@ import { SessionService } from 'src/app/session.service';
 import { tap, filter } from 'rxjs/operators';
 import { Status } from 'src/app/AppEnums';
 import { ToastService } from 'src/app/ui-components/toast.service';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-food-list',
@@ -49,7 +50,8 @@ export class FoodListComponent implements OnInit, OnChanges {
     private sanitizer: DomSanitizer,
     private fb: FormBuilder,
     public session: SessionService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    public loadBar: LoadBarService
     ) {
         this.res = this.isRes;
      }

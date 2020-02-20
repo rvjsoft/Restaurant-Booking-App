@@ -4,6 +4,7 @@ import { ToastService } from 'src/app/ui-components/toast.service';
 import { BookTableService } from '../book-table.service';
 import { TableAvailModel, TableAvailData, BookTableRequest, BookTableResponse, TableAvailResponse } from 'src/app/FoodOrderApp';
 import { PartOfDay } from 'src/app/AppEnums';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-book-table',
@@ -21,7 +22,8 @@ export class BookTableComponent implements OnInit {
   constructor(
     private appService: AppServiceService,
     private toastService: ToastService,
-    private bookTableService: BookTableService
+    private bookTableService: BookTableService,
+    public loadBar: LoadBarService
   ) {
     this.availability = this.bookTableService.availability;
     this.resId = this.bookTableService.resId;
@@ -38,13 +40,16 @@ export class BookTableComponent implements OnInit {
     request.part = this.tableData.part;
     request.count = this.tableData.baseCount;
     request.resId = this.resId;
+    this.loadBar.showLoadBar();
     this.appService.bookTable(request).subscribe(
       (response: BookTableResponse) => {
+        this.loadBar.hideLoadBar();
         this.toastService.showMessage([response.message], false);
         this.tableData = new TableAvailData();
         this.populateAvail();
       },
       (error: any) => {
+        this.loadBar.hideLoadBar();
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
       }

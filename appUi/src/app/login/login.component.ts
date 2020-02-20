@@ -41,12 +41,12 @@ export class LoginComponent implements OnInit {
     this.loadBar.showLoadBar();
     this.appService.login(request).subscribe(
       (response: HttpResponse<BaseResponse>) => {
+        this.loadBar.hideLoadBar();
         let resBody = response.body;
         if(response.headers) {
           this.session.userLevel = response.headers.get(this.USR_LVL_HEADER);
         }
         this.toastService.showMessage([resBody.message], false);
-        this.loadBar.hideLoadBar();
         this.navigateToUserLanding();
       },
       (error: any) => {
