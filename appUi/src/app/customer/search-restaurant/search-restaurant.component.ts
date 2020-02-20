@@ -5,6 +5,7 @@ import { Status, FoodType } from 'src/app/AppEnums';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { Router } from '@angular/router';
 import { SessionService } from 'src/app/session.service';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-search-restaurant',
@@ -24,7 +25,8 @@ export class SearchRestaurantComponent implements OnInit {
     private appService: AppServiceService,
     private toastService: ToastService,
     private router: Router,
-    private session: SessionService
+    private session: SessionService,
+    public loadBar: LoadBarService
   ) { }
 
   ngOnInit() {
@@ -55,16 +57,19 @@ export class SearchRestaurantComponent implements OnInit {
     if (this.type)
       request.type = FoodType.VEG;
     this.session.loadingResPage = true;
+    this.loadBar.showLoadBar();
     this.appService.getRestaurant(request, true).subscribe(
       (response: GetRestaurantResponse) => {
         // this.restaurants = response.restaurants;
         this.restaurants = this.restaurants.concat(response.restaurants);
         this.session.loadingResPage = false;
+        this.loadBar.hideLoadBar();
       },
       (error) => {
         let messages = this.extractErrorMesage(error.error);
         this.toastService.showMessage(messages, true);
         this.session.loadingResPage = false;
+        this.loadBar.hideLoadBar();
       }
     );
   }

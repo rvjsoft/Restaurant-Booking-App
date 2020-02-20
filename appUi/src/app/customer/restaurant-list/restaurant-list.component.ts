@@ -3,6 +3,7 @@ import { RestaurantModel } from '../../FoodOrderApp';
 import { Observable, Observer, of } from 'rxjs';
 import { AppServiceService } from '../../app-service.service';
 import { SessionService } from '../../session.service';
+import { LoadBarService } from 'src/app/load-bar.service';
 
 @Component({
   selector: 'app-restaurant-list',
@@ -23,7 +24,11 @@ export class RestaurantListComponent implements OnInit {
   @Output()
   loadNext = new EventEmitter<boolean>();
 
-  constructor(private appService: AppServiceService, private session: SessionService) { }
+  constructor(
+    private appService: AppServiceService,
+    private session: SessionService,
+    public loadBar: LoadBarService
+    ) { }
 
   ngOnInit() {
 

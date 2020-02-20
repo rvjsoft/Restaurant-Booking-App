@@ -45,7 +45,7 @@ export class AppServiceService {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    return this.http.post(requestURL, request, {headers: headers, withCredentials: true});
+    return this.http.post(requestURL, request, {observe: 'response', headers: headers, withCredentials: true});
   }
 
   public logout(): Observable<any> {

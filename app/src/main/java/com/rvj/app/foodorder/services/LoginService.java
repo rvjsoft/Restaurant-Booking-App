@@ -29,6 +29,7 @@ public class LoginService {
 			Cookie userLevel = new Cookie(AppConstants.USR_LEVEL, level);
 			userLevel.setSecure(true);
 			response.addCookie(userLevel);
+			response.addHeader(AppConstants.USR_LEVEL_HEADER, level);
 			System.out.println(getUserLevel(request.getUserName()));
 			//TODO:set auth token here
 			return true;
@@ -52,6 +53,7 @@ public class LoginService {
 		userLevel.setMaxAge(0);
 		userLevel.setSecure(true);
 		response.addCookie(userLevel);
+		response.addHeader(AppConstants.USR_LEVEL_HEADER, null);
 	}
 	
 }

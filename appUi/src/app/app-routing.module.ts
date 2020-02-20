@@ -1,19 +1,8 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { CustomerRegistrationComponent } from './register-user/customer-registration/customer-registration.component';
-import { registerLocaleData } from '@angular/common';
 import { RestaurantRegistrationComponent } from './register-user/restaurant-registration/restaurant-registration.component';
-import { AddAddressComponent } from './customer/add-address/add-address.component';
-import { RestaurantComponent } from './restaurant/restaurant/restaurant.component';
-import { FoodEditComponent } from './general/food-edit/food-edit.component';
-import { ModifyTablesComponent } from './restaurant/modify-tables/modify-tables.component';
-import { SearchRestaurantComponent } from './customer/search-restaurant/search-restaurant.component';
-import { OrderCheckoutComponent } from './customer/order-checkout/order-checkout.component';
-import { OrdersComponent } from './general/orders/orders.component';
-import { CustomerOrdersComponent } from './general/customer-orders/customer-orders.component';
-import { TablesHistoryComponent } from './general/tables-history/tables-history.component';
-import { BookTableComponent } from './customer/book-table/book-table.component';
 
 
 const routes: Routes = [
@@ -25,6 +14,9 @@ const routes: Routes = [
   },
   {
     path: 'register/restaurant', component: RestaurantRegistrationComponent
+  },
+  {
+    path: '*', redirectTo: 'login'
   }/*,
   {
     path: '**', redirectTo: 'login'
