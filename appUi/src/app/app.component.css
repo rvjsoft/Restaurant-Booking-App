@@ -1,0 +1,33 @@
+.heading {
+  background-color: #2d3236;
+}
+
+.logout_link {
+  /* margin-left: auto; */
+  position: absolute;
+  right: 20px;
+}
+
+.loading-bar-container {
+  width: 100%;
+  height: 5px;
+}
+
+.loading-bar {
+  height: 5px;
+  background-color: red;
+  animation-name: load;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes load {
+
+  0% {float: left; width: 0%;}
+  10% {float: left; width: 0%;}
+  50% {float:left; width: 100%;}
+  60% {float:left; width: 100%;}
+  61% {float: right; width: 100%;}
+  100% {float: right;width: 0%;}
+}

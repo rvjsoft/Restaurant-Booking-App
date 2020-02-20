@@ -1,0 +1,40 @@
+.resimage {
+  z-index: 1;
+  height: 300px;
+  background-size: cover !important;
+  /* width: 200px; */
+}
+
+.temp {
+  z-index: 1200;
+}
+
+.res_name {
+  color: white;
+  background-color: gray;
+  padding: 5px 20px;
+  border-radius: 15px;
+}
+
+.res_type {
+  color: white;
+  background-color: gray;
+  padding: 3px 15px;
+  border-radius: 10px;
+}
+
+.res_address {
+  color: black;
+  background-color: rgb(229, 236, 204);
+  border-left: 5px solid darkgray;
+}
+
+.file_upload {
+  display: none;
+}
+.file_upload_label {
+}
+
+.food_list {
+  padding-top:20px
+}

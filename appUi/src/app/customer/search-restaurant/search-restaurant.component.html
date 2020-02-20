@@ -1,0 +1,25 @@
+<div class="container res_search">
+  <div class="search_io sticky-top bg-light p-1">
+    <div class="search row align-items-center justify-content-center m-3">
+      <div class="input-group col-sm-8 ">
+        <input type="text" [(ngModel)]="name" class="form-control form-control-lg" placeholder="Search">
+        <div class="input-group-append">
+          <button class="btn btn-primary btn-lg" (click)="resetPage(); getResList();" >Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center justify-content-center">
+      <div class="form-check mx-2">
+        <input type="checkbox" [(ngModel)]="type" (change)="resetPage(); getResList();" class="form-check-input" id='veg' />
+        <label for='veg'>Veg-Only</label>
+      </div>
+      <div class="form-check mx-2">
+        <input type="checkbox" [(ngModel)]="status" (change)="resetPage(); getResList();" class="form-check-input" id='available' />
+        <label for='available'>Available-Only</label>
+      </div>
+    </div>
+  </div>
+  <div class="res_list row justify-content-center">
+    <app-restaurant-list [restaurants]='restaurants' (loadNext)='loadNextPage()' (resSelect)='selectRes($event)' class="list col-auto"></app-restaurant-list>
+  </div>
+</div>

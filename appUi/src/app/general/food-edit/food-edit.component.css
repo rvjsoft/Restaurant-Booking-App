@@ -1,0 +1,27 @@
+.file_upload {
+  display: none;
+}
+.file_upload_label {
+  /* background-color: white; */
+  width: 100px;
+  height: 100px;
+  background-size: cover !important;
+  /* background-image: url('../../../assets/images/gray.svg'); */
+}
+
+.food_type {
+  margin-right: 15px;
+}
+
+.food_io {
+  background-color: lightgray;
+  padding: 15px;
+}
+
+.modify_food {
+  margin:15px;
+}
+
+.food_list {
+  margin-top:5px
+}

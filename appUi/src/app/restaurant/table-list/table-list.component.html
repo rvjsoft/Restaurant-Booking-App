@@ -1,0 +1,25 @@
+<div class="table_list container">
+  <div *ngIf="availability != null && availability != undefined" class="list row justify-content-center">
+    <div *ngFor="let avail of availability | keyvalue" (click)='selectAvail($event)' class="row list_item border justify-content-center rounded my-3">
+      <div class="col-sm-auto text-secondary m-3 font-italic font-weight-bold align-self-center">
+        <div class="row justify-content-center">{{avail.key}}</div>
+      </div>
+      <div class="col-sm-auto justify-content-center text-dark border-left m-3">
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="row justify-content-center m-1 text-dark">Total</div>
+        <div class="row justify-content-center m-1 text-dark">Booked</div>
+      </div>
+      <div *ngFor="let part of avail.value | keyvalue" class="col-sm-auto m-3">
+        <div class="row justify-content-center m-1 text-dark">{{part.key | titlecase}}</div>
+        <div class="row justify-content-center m-1 text-dark font-weight-bold">
+          {{(part.value.total == -1) ? baseCount : (part.value.total == 0) ?"-" : part.value.total}}
+        </div>
+        <div class="row justify-content-center m-1 text-dark font-weight-bold">
+          {{(part.value.bookedTables == 0) ? "-" : part.value.bookedTables}}</div>
+        </div>
+    </div>
+  </div>
+  <div *ngIf="availability == null || availability == undefined">
+    <span class="col-auto h4">No data available</span>
+  </div>
+</div>

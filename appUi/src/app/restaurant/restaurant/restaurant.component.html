@@ -1,0 +1,60 @@
+<div class="restaurant container">
+  <div class="resimage row align-items-end" [ngStyle]='{background: "url("+temp+")"}'>
+    <div class='col temp h2 '>
+      <span class="res_name font-weight-bold">{{name | titlecase}}</span>
+    </div>
+    <div *ngIf="isRes" class='col-sm-auto align-self-end'>
+      <label class='file_upload_label row justify-content-center' for='upload_image'>
+        <span class='btn btn-dark'>upload</span>
+      </label>
+      <input type="file" id='upload_image' class="file_upload" (change)='uploadImage($event.target.files)' />
+    </div>
+    <div class='col-auto h5'>
+      <div class="res_type">
+        <img calss='image_type' width="25px" height="25px" [attr.src]="type == 'VEG' ? imageVeg : type == 'NON_VEG' ? imageNonVeg : null" />
+        <span class='text-white font-italic'>{{type | titlecase}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-between px-3 py-3">
+    <div class="col-sm-auto res_address px-5 py-2">
+      <div class="row address_info">
+        <span class="text-dark font-weight-bold col-sm-auto">Address:</span>
+        <div class="row">
+          <p class="col-sm-auto">{{address.address1}}, {{address.address2}}</p>
+          <p class="col-sm-auto">{{address.landmark}}, {{address.city}}, {{address.state}} - {{address.postalCode}}</p>
+        </div>
+      </div>
+      <div class="row email">
+        <span class="text-dark font-weight-bold col-sm-auto">Email:</span>
+        <span class="col-sm-auto font-italic">{{email}}</span>
+      </div>
+      <div class="row phone">
+        <span class="text-dark font-weight-bold col-sm-auto">Phone:</span>
+        <span class="col-sm-auto font-italic">{{phone}}</span>
+      </div>
+    </div>
+    <div class="col-auto align-self-center">
+      <div class="row align-items-start py-2">
+        <select [attr.disabled]='isRes? null : ""' (change)='changeStatus()' class="form-control" name='status' [(ngModel)]="isAvailable">
+          <option name='avail' value='AVAILABLE'>Available</option>
+          <option name='unavail' value='UNAVAILABLE'>Unavailable</option>
+        </select>
+      </div>
+      <div class="row align-items-end py-2">
+        <div *ngIf='!isRes' class="col btn btn-dark" (click)='goToBookTable()'>Book Seats</div>
+        <div *ngIf='isRes' class="col btn btn-dark" (click)='goToTables()'>Base Seats: {{baseCount}}</div>
+      </div>
+    </div>
+    </div>
+    <div class="row food_list justify-content-around align-items-center">
+      <!-- <div class="col-8"> -->
+        <div class="col-2 h3 text-dark font-weight-light">Foods</div>
+        <div *ngIf="session.userLevel == 'RESTAURANT'" class="col-auto btn btn-dark" (click)='goToModifyFoods()'>Modify
+          Foods</div>
+      <!-- </div> -->
+  </div>
+  <div class="food_list_component">
+    <app-food-list (checkoutOrder)='checkout($event)' [foodList]='foods' [isAvailable]='isAvailable' [isEdit]='false' [isCheckout]='true'></app-food-list>
+  </div>
+</div>

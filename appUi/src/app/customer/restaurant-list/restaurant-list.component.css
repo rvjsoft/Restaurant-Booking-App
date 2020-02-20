@@ -1,0 +1,19 @@
+.list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.list_item {
+  position: relative;
+  margin: 20px;
+}
+
+.address {
+  padding-top: 20px;
+}
+
+.list_item:hover {
+  box-shadow: lightgray -5px 5px 10px;
+}
