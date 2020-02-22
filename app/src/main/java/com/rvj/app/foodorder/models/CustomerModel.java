@@ -12,12 +12,12 @@ public class CustomerModel {
 	
 	@NotEmpty(message = "firstName should Not be null/empty")
 	@Pattern(regexp = "[a-zA-Z]*", message = "FirstName should be Alphabets")
-	@Size(min = 5, max = 20, message = "firstName length should be from 5 to 20 characters")
+	@Size(min = 1, max = 20, message = "firstName length should be from 1 to 20 characters")
 	private String firstName;
 	
 	@NotEmpty(message = "lastName should Not be null/empty")
 	@Pattern(regexp = "[a-zA-Z]*", message = "LastName should be Alphabets")
-	@Size(min = 5, max = 20, message = "lastName length should be from 5 to 20 characters")
+	@Size(min = 1, max = 20, message = "lastName length should be from 1 to 20 characters")
 	private String lastName;
 	
 	@Email

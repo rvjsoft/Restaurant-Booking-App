@@ -58,7 +58,7 @@ public class Restaurant extends User {
 	@Column(name = "image_id")
 	private String imageId;
 
-	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = false)
 	private List<Food> foods = new ArrayList<Food>();
 
 //	@OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
