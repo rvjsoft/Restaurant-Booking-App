@@ -20,13 +20,13 @@
           class="card-img-top res_image" width="120px" height="140px" />
         <div class="card-body">
           <span class="card-title font-weight-bold text-dark px-2 row">{{restaurant.name | titlecase}}</span>
-          <div class="row align-items-center justify-content-between">
-            <div class="col-auto align-self-center">
+          <div class="row px-2 align-items-center justify-content-between">
+            <div class="col-auto px-0 align-self-center">
               <img calss='image_type' width="20px" height="20px"
                 [attr.src]="restaurant.type == 'VEG' ? imageVeg : restaurant.type == 'NON_VEG' ? imageNonVeg : null" />
-              <span class='font-italic text-secondary'>{{restaurant.type | titlecase}}</span>
+              <span class='font-italic text-secondary'>{{restaurant.type=='VEG' ? 'Veg' : 'Non-Veg'}}</span>
             </div>
-            <span class="col-auto font-italic text-secondary">{{restaurant.status | titlecase}}</span>
+            <span class="col-auto px-0 font-italic text-secondary">{{restaurant.status | titlecase}}</span>
           </div>
           <div class="row text-body address">
             <span class="col-auto">
