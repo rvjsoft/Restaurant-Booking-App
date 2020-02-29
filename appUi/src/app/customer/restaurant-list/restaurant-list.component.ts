@@ -4,6 +4,7 @@ import { Observable, Observer, of } from 'rxjs';
 import { AppServiceService } from '../../app-service.service';
 import { SessionService } from '../../session.service';
 import { LoadBarService } from 'src/app/load-bar.service';
+import { ImageResponseCacheService } from 'src/app/image-response-cache.service';
 
 @Component({
   selector: 'app-restaurant-list',
@@ -27,31 +28,38 @@ export class RestaurantListComponent implements OnInit {
   constructor(
     private appService: AppServiceService,
     private session: SessionService,
-    public loadBar: LoadBarService
-    ) { }
+    public loadBar: LoadBarService,
+    private imageCache: ImageResponseCacheService
+  ) { }
 
   ngOnInit() {
 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    for(let index in this.restaurants) {
+    for (let index in this.restaurants) {
       let res = this.restaurants[index];
-      if(res.imageId == null || res.imageId == undefined) {
+      if (res.imageId == null || res.imageId == undefined) {
         this.resImages[res.id] = of('url(' + this.resImage + ')');
       } else if (this.resImages[res.id] != null && this.resImages[res.id] != undefined) {
         continue;
       }
       this.resImages[res.id] = new Observable<any>(
         (observer: Observer<any>) => {
+          let cachedImage = this.imageCache.getImage(res.imageId);
+          if (cachedImage != null && cachedImage != undefined) {
+            observer.next(cachedImage);
+          } else {
             this.appService.getRestaurantImage(res.imageId).subscribe(
               (imageData) => {
+                this.imageCache.setImage(res.imageId, imageData);
                 observer.next(imageData);
               }, (error) => {
                 observer.next(this.resImage);
               }
             );
           }
+        }
       );
     }
   }

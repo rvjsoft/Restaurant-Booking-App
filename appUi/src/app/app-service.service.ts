@@ -164,14 +164,7 @@ export class AppServiceService {
 
   public getRestaurantImage(imageId: string): Observable<any> {
     let requestURL = environment.appURI + this.PATH_GET_RES_IMAGE + imageId;
-    let cachedImage = this.imageCache.getImage(imageId);
-    if (cachedImage != null && cachedImage != undefined) {
-      return cachedImage;
-    } else {
-      let response = this.http.get(requestURL, {headers: {}, responseType: 'text', withCredentials: true});
-      this.imageCache.setImage(imageId, response);
-      return response;
-    }
+    return this.http.get(requestURL, {headers: {}, responseType: 'text', withCredentials: true});
   }
 
   public uploadImage(file: File, foodId?: string): Observable<any> {

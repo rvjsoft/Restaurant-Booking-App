@@ -6,15 +6,15 @@ import { Observable } from 'rxjs';
 })
 export class ImageResponseCacheService {
 
-  private imageCache: {[key: string]: Observable<any>} = {};
+  private imageCache: {[key: string]: string} = {};
 
   constructor() { }
 
-  setImage(imageId: string, response: Observable<any>): void {
+  setImage(imageId: string, response: string): void {
     this.imageCache[imageId] = response;
   }
 
-  getImage(imageId: string): Observable<any> {
+  getImage(imageId: string): string {
     return this.imageCache[imageId];
   }
 }
