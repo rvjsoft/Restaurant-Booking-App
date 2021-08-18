@@ -9,6 +9,7 @@ import { tap, filter } from 'rxjs/operators';
 import { Status } from 'src/app/AppEnums';
 import { ToastService } from 'src/app/ui-components/toast.service';
 import { LoadBarService } from 'src/app/load-bar.service';
+import { ImageResponseCacheService } from 'src/app/image-response-cache.service';
 
 @Component({
   selector: 'app-food-list',
@@ -51,32 +52,39 @@ export class FoodListComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     public session: SessionService,
     private toastService: ToastService,
-    public loadBar: LoadBarService
-    ) {
-        this.res = this.isRes;
-     }
+    public loadBar: LoadBarService,
+    private imageCache: ImageResponseCacheService
+  ) {
+    this.res = this.isRes;
+  }
 
   ngOnInit() {
     console.log('inside init', this.foodList);
     for (let index in this.foodList) {
       let food = this.foodList[index];
-      if(this.quantityValues[food.id+''] == null || this.quantityValues[food.id+''] == undefined)
-      this.quantityValues[food.id+''] = 0;
+      if (this.quantityValues[food.id + ''] == null || this.quantityValues[food.id + ''] == undefined)
+        this.quantityValues[food.id + ''] = 0;
     }
-    for(let index in this.foodList) {
+    for (let index in this.foodList) {
       let food = this.foodList[index];
-      if(food.imageId == null || food.imageId == undefined)
+      if (food.imageId == null || food.imageId == undefined)
         this.foodImages[food.id] = of(this.foodImage);
       this.foodImages[food.id] = new Observable<any>(
         (observer: Observer<any>) => {
+          let cachedImage = this.imageCache.getImage(food.imageId);
+          if (cachedImage != null && cachedImage != undefined) {
+            observer.next(cachedImage);
+          } else {
             this.appService.getRestaurantImage(food.imageId).subscribe(
               (imageData) => {
+                this.imageCache.setImage(food.imageId, imageData);
                 observer.next(imageData);
               }, (error) => {
                 observer.next(this.foodImage);
               }
             );
           }
+        }
       );
     }
     this.setTotal();
@@ -87,24 +95,30 @@ export class FoodListComponent implements OnInit, OnChanges {
     let foods = changes['foodList'].currentValue
     for (let index in foods) {
       let food = foods[index];
-      if (this.quantityValues[food.id + ''] == null || this.quantityValues[food.id + ''] == undefined){
-        this.quantityValues[food.id+''] = 0;
+      if (this.quantityValues[food.id + ''] == null || this.quantityValues[food.id + ''] == undefined) {
+        this.quantityValues[food.id + ''] = 0;
       }
     }
-    for(let index in this.foodList) {
+    for (let index in this.foodList) {
       let food = this.foodList[index];
-      if(food.imageId == null || food.imageId == undefined)
+      if (food.imageId == null || food.imageId == undefined)
         this.foodImages[food.id] = of('url(' + this.foodImage + ')');
       this.foodImages[food.id] = new Observable<any>(
         (observer: Observer<any>) => {
+          let cachedImage = this.imageCache.getImage(food.imageId);
+          if (cachedImage != null && cachedImage != undefined) {
+            observer.next(cachedImage);
+          } else {
             this.appService.getRestaurantImage(food.imageId).subscribe(
               (imageData) => {
+                this.imageCache.setImage(food.imageId, imageData);
                 observer.next(imageData);
               }, (error) => {
                 observer.next(this.foodImage);
               }
             );
           }
+        }
       );
     }
   }
@@ -122,7 +136,7 @@ export class FoodListComponent implements OnInit, OnChanges {
   }
 
   get isRes() {
-    if(this.session.userLevel == 'RESTAURANT') {
+    if (this.session.userLevel == 'RESTAURANT') {
       return true;
     } else {
       return false;
@@ -131,10 +145,10 @@ export class FoodListComponent implements OnInit, OnChanges {
 
   public checkout() {
     let orderedFood = Array<FoodModel>();
-    for(let id of Object.keys(this.quantityValues)) {
-      if(this.quantityValues[id] != 0) {
-        for(let val of this.foodList) {
-          if(val.id+'' == id) {
+    for (let id of Object.keys(this.quantityValues)) {
+      if (this.quantityValues[id] != 0) {
+        for (let val of this.foodList) {
+          if (val.id + '' == id) {
             orderedFood.push(val);
             break;
           }
@@ -149,9 +163,9 @@ export class FoodListComponent implements OnInit, OnChanges {
 
   setTotal() {
     this.total = 0;
-    if(this.foodList == null) return;
-    for(let food of this.foodList) {
-      this.total = this.total + (food.price * this.quantityValues[food.id+'']);
+    if (this.foodList == null) return;
+    for (let food of this.foodList) {
+      this.total = this.total + (food.price * this.quantityValues[food.id + '']);
     }
   }
 
@@ -172,7 +186,7 @@ export class FoodListComponent implements OnInit, OnChanges {
     } else {
       this.unavailable.push(id);
       if (this.available.indexOf(id) !== -1) {
-       this.available.splice(this.available.indexOf(id), 1);
+        this.available.splice(this.available.indexOf(id), 1);
       }
     }
     console.log(this.available);
@@ -200,11 +214,11 @@ export class FoodListComponent implements OnInit, OnChanges {
     let messages: string[] = [];
     if (errorObj == null || errorObj == undefined) {
       messages.push('service not available');
-      return messages ;
+      return messages;
     }
     messages.push(errorObj.message);
     let errors = errorObj.errors;
-    for(let error in errors) {
+    for (let error in errors) {
       messages.push(errors[error]);
     }
     return messages;
