@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginRequest, RegisterUserRequest, AddressModel, AddAddressRequest, DeleteAddressRequest, GetRestaurantsRequest, AddFoodRequest, UpdateFoodRequest, DeleteFoodRequest, RestaurantTableRequest, TableAvailRequest, OrderFoodRequest, FoodStatusRequest, RestaurantStatusReqeust, GetOrderRequest, OrderStatusRequest, GetTableRequest, BookTableRequest } from './FoodOrderApp';
-import { DOCUMENT } from '@angular/common';
+import { ImageResponseCacheService } from './image-response-cache.service';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +37,7 @@ export class AppServiceService {
   readonly PATH_BOOK_TABLE = 'customer/booktable';
   readonly PATH_LOGOUT = 'logout';
 
-  constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
+  constructor(private http: HttpClient, private imageCache: ImageResponseCacheService) {}
 
   public login(request: LoginRequest): Observable<any> {
     let requestURL = environment.appURI + this.PATH_LOGIN;
