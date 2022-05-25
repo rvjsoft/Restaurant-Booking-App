@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
 import com.rvj.app.foodorder.utils.AppConstants;
+import org.springframework.test.context.junit.jupiter.DisabledIf;
 
+@DisabledIf("${app.customsecurity}")
 @Component
 public class CORSFilter implements Filter{
 

@@ -13,7 +13,9 @@ import org.springframework.context.annotation.Configuration;
 
 import com.rvj.app.foodorder.models.BaseRequest;
 import com.rvj.app.foodorder.utils.AppConstants;
+import org.springframework.test.context.junit.jupiter.DisabledIf;
 
+@DisabledIf("${app.customsecurity}")
 @Aspect
 @Configuration
 public class UserAspect {

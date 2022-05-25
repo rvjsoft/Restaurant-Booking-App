@@ -1,9 +1,6 @@
 package com.rvj.app;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
+import com.rvj.app.dataaccess.UserRepository;
 import org.apache.catalina.Context;
 import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +8,23 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 
-import com.rvj.app.dataaccess.UserRepository;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @EnableJpaRepositories(basePackages = {"com.rvj.app.dataaccess"})
 @EntityScan(basePackages = {"com.rvj.app.foodorder.entity"} )
 @EnableConfigurationProperties
@@ -45,6 +50,18 @@ public class FoodOrderAppApplication implements CommandLineRunner{
 	            context.setCookieProcessor(rfc6265CookieProcessor);
 	        }
 	    };
+	}
+
+	@Bean
+	UserDetailsManager users(DataSource dataSource) {
+		UserDetails admin = User.builder()
+				.username("admin")
+				.password("admin")
+				.roles("USER", "ADMIN")
+				.build();
+		JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+		users.createUser(admin);
+		return users;
 	}
 
 	@Override
