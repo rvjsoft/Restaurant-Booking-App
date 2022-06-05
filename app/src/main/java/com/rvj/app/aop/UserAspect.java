@@ -1,27 +1,28 @@
 package com.rvj.app.aop;
 
-import java.util.Objects;
-
-import javax.servlet.http.HttpSession;
-
+import com.rvj.app.foodorder.models.BaseRequest;
+import com.rvj.app.security.CustomUserDetails;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-
-import com.rvj.app.foodorder.models.BaseRequest;
-import com.rvj.app.foodorder.utils.AppConstants;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.DisabledIf;
+
+import java.security.Principal;
+import java.util.Objects;
 
 @DisabledIf("${app.customsecurity}")
 @Aspect
 @Configuration
 public class UserAspect {
 
-	@Autowired
-	HttpSession session;
+//	@Autowired
+//	HttpSession session;
 	
 	@Pointcut(value = "@annotation(org.springframework.web.bind.annotation.PostMapping)")
 	public void postMapping() {}
@@ -40,7 +41,13 @@ public class UserAspect {
 		if(jp.getArgs().length > 1) {
 			if(Objects.nonNull(jp.getArgs()) && jp.getArgs()[0] instanceof BaseRequest) {
 				BaseRequest request = (BaseRequest) jp.getArgs()[0];
-				request.setUserName((String) session.getAttribute(AppConstants.APP_USER));
+				Principal principal = SecurityContextHolder.getContext().getAuthentication();
+				String username = null;
+				if(principal instanceof UsernamePasswordAuthenticationToken) {
+					CustomUserDetails customUserDetails = (CustomUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+					username = customUserDetails.getUsername();
+				}
+				request.setUserName(username);
 			}
 		}
 	}

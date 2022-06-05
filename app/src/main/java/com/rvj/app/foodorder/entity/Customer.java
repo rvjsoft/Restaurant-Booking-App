@@ -1,5 +1,6 @@
 package com.rvj.app.foodorder.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import lombok.Data;
 @Entity
 @Table(name = "customer")
 @PrimaryKeyJoinColumn(name = "id")
-public class Customer extends User {
+public class Customer extends User implements Serializable {
 	
 	@Column(name = "first_name")
 	private String firstName;

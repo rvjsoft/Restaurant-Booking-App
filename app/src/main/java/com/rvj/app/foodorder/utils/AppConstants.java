@@ -16,5 +16,8 @@ public class AppConstants {
 	public static final String IMAGE_ID = "imageId";
 	public static final Long NO_FOOD = -1l;
 	
-	public static final String IMAGE_EXTENSION = ".jpg"; 
+	public static final String IMAGE_EXTENSION = ".jpg";
+
+	public static final String CUSTOMER = "CUSTOMER";
+	public static final String RESTAURANT = "RESTAURANT";
 }

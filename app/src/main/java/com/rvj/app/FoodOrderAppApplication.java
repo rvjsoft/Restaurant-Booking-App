@@ -1,6 +1,9 @@
 package com.rvj.app;
 
 import com.rvj.app.dataaccess.UserRepository;
+import com.rvj.app.foodorder.services.UserRegistrationService;
+import com.rvj.app.security.CustomUserDetails;
+import com.rvj.app.security.CustomUserDetailsManager;
 import org.apache.catalina.Context;
 import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +32,10 @@ import javax.transaction.Transactional;
 @EntityScan(basePackages = {"com.rvj.app.foodorder.entity"} )
 @EnableConfigurationProperties
 public class FoodOrderAppApplication implements CommandLineRunner{
-	
-	@PersistenceContext
-	EntityManager em;
-	
+
 	@Autowired
-	UserRepository repo;
-	
+	UserRegistrationService userRegistrationService;
+
 	public static void main(String[] args) {
 		SpringApplication.run(FoodOrderAppApplication.class, args);
 	}
@@ -52,16 +52,12 @@ public class FoodOrderAppApplication implements CommandLineRunner{
 	    };
 	}
 
-	@Bean
-	UserDetailsManager users(DataSource dataSource) {
-		UserDetails admin = User.builder()
-				.username("admin")
-				.password("admin")
-				.roles("USER", "ADMIN")
-				.build();
-		JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-		users.createUser(admin);
-		return users;
+//	@Bean
+	UserDetailsManager users(CustomUserDetailsManager customUserDetailsManager) {
+		return customUserDetailsManager;
+
+//		JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+//		return users;
 	}
 
 	@Override

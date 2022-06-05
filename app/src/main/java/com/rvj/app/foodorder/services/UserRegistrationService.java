@@ -1,7 +1,12 @@
 package com.rvj.app.foodorder.services;
 
+import com.rvj.app.foodorder.entity.User;
+import com.rvj.app.foodorder.models.CustomerModel;
+import com.rvj.app.foodorder.models.RestaurantModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.rvj.app.dataaccess.CustomerRepository;
@@ -15,6 +20,11 @@ import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.RegisterUserRequest;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
+
+import static com.rvj.app.foodorder.utils.AppConstants.CUSTOMER;
+import static com.rvj.app.foodorder.utils.AppConstants.RESTAURANT;
 
 @Slf4j
 @Service
@@ -74,4 +84,28 @@ public class UserRegistrationService {
 		return !restaurantRepository.findByEmailOrPhone(email, phone).isEmpty();
 	}
 
+	public void createUser(UserDetails user) {
+		RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+		registerUserRequest.setUserName(user.getUsername());
+		registerUserRequest.setPassword(user.getPassword());
+		Optional<GrantedAuthority> authority = (Optional<GrantedAuthority>) user.getAuthorities().stream().findFirst();
+		authority.ifPresent(grantedAuthority -> {
+			switch (grantedAuthority.getAuthority()) {
+				case CUSTOMER:
+					registerUserRequest.setCustomer(new CustomerModel());
+					createCustomer(registerUserRequest);
+					break;
+				case RESTAURANT:
+					registerUserRequest.setRestaurant(new RestaurantModel());
+					createRestaurant(registerUserRequest);
+					break;
+				default:
+					break;
+			}
+		});
+	}
+
+	public Optional<User> loadUser(String username) {
+		return userRepository.findByUserName(username).stream().findFirst();
+	}
 }

@@ -28,9 +28,9 @@ public class WebConfig implements WebMvcConfigurer{
 	}
 	
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new AuthenticationInterceptor()).excludePathPatterns("/login", "/register/**",
-				"/logout"/* ,"/appUi","/index.html","/*.js" */);
-		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/login","/register/**","/logout");
+//		registry.addInterceptor(new AuthenticationInterceptor()).excludePathPatterns("/login", "/register/**",
+//				"/logout"/* ,"/appUi","/index.html","/*.js" */);
+//		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/login","/register/**","/logout");
 	}
 	
 //	public void addCorsMappings(CorsRegistry registry) {
