@@ -16,7 +16,6 @@ import org.springframework.test.context.junit.jupiter.DisabledIf;
 import java.security.Principal;
 import java.util.Objects;
 
-@DisabledIf("${app.customsecurity}")
 @Aspect
 @Configuration
 public class UserAspect {

@@ -10,12 +10,19 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 import com.rvj.app.foodorder.utils.AppConstants;
 import org.springframework.test.context.junit.jupiter.DisabledIf;
-
-@DisabledIf("${app.customsecurity}")
+import org.springframework.test.context.junit.jupiter.EnabledIf;
+@ConditionalOnProperty(
+		value="app.customsecurity",
+		havingValue = "true",
+		matchIfMissing = true)
+//@EnabledIf(expression = "#{environment['app.customsecurity']}", loadContext = true)
 @Component
 public class CORSFilter implements Filter{
 

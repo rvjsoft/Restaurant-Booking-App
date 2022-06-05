@@ -43,7 +43,8 @@ export class AppServiceService {
     let requestURL = environment.appURI + this.PATH_LOGIN;
     request.messageId = (Date.now() / 1000).toString();
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + btoa(request.userName + ':' + request.password)
     });
     return this.http.post(requestURL, request, {observe: 'response', headers: headers, withCredentials: true});
   }

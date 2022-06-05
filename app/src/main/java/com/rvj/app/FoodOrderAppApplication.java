@@ -21,6 +21,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -58,6 +60,22 @@ public class FoodOrderAppApplication implements CommandLineRunner{
 
 //		JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
 //		return users;
+	}
+
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/*").allowedOrigins("localhost")
+						.allowCredentials(true)
+						.allowedHeaders("Content-Type", "Accept", "X-Requested-With", "remember-me", "Authorization", "x-usr-level")
+						.allowedMethods("POST", "GET", "OPTIONS", "DELETE")
+						.allowedOriginPatterns("*")
+						.maxAge(3600)
+						.exposedHeaders("x-usr-level");
+			}
+		};
 	}
 
 	@Override
