@@ -27,7 +27,8 @@ public class GetTableAvailOperation extends Operation<TableAvailRequest, TableAv
 	
 	@Override
 	protected boolean validate() {
-		UserLevel level = (UserLevel) session.getAttribute(AppConstants.USR_LEVEL);
+//		UserLevel level = (UserLevel) session.getAttribute(AppConstants.USR_LEVEL);
+		UserLevel level = request.getUserLevel();
 		if (level.equals(UserLevel.CUSTOMER)) {
 			if(Objects.isNull(request.getResId())) {
 				this.getErrors().addError("resId", "resId should not be null");
@@ -40,7 +41,7 @@ public class GetTableAvailOperation extends Operation<TableAvailRequest, TableAv
 				}
 			}
 		} else {
-			request.setUserName((String) session.getAttribute(AppConstants.APP_USER));
+//			request.setUserName((String) session.getAttribute(AppConstants.APP_USER));
 		}
 		return true;
 	}

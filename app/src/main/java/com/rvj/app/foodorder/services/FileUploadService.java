@@ -54,7 +54,7 @@ public class FileUploadService {
 	BoxClientService boxService;
 	
 	public String validate(FileUploadRequest request) {
-		request.setUserName((String)session.getAttribute(AppConstants.APP_USER));
+//		request.setUserName((String)session.getAttribute(AppConstants.APP_USER));
 		Restaurant restaurant = restaurantService.getRestaurant(request.getUserName());
 		if(Objects.isNull(restaurant)) {
 			return "restaurant doesn't exist";

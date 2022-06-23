@@ -32,12 +32,14 @@ export class AppComponent {
 
   public logout() {
     console.log(this.isUserLogged);
-    this.appService.logout().subscribe(
-      (response: any) => {
+    // this.appService.logout().subscribe(
+    //   (response: any) => {
         this.session.userLevel = null;
-        this.toastService.showMessage([response.message], false);
+        this.session.userName = null;
+        this.session.userName = null;
+        this.toastService.showMessage(['Loggedout Successfully.'], false);
         this.router.navigate(['login']);
-      }
-    );
+    //   }
+    // );
   }
 }

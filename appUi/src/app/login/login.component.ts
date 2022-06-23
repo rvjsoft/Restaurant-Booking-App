@@ -45,6 +45,8 @@ export class LoginComponent implements OnInit {
         let resBody = response.body;
         if(response.headers) {
           this.session.userLevel = response.headers.get(this.USR_LVL_HEADER);
+          this.session.userName = request.userName;
+          this.session.password = request.password;
         }
         this.toastService.showMessage([resBody.message], false);
         this.navigateToUserLanding();

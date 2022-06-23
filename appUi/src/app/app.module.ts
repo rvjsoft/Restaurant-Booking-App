@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -12,6 +12,7 @@ import { CustomerModule } from './customer/customer.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { GeneralModule } from './general/general.module';
 import { LoadBarComponent } from './load-bar/load-bar.component';
+import { AuthInterceptorService } from './app-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,11 @@ import { LoadBarComponent } from './load-bar/load-bar.component';
     RestaurantModule,
     GeneralModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS, 
+    useClass: AuthInterceptorService, 
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

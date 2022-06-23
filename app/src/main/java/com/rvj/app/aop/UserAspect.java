@@ -1,5 +1,6 @@
 package com.rvj.app.aop;
 
+import com.rvj.app.foodorder.entity.enums.UserLevel;
 import com.rvj.app.foodorder.models.BaseRequest;
 import com.rvj.app.security.CustomUserDetails;
 import org.aspectj.lang.JoinPoint;
@@ -9,12 +10,14 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.DisabledIf;
 
 import java.security.Principal;
 import java.util.Objects;
+import java.util.Optional;
 
 @Aspect
 @Configuration
@@ -42,11 +45,17 @@ public class UserAspect {
 				BaseRequest request = (BaseRequest) jp.getArgs()[0];
 				Principal principal = SecurityContextHolder.getContext().getAuthentication();
 				String username = null;
+				UserLevel userLevel = null;
 				if(principal instanceof UsernamePasswordAuthenticationToken) {
 					CustomUserDetails customUserDetails = (CustomUserDetails) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 					username = customUserDetails.getUsername();
+					Optional<GrantedAuthority> authority = (Optional<GrantedAuthority>) customUserDetails.getAuthorities().stream().findFirst();
+					if(authority.isPresent()) {
+						userLevel = UserLevel.valueOf(authority.get().getAuthority());
+					}
 				}
 				request.setUserName(username);
+				request.setUserLevel(userLevel);
 			}
 		}
 	}

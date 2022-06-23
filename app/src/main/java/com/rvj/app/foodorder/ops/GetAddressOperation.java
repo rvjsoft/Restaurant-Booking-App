@@ -19,7 +19,7 @@ public class GetAddressOperation extends Operation<BaseRequest, GetAddressRespon
 	
 	@Override
 	protected boolean validate() {
-		request.setUserName((String) session.getAttribute(AppConstants.APP_USER));
+		//request.setUserName((String) session.getAttribute(AppConstants.APP_USER));
 		return true;
 	}
 

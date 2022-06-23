@@ -39,9 +39,9 @@ public class GetRestaurantsOperation extends Operation<GetRestaurantsRequest, Ge
 		 * (customer == null) { this.getErrors().addError("customer",
 		 * "customer does not exist"); } else
 		 */
-		if(((UserLevel)session.getAttribute(AppConstants.USR_LEVEL)).equals(UserLevel.RESTAURANT))
+		if(request.getUserLevel().equals(UserLevel.RESTAURANT))
 		{
-			request.setUserName((String) session.getAttribute(AppConstants.APP_USER));
+//			request.setUserName((String) session.getAttribute(AppConstants.APP_USER));
 			User user = customerService.getUser(request.getUserName());
 			if(Objects.nonNull(user))
 				request.setResId(user.getId());
