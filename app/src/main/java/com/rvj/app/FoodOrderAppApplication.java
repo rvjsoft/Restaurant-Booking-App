@@ -67,7 +67,7 @@ public class FoodOrderAppApplication implements CommandLineRunner{
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("localhost")
+				registry.addMapping("/**").allowedOrigins("**")
 						.allowCredentials(true)
 						.allowedHeaders("Content-Type", "Accept", "X-Requested-With", "remember-me", "Authorization", "x-usr-level")
 						.allowedMethods("POST", "GET", "OPTIONS", "DELETE")
